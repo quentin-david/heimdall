@@ -1,0 +1,98 @@
+{% extends "notes/base_notes.html" %}
+
+{% block launcher %}
+    <a href="{% url 'notes_list' %}">
+        <button type="button" class="btn btn-default">
+            <span class="glyphicon glyphicon-arrow-left"></span>
+        </button>
+    </a>
+{% endblock %}
+
+{% block title %}Create new Note {%endblock%}
+
+{% block content %}
+    <form action="" enctype="multipart/form-data" method="post">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-lg-12 input-group">
+                {{ form.non_field_errors }}
+                    {{ form.title.errors }}
+                    <div class="input-group-addon"><b>Title</b></div>
+                    {{ form.title }}
+			</div>
+			<div class="col-lg-3">
+                {{ form.non_field_errors }}
+                <div class="form-group">
+                    {{ form.category.errors }}
+                    <label for="{{ form.category.id_for_label }}">Category</label>
+                    {{ form.category }}
+				</div>
+			</div>
+            <div class="col-lg-2">
+				<div class="form-group">
+                    {{ form.state.errors }}
+                    <label for="{{ form.title.id_for_label }}">State</label>
+                    {{ form.state }}
+					
+					{{ form.public.errors }}
+                    <label for="{{ form.public.id_for_label }}">Public</label>
+                    {{ form.public }}
+                    
+                    {{ form.shared.errors }}
+                    <label for="{{ form.shared.id_for_label }}">Shared</label>
+                    {{ form.shared }}
+				</div>
+			</div>
+            
+			
+            <div class="col-lg-4">
+					{% if upfiles %}
+						<label for="{{ form.uploaded_files.id_for_label }}">existing files</label>
+						<ul>
+						{% for file in upfiles %}
+							<li id="file_{{file.id}}">
+								{{file.short_name}}
+								<button id="del_file_{{file.id}}" style="color: red" type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top" title="delete this file">
+									<span class="glyphicon glyphicon-remove"></span>
+								</button>
+								<script>
+									$("#del_file_{{file.id}}").click(function(){
+										$.ajax({
+											type: "POST",
+											url: "{% url 'notes_file_delete' file.id %}",
+											success: function(result){
+											$("#file_{{file.id}}").hide();
+										}});
+									});
+								</script>
+							</li>
+						{% endfor %}
+						</ul>
+					{% endif %}
+					
+                    {{ form.uploaded_files.errors }}
+                    <label for="{{ form.uploaded_files.id_for_label }}">add file</label>
+                    <input id="id_uploaded_files_0" name="uploaded_files" multiple="" type="file">
+            </div>
+		</div>
+		
+		<div class="row">
+			<div class="col-lg-12">
+				{{form.content.errors}}
+				{{form.content}}
+			</div>
+		</div>
+        <div class="row">
+			<div class="col-lg-12">
+				<div class="form-group">
+					<input class="btn-submit" type="submit" value="Submit" />
+					<a href="{% url 'notes_list' %}"><button type="button" class="btn-cancel">Cancel</button></a>
+				</div>
+			</div>
+        </div>
+    </form>
+    
+    <script type="text/javascript">
+		CKEDITOR.replace( 'id_content' );
+	</script>
+{% endblock %}

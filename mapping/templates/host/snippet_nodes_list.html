@@ -1,0 +1,39 @@
+        {% if node.nodeparams_set.all.0.state == 'UN' %}
+        <tr class="warning">
+        {% elif node.nodeparams_set.all.0.state == 'OK' %}
+        <tr class="success">
+        {% elif node.nodeparams_set.all.0.state == 'KO' %}
+        <tr class="danger">
+        {% endif %}
+            <td>
+                <a href="{% url 'node_view' node.id %}">{{node.name}}</a>
+            </td>
+            <td>{{node.short_description}}</td>
+            <td>
+                {{node.date_check_foreman|timesince}} /
+                {{node.date_update_foreman|timesince}}
+            </td>
+            <td>
+                {% if node.foreman_status_label == 'OK' %}
+                    <span class="label label-success">F</span>
+                {% elif node.foreman_status_label == 'Warning' %}
+                    <span class="label label-warning">F</span>
+                {% elif node.foreman_status_label == 'Error' %}
+                    <span class="label label-danger">F</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if user.username == node.application.owner.username or not node.application %}
+                    <a href="{% url 'node_delete' node.id %}">
+                        <button type="button" class="btn btn-default btn-xs">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </a>
+                    <a href="{% url 'node_update' node.id %}">
+                        <button type="button" class="btn btn-default btn-xs">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </button>
+                    </a>
+                {% endif %}
+            </td>
+        </tr>

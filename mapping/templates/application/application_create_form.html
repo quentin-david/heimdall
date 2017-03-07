@@ -1,0 +1,66 @@
+{% extends "application/base_application.html" %}
+
+{% block title %}Application edition {% endblock %}
+
+{% block launcher %}
+	{% if appli %}
+		<a href="{% url 'application_view' appli.id %}">
+	{% else %}
+		<a href="{% url 'application_list' %}">
+	{% endif %}
+        <button type="button" class="btn btn-default">
+            <span class="glyphicon glyphicon-arrow-left"></span>
+        </button>
+    </a>
+{% endblock %}
+
+{% block content %}
+    <form action="" method="post">
+        {% csrf_token %}
+        <div class="row">
+			<div class="col-lg-3">
+                {{ form.non_field_errors }}
+                <div class="input-group">
+                    {{ form.name.errors }}
+                    <div class="input-group-addon"><b>Name</b></div>
+                    {{ form.name }}
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="input-group">
+                    <div class="input-group-addon"><b>Trigramme</b></div>
+                    {{ form.identifier }}
+					{% if form.identifier.errors %}
+						<div class="alert alert-info" role="alert">{{ form.identifier.errors }}</div>
+					{% endif %}
+                </div>
+            </div>
+			<div class="col-lg-3">
+                <div class="form-group">
+                    {{ form.owner.errors }}
+                    <label for="{{ form.owner.id_for_label }}">Owner :</label>
+                    {{ form.owner }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+				{{ form.description.errors }}
+				{{ form.description }}
+			</div>
+		</div>
+		
+         <div class="row">
+			<div class="col-lg-12">
+				<div class="form-group">
+					<input class="btn-submit" type="submit" value="Submit" />
+					<a href="{% url 'application_list' %}"><button type="button" class="btn-cancel">Cancel</button></a>
+				</div>
+			</div>
+        </div>
+    </form>
+    
+    <script type="text/javascript">
+		CKEDITOR.replace( 'id_description' );
+	</script>
+{% endblock %}

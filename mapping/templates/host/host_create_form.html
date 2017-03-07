@@ -1,0 +1,122 @@
+{% extends "host/base_host.html" %}
+
+{% block title %}{% endblock %}
+
+{% block launcher %}
+    {% if host %}
+        <a href="{% url 'host_view' host.id %}">
+    {% else %}
+        <a href="{% url 'host_list' %}">
+    {% endif %}
+        <button type="button" class="btn btn-default">
+            <span class="glyphicon glyphicon-arrow-left"></span>
+        </button>
+    </a>
+    {{block.super}}
+{% endblock %}
+
+{% block object_list %}
+    <h4>editing {{host.name}}...</h4>
+{% endblock %}
+
+{% block content %}
+    <form action="" method="post">
+        {% csrf_token %}
+        <div class="row">
+            <fieldset>
+                {% if host %}
+                    <legend>Host {{host.name}}</legend>
+                {% else %}
+                    <legend>new Host</legend>
+                {% endif %}
+                <div class="col-lg-6">
+                    <fieldset>
+                        {{ form.non_field_errors }}
+                        <div class="input-group">
+                            {{ form.name.errors }}
+                            <span class="input-group-addon" id="sizing-addon1">Name</span>
+                            {{ form.name }}
+                         </div>
+                        <div class="input-group">
+                            {{ form.foreman_server.errors }}
+                            <span class="input-group-addon" id="sizing-addon1">Foreman server</span>
+                            {{ form.foreman_server }}
+                         </div>
+                    </fieldset>
+               
+                    <fieldset>
+                        <legend>Hardware</legend>
+                        <div class="input-group">
+                            <span class="input-group-addon" id="sizing-addon1">RAM</span>
+                            {{ form.nb_ram }}
+                            {% if form.nb_ram.errors %}
+                                <div class="alert alert-info" role="alert">{{ form.nb_ram.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="input-group">
+                            {{ form.nb_cpu.errors }}
+                            <span class="input-group-addon" id="sizing-addon1">CPU</span>
+                            {{ form.nb_cpu }}
+                        </div>
+
+                        <div class="input-group">
+                            {{ form.disk_size.errors }}
+                            <span class="input-group-addon" id="sizing-addon1">disk</span>
+                            {{ form.disk_size }}
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="col-lg-6">
+                    <fieldset>
+                        <legend>System</legend>
+                        <div class="input-group">
+                            {{ form.os.errors }}
+                            <span class="input-group-addon" id="sizing-addon1">OS</span>
+                            {{ form.os }}
+                        </div>
+                        <div class="input-group">
+                            {{ form.munin_server.errors }}
+                            <span class="input-group-addon" id="sizing-addon1">Munin server</span>
+                            {{ form.munin_server }}
+                        </div>
+                    </fieldset>
+                
+                    <fieldset>
+                        <legend>Network</legend>
+                        <div class="input-group">
+                            {{ form.ip_public.errors }}
+                            <span class="input-group-addon" id="sizing-addon1">public @IP</span>
+                            {{ form.ip_public }}
+                        </div>
+                        <div class="input-group">
+                            {{ form.mac_public.errors }}
+                            <span class="input-group-addon" id="sizing-addon1">public @MAC</span>
+                            {{ form.mac_public }}
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </fieldset>
+        
+        <div class="row">
+            <div class="col-lg-12">
+                {{ form.description.errors }}
+                {{ form.description }}
+            </div>
+        </div>
+        
+         <div class="row">
+			<div class="col-lg-12">
+				<div class="form-group">
+					<input class="btn-submit" type="submit" value="Submit" />
+					<a href="{% url 'host_list' %}"><button type="button" class="btn-cancel">Cancel</button></a>
+				</div>
+			</div>
+        </div>
+    </form>
+    
+    <script type="text/javascript">
+		CKEDITOR.replace( 'id_description' );
+	</script>
+{% endblock %}

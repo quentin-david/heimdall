@@ -1,0 +1,66 @@
+<div class="panel panel-default note">
+        <table class="table table-bordered">
+        <tr class="header-line">
+            <th colspan="2" style="text-align: center">
+                <span style="float: left">[{{note.category.name}}]</span>
+                <span style="float: left"> ({{note.date_update}})</span>
+                
+                {{note.title}}
+                
+                <span style="float: right">
+                        {% if note.notesfile_set.all|length > 0 %}
+                                <button id="btn-show-files" type="button" class="btn btn-default btn-xs">
+                                        <span class="glyphicon glyphicon-paperclip"></span>
+                                </button>
+                                <script>
+                                       $("#btn-show-files").click(function(){
+                                                $(".note-files-line-{{note.id}}").toggle();
+                                       });
+                                </script>
+                        {% endif %}
+                        
+                        ({{note.owner.username}})
+                        {% if user.username == note.owner.username %}
+                        <a href="{% url 'notes_update' note.id %}">
+                            <button type="button" class="btn btn-default btn-xs">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                        </a>
+                        <a href="{% url 'notes_delete' note.id %}">
+                            <button type="button" class="btn btn-default btn-xs">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </a>
+                        {% endif %}
+                </span>
+            </th>
+        </tr>
+        
+        {% if note.notesfile_set.all|length > 0 %}
+                <tr class="subheader-line note-files-line-{{note.id}}">
+                <td style="text-align: center; vertical-align: middle;">
+                        Uploaded files :
+                </td>
+                <td>
+                {% for file in note.notesfile_set.all %}
+                        <a href="{{file.uploaded_file.url}}">
+                                {{file.short_name}}
+                        </a>
+                         ({{file.uploaded_file.size|filesizeformat}})
+                         {% if user.username == note.owner.username %}
+                                <a href="{% url 'notes_file_delete' file.id %}">
+                                      <button type="button" style="color: red" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top" title="delete this file">
+                                          <span class="glyphicon glyphicon-remove"></span>
+                                      </button>
+                                </a>
+                        {% endif %}
+                         <br> 
+                {% endfor %}
+                </td>
+                </tr>
+        {% endif %}
+        <tr>
+            <td colspan="2">{{note.content|safe}}</td>
+        </tr>
+    </table>
+</div>

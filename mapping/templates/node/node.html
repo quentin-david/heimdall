@@ -1,0 +1,154 @@
+{% extends "node/base_node.html" %}
+
+{% block title %}Node {{node.name}}{% endblock %}
+
+{% block content %}
+    <div class="object_description">
+        {{node.short_description|safe}}
+    </div>
+    
+    <h2>Description</h2>
+    <div class="object_description">
+        {{node.description|safe}}
+    </div>
+    
+    <h2>
+        VM specs
+        {% comment %}
+        <a href="{# url 'nodeparams_update' node_params.id #}">
+            <button type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="right" title="Edit parameters manually">
+                <span class="glyphicon glyphicon-pencil"></span>
+            </button>
+        </a>
+        {% endcomment %}
+    </h2>
+    <table class="table table-bordered table-striped">
+        <tr>
+            <td>Host</td>
+            <td>
+                <a href="{% url 'host_view' node.host.id %}">{{node.host.name}}</a>
+            </td>
+        </tr>
+        <tr>
+            <td>Application</td>
+            <td>
+                {% if node.application %}
+                    <a href="{% url 'application_view' node.application.id %}">{{node.application.name}}</a>
+                    <small>({{node.application.identifier}})</small>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>RAM</td><td>{{node.nb_ram|filesizeformat}}</td>
+        </tr>
+        <tr>
+            <td>CPU</td><td>{{node.nb_cpu}} CPU</td>
+        </tr>
+        <tr>
+            <td>Disk size</td><td>{{node.disk_size}} GB</td>
+        </tr>
+        <tr>
+            <td>OS</td><td>{{node.os}}</td>
+        </tr>
+    </table>
+    
+    <h2>Network</h2>
+    <p>@IP admin : {{node.ip_admin}}</p>
+    <table  class="table table-bordered table-striped">
+        <tr>
+            <th>Network name</th>
+            <th>@IP</th>
+            <th>Interface (type)</th>
+            <th>@MAC</th>
+        </tr>
+        {% for nic in node.networklink_set.all %}
+            <tr>
+                <td>{{nic.network.name}}</td>
+                <td>{{nic.ip}}</td>
+                <td>{{nic.iface}} ({{nic.nic_type}})</td>
+                <td>{{nic.mac}}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    </table>
+    
+    {% comment %}
+    <div class="dropdown">
+        <h2>
+            Services
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+              New
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+              <li><a href="{% url 'service_webserver_create' node.application.id %}">Web server</a></li>
+              <li><a href="{% url 'service_reverseproxy_create' node.application.id %}">New Reverse</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="#">Separated link</a></li>
+            </ul>
+        </h2>
+    </div>
+    {% endcomment %}
+
+
+    <h2>Services</h2>
+        <h4>Registered in Heimdall</h4>
+        {% for service in  node.service_set.all %}
+            <table class="table table-bordered table-striped">
+                <tr>
+                    <th>Type</th>
+                    <th>Name</th>
+                </tr>
+                <tr>
+                    <td>{% if service.servicewebserver %}Apache{% elif service.servicereverseproxy %}Reverse{%endif%}</td>
+                    <td>{{service.name}}</td>
+                </tr>
+            </table>    
+        {% endfor %}
+    
+        <h4>Found on Puppet</h4>
+        <ul>
+        {% for puppet_class in puppetclasses_list %}
+            <li>{{puppet_class.name}}</li>
+        {% endfor %}
+        </ul>
+    
+    <h2>Monitoring</h2>
+    {% if node.munin_server %}
+        <p>Munin server : <a href="{% url 'munin_node_view' node.id 'day' %}">see graphs</a></p>
+    {% else %}
+        <p>No Munin server... <a href="{% url 'node_update' node.id %}">add one</a></p>
+    {% endif %}
+    
+    <h2>
+        State
+        {% comment %}
+        <a href="{% url 'node_set_params' node.id %}">
+            <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="right" title="Get parameters from Foreman">
+                <span class="glyphicon glyphicon-circle-arrow-down"></span>
+            </button>
+        </a>
+        {% endcomment %}
+        ({{node.state}})
+    </h2>
+    <p>
+        Last update : {{node.date_update_foreman}} <br>
+    </p>
+    
+    <h2>Elements collected on Foreman</h2>
+    {% if node.collect_profile %}
+        <p>collect date : {{collected_element.date}}</p>
+        {{collected_element.data_json}}
+        <p>
+            Acces JSON : {{collected_data}}
+        </p>
+        <ul>
+            {% for addr, val in collected_data.col_ipaddress.items %}
+                <li>nic : {{addr}} (@ip : {{val}}, @mac : {{addr.mac}})</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No collect profile set on this node</p>
+    {% endif %}
+    {#debug#}
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block stylesheets %}
+    {{block.super}}
+    <link rel="stylesheet" href="{% static 'css/bugzilla.css' %}">
+{% endblock %}
+
+{% block left_nav %}
+    <div class="list-group">
+        <a href="{% url "application_list" %}"><button type="button" class="btn btn-default btn-lg btn-block">Applications</button></a>
+        <a href="{% url "host_list" %}"><button type="button" class="btn btn-default btn-lg btn-block">Hosts</button></a>
+        <a href="{% url "bugzilla_list" %}"><button type="button" class="btn btn-primary btn-lg btn-block">Bugzilla</button></a>
+    </div>
+    
+    <div class="list-group launcher">
+        {% block launcher %}
+            <a href="{% url 'bugzilla_create' %}">
+                <button type="button" class="btn btn-default">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </button>
+            </a>
+        {% endblock %}
+    </div>
+    
+    {% if qs_state or qs_owner or qs_title or qs_application %}
+        <div class="list-group launcher search_active">
+    {% else %}
+        <div class="list-group launcher">
+    {% endif %}
+        <h5>Search</h5>
+        <form action="{% url 'bugzilla_list' %}" method="get">
+            {{search_form}}
+            <input type="submit" value="Submit" />
+        </form>
+    </div>
+    
+    <div class="list-group launcher">
+        <h5>State</h5>
+        {% if qs_state == 'open' %}
+            <a href="{% url 'bugzilla_list'%}?qs_state=open"><button type="button" class="btn btn-primary btn-block">Open</button></a>
+            <a href="{% url 'bugzilla_list'%}?qs_state=close"><button type="button" class="btn btn-default btn-block">Close</button></a>
+        {% elif qs_state == 'close' %}
+            <a href="{% url 'bugzilla_list'%}?qs_state=open"><button type="button" class="btn btn-default btn-block">Open</button></a>
+            <a href="{% url 'bugzilla_list'%}?qs_state=close"><button type="button" class="btn btn-primary btn-block">Close</button></a>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block title %} Bugzilla {% endblock %}

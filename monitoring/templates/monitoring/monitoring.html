@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block left_nav %}
+    <div class="list-group">
+        <a href="{% url "application_list" %}"><button type="button" class="btn btn-default btn-lg btn-block">Applications</button></a>
+        <a href="{% url "host_list" %}"><button type="button" class="btn btn-default btn-lg btn-block">Hosts</button></a>
+        <a href="{% url "monitoring_home" %}"><button type="button" class="btn btn-primary btn-lg btn-block">Monitoring</button></a>
+    </div>
+    
+    <div class="launcher">
+        {% block launcher %}
+            <a href="{% url 'munin_create' %}">
+                <button type="button" class="btn btn-default">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </button>
+            </a>
+        {% endblock %}
+    </div>
+    
+    <div class="launcher">
+        {% block object_list %}
+            <h4>Host list</h4>
+            <div class="list-group">
+                {% for host_item in host_list %}
+                    {% if host_item.name == host.name or host_item.name == node.host.name %}
+                        <a href="{% url 'munin_host_view' host_item.id 'day' %}" class="list-group-item active"> {{host_item.name}} </a>
+                    {% else %}
+                        <a href="{% url 'munin_host_view' host_item.id 'day' %}" class="list-group-item"> {{host_item.name}} </a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endblock %}
+    </div>
+{% endblock %}
+
+
+{% block title %} Monitoring home {% endblock %}
+
+{% block content %}
+ 
+    <h2>Munin servers</h2>
+    {% if munin_server_list %}
+        {% for munin in munin_server_list %}
+            <h3>
+                {{munin.server.name}}
+                <a href="{% url 'munin_update' munin.id %}">
+                    <button type="button" class="btn btn-default btn-xs">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                    </button>
+                </a>
+            </h3>
+            <table class="table table-bordered">
+                <tr>
+                    <th>@IP</th>
+                    <td>
+                        {{munin.ip}}
+                        {% if munin.server %}
+                            (<a href="{% url 'node_view' munin.server.id %}">{{munin.server.name}}</a>)
+                        {% endif %}
+                        (external <a href="https://www.infra.quentin-david.ovh/munin/" target="_blank">link</a>)
+                    </td>
+                </tr>
+                <tr>
+                    <th>Method</th>
+                    <td>{{munin.method}}</td>
+                </tr>
+                <tr>
+                    <th>Service state</th>
+                    <td>
+                        {% if munin.checkApi %} OK {% else %} ... {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Nodes monitored</th>
+                    <td>
+                        {# regroup node_list by application  as node_listing #}
+                        {% regroup munin.node_set.all by application as node_listing %}
+                        <ul>
+                        {% for application in node_listing %}
+                            <li> {{ application.grouper }}
+                                <ul>
+                                    {% for node in application.list %}
+                                        <li><a href="{% url 'munin_node_view' node.id 'day' %}">{{node}}</a></li>
+                                    {% endfor %}
+                                </ul>
+                        {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+        {% endfor %}
+    {% endif %}
+    
+    <h2>Profiling</h2>
+    {% for host in host_list %}
+        <div class="col-lg-5">
+            <h4>{{host.name}}</h4>
+            <ul>
+            {% for metric,desc in metric_list.items %}
+                <li><a href="{% url 'munin_profiling' host.id metric 'day' %}">{{desc}}</a></li>
+            {% endfor %}
+            </ul>
+        </div>
+    {% endfor %}
+    <br>
+{% endblock %}

@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block left_nav %}
+    <div class="list-group launcher">
+        {% block launcher %}
+            <h4>Ajouter exercice</h4>
+            <a href="{% url 'exercice_create' %}">
+                <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="add poupinou">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </button>
+            </a>
+        {% endblock %}
+    </div>
+{% endblock %}
+
+{% block title %}Score poupinous{% endblock %}
+
+{% block content %}
+    
+    <div class="row">
+        <div class="col-lg-12">
+            <img src="{% url 'exercice_graph' %}"/>
+        </div>
+    </div>
+    
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>Date</th>
+            <th>Exercice</th>
+            <th>temps Deborah</th>
+            <th>temps Quentin</th>
+        </tr>
+        {% regroup exercice_list by date as exercices %}
+        {% for ex in exercices %}
+        <tr>
+            <td rowspan="{{ex.list|length}}">
+                {{ex.grouper}} <br>
+                Quentin : {{ex.get_temps_total_by_date}}<br>
+                Deborah : 
+            </td>
+                {% for type_ex in ex.list %}
+                    {% if forloop.counter0 == 0 %}
+                        <td>
+                            {{type_ex.exercice}}
+                            <span style="float: right">
+                                <a href="{% url 'exercice_delete' type_ex.id %}">
+                                    <button type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top" title="delete">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </a>
+                                <a href="{% url 'exercice_update' type_ex.id %}">
+                                    <button type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top" title="edit">
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                    </button>
+                                </a>
+                            </span>
+                        </td>
+                        <td>{{type_ex.temps_db}}</td>
+                        <td>{{type_ex.temps_qt}}</td>
+                    {% else %}
+                        <tr>
+                            <td>
+                                {{type_ex.exercice}}
+                                <span style="float: right">
+                                    <a href="{% url 'exercice_delete' type_ex.id %}">
+                                        <button type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top" title="delete">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </a>
+                                    <a href="{% url 'exercice_update' type_ex.id %}">
+                                        <button type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top" title="edit">
+                                            <span class="glyphicon glyphicon-pencil"></span>
+                                        </button>
+                                    </a>
+                                </span>
+                            </td>
+                            <td>{{type_ex.temps_db}}</td>
+                            <td>{{type_ex.temps_qt}}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+    
+    {% comment %}
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>Date</th>
+            <th>Exercice</th>
+            <th>Deborah</th>
+            <th>Quentin</th>
+        </tr>
+    {% for ex in exercice_list %}
+        <tr>
+            <td>
+                {{ex.date}}
+                <span style="float: right">
+                    <a href="{% url 'exercice_delete' ex.id %}">
+                        <button type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top" title="delete">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </a>
+                    <a href="{% url 'exercice_update' ex.id %}">
+                        <button type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top" title="edit">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </button>
+                    </a>
+                </span>
+            </td>
+            <td>{{ex.exercice}}</td>
+            <td>{{ex.temps_db}}</td>
+            <td>{{ex.temps_qt}}</td>
+        </tr>
+    {% endfor %}
+    </table>
+    {% endcomment %}
+    
+    
+    <br>
+{% endblock %}

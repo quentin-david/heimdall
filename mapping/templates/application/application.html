@@ -1,0 +1,154 @@
+{% extends "application/base_application.html" %}
+
+{% block title %}Application {{appli.name}} ({{appli.identifier}}){% endblock %}
+
+{% block launcher %}
+    <a href="{% url 'application_list' %}">
+        <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="back to the application list">
+            <span class="glyphicon glyphicon-arrow-left"></span>
+        </button>
+    </a>
+    {% if user.username == appli.owner.username %}
+        <a href="{% url 'application_update' appli.id %}">
+            <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="edit this application">
+                <span class="glyphicon glyphicon-pencil"></span>
+            </button>
+        </a>
+        <a href="{% url 'application_delete' appli.id %}">
+            <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="delete this application">
+                <span class="glyphicon glyphicon-remove"></span>
+            </button>
+        </a>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <h3>Description</h3>
+    <div class="object_description">
+        {{appli.description|safe}}
+    </div>
+    
+    <h4>Public URL :</h4>
+        {% if appli %}
+            <ul>
+            {% for service in appli.service_set.all %}
+                {% if service.servicewebserver %}
+                    <li>
+                    <a href="{{service.servicewebserver.protocol}}://{{service.servicewebserver.servername}}.{{service.servicewebserver.reverse_proxy.proxy_url}}/{{service.servicewebserver.url_root}}" target="_blank">
+                        {{service.servicewebserver.protocol}}://{{service.servicewebserver.servername}}.{{service.servicewebserver.reverse_proxy.proxy_url}}/{{service.servicewebserver.url_root}}
+                    </a>
+                    (through reverse : {{service.servicewebserver.reverse_proxy.node.name}} ({{service.servicewebserver.reverse_proxy.ip}}))
+                    </li>
+                {% endif %}
+            {% endfor %}
+            </ul>
+        {% else %}
+            <div class="alert alert-info" role="alert">No webserver with public access</div>
+        {% endif %}
+
+    
+    
+    <h3>VMs attached <span class="badge">{{appli.node_set.all|length}}</span></h3>
+    {% if appli.node_set.all %}
+        <table class="table table-bordered table-striped">
+            <tr>
+                <th>Node name</th>
+                <th>Description</th>
+                <th>Last check/update</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            {% for node in appli.node_set.all %}
+                {% include "host/snippet_nodes_list.html" %}
+            {% empty %}
+                <div class="alert alert-info" role="alert">No node in Heimdall for {{appli.name}}</div>
+            {% endfor %}
+        </table>
+    {% else %}
+        <div class="alert alert-info" role="alert">No node in Heimdall for {{appli.name}}</div>
+    {% endif %}
+    
+    
+    
+    <h3>Network links</h3>
+    {% if appli.node_set.all %}
+        <table class="table table-bordered table-striped">
+            <tr>
+                <th rowspan="2">Node</th>
+                <th colspan="4" style="text-align: center">Network</th>
+            </tr>
+            <tr>
+            {% for network in network_list %}
+                <th>{{network.name}}</th>
+            {% endfor %}
+            </tr>
+            
+            {% for node in appli.node_set.all %}
+                <tr>
+                    <td>{{node.name}}</td>
+                    {% for network in network_list %}
+                        {% for net in node.networklink_set.all %}
+                            {% if network.id == net.network.id %}
+                                <td>{{net.ip}}</td>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+    
+    
+    
+    
+    <div class="dropdown">
+        <h3>
+            Services <span class="badge">{{appli.service_set.all|length}}</span>
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                New
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+              <li><a href="{% url 'service_webserver_create' appli.id %}">Web server</a></li>
+              <li><a href="{% url 'service_reverseproxy_create' appli.id %}">Reverse proxy</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="{% url 'service_database_create' appli.id %}">Database</a></li>
+            </ul>
+        </h3>
+    </div>
+
+    {% if appli.service_set.all %}
+        <div class="row">
+        {% for service in appli.service_set.all %}
+            <div class="col-lg-6">
+                {% if service.servicewebserver %}
+                    {% include "service/snippet/snippet_servicewebserver.html" %}
+                {% elif service.servicereverseproxy %}
+                    {% include "service/snippet/snippet_servicereverseproxy.html" %}
+                {% elif service.servicedatabase %}
+                    {% include "service/snippet/snippet_servicedatabase.html" %}
+                {% endif %}
+            </div>
+        {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info" role="alert">No service attached</div>
+    {% endif %}
+    
+    
+
+    <h3>Bugzilla <span class="badge">{{appli.bugzilla_set.all|length}}</span></h3>
+    {% if appli.bugzilla_set.all %}
+        <p>Bug still open :</p>
+        <ul>
+            {% for bugzilla in appli.bugzilla_set.all %}
+                <li>
+                    <a href="{% url 'bugzilla_list' %}"> {{bugzilla.title}} </a> (opened in {{bugzilla.date_creation}} by {{bugzilla.owner}})
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <div class="alert alert-info" role="alert">No bugzilla open</div>
+    {% endif %}
+    <br>
+{% endblock %}

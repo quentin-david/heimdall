@@ -1,0 +1,28 @@
+{% extends "network/base_network.html" %}
+
+{% block title %}Networks{% endblock %}
+
+{% block content %}
+    <h2>Networks list</h2>
+    <ul>
+        {% for host in host_list %}
+            <li>{{host.name}}</li>
+            <ul>
+                {% for network in host.network_set.all %}
+                    <li>{{network.name}}</li>
+                    <ul>
+                    {% for node in host.node_set.all %}
+                        {% for net in node.networklink_set.all %}
+                            {% if net.network.name == network.name %}
+                                <li>{{node.name}} ({{net.ip}}) [{{net.nic_type}}]</li>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                    </ul>
+                {% empty %}
+                    <div class="alert alert-info" role="alert">no network for this host</div>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+    </ul>
+{% endblock %}

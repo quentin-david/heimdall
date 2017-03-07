@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block left_nav %}
+    <div class="list-group launcher">
+        {% block launcher %}
+            <a href="{% url 'collect_home' %}">
+                <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="add new profile">
+                    <span class="glyphicon glyphicon-arrow-left"></span>
+                </button>
+            </a>
+            <a href="{% url 'collecting_node' node.id %}">
+                <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="add new profile">
+                    <span class="glyphicon glyphicon-refresh"></span>
+                </button>
+            </a>
+        {% endblock %}
+    </div>
+{% endblock %}
+
+{% block title %}List of collects for {{node.name}}{% endblock %}
+
+{% block content %}
+    <table class="table table-bordered">
+        <tr>
+            <th>date</th>
+            <th>type</th>
+            <th>item</th>
+            <th>value</th>
+        </tr>
+        {% for coll in file_list %}
+        <tr>
+            <td>{{coll.date}}</td>
+            <td>{{coll.item.family}}</td>
+            <td>{{coll.item}}</td>
+            {% if coll.item.family == 'file' %}
+                <td>{{coll.data_file}}</td>
+            {% elif coll.item.family == 'script' %}
+                <td>{{coll.data_json}}</td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </table>
+    
+    {% comment %}
+    <div class="row">
+        {% for file in file_list %}
+            <div class="col-lg-6">
+                {{file}}
+                <h3>File {{file.item.name}}</h3>
+                <p>{{file.date}}</p>
+                <p>{{file.data_file|safe}}</p>
+            </div>    
+        {% endfor %}
+    </div>
+    {% endcomment %}
+    
+{% endblock %}

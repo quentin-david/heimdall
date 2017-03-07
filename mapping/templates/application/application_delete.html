@@ -1,0 +1,10 @@
+{% extends "application/base_application.html" %}
+
+{% block content %}
+    <p>You are about to delete the application {{appli.name}} created by {{appli.owner.username}}</p>
+    <form method="post" action="">
+        {% csrf_token %}  <!-- Nous prenons bien soin d'ajouter le csrf_token -->
+        <input type="submit" value="Proceed" />
+        <a href="{% url "application_list" %}">Cancel</a>
+    </form>
+{% endblock %}

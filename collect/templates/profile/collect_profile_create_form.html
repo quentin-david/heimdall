@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block left_nav %}
+    <div class="list-group launcher">
+        {% block launcher %}
+            <a href="{% url 'collect_home' %}">
+                <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="back to list">
+                    <span class="glyphicon glyphicon-arrow-left"></span>
+                </button>
+            </a>
+        {% endblock %}
+    </div>
+{% endblock %}
+
+{% block title %} Create new profile {% endblock %}
+
+{% block content %}
+    <form action="" method="post">
+        {% csrf_token %}
+        {{form.as_p}}
+        
+        <div class="row">
+			<div class="col-lg-12">
+				<div class="form-group">
+					<input class="btn-submit" type="submit" value="Submit" />
+					<a href="{% url 'collect_home' %}"><button type="button" class="btn-cancel">Cancel</button></a>
+				</div>
+			</div>
+        </div>
+    </form>
+{% endblock %}

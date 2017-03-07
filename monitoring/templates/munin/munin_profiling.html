@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block left_nav %}
+    <div class="launcher">
+        <a href="{% url 'monitoring_home' %}">
+            <button type="button" class="btn btn-default">
+                <span class="glyphicon glyphicon-arrow-left"></span>
+            </button>
+        </a>
+    </div>
+    <div class="launcher">
+        <h4>Precision</h4>
+        <div class="list-group">
+            {% if precision == 'day' %}
+                <a href="{% url 'munin_profiling' host.id metric 'day' %}" class="list-group-item active">DAY</a>
+                <a href="{% url 'munin_profiling' host.id metric 'week' %}" class="list-group-item ">WEEK</a>
+                 <a href="{% url 'munin_profiling' host.id metric 'month' %}" class="list-group-item ">MONTH</a>
+            {% elif precision == 'week' %}
+                <a href="{% url 'munin_profiling' host.id metric 'day' %}" class="list-group-item">DAY</a>
+                <a href="{% url 'munin_profiling' host.id metric 'week' %}" class="list-group-item active">WEEK</a>
+                 <a href="{% url 'munin_profiling' host.id metric 'month' %}" class="list-group-item ">MONTH</a>
+            {% elif precision == 'month' %}
+                <a href="{% url 'munin_profiling' host.id metric 'day' %}" class="list-group-item">DAY</a>
+                <a href="{% url 'munin_profiling' host.id metric 'week' %}" class="list-group-item">WEEK</a>
+                 <a href="{% url 'munin_profiling' host.id metric 'week' %}" class="list-group-item active">MONTH</a>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="launcher">
+        {% block object_list %}
+            <h4>Metric</h4>
+            <div class="list-group">
+                {% for met,desc in metric_list.items %}
+                    {% if metric == met %}
+                        <a href="{% url 'munin_profiling' host.id met precision %}" class="list-group-item active"> {{desc}} </a>
+                    {% else %}
+                        <a href="{% url 'munin_profiling' host.id met precision %}" class="list-group-item"> {{desc}} </a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endblock %}
+    </div>
+{% endblock %}
+
+{% block title %} Profiling {{host.name}} by {{metric}}{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-lg-11">
+            <img src="{% url 'pic' 'host' host.id metric precision %}" style="width: 100%">
+        </div>
+    </div>
+    
+    <div class="row">
+        {% for node in host.node_set.all %}
+            {% if node.munin_server %}
+                <div class="col-lg-6">
+                    <h5>
+                        <a href="{% url 'munin_node_view' node.id 'day'%}">{{node.name}}</a>
+                    </h5>
+                    <img src="{% url 'pic' 'node' node.id metric precision %}" style="width: 100%">
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endblock %}

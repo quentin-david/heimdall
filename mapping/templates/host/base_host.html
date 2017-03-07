@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block left_nav %}
+    <div class="list-group">
+        <a href="{% url "application_list" %}"><button type="button" class="btn btn-default btn-lg btn-block">Applications</button></a>
+        <a href="{% url "host_list" %}"><button type="button" class="btn btn-primary btn-lg btn-block">Hosts</button></a>
+        <a href="{% url "network_list" %}"><button type="button" class="btn btn-default btn-lg btn-block">Networks</button></a>
+    </div>
+    
+    <div class="list-group launcher">
+        {% block launcher %}
+            <a href="{% url 'host_create' %}">
+                <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="add a new host">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </button>
+            </a>
+        {% endblock %}
+    </div>
+    
+    {% comment %}
+    <div class="launcher">
+        {% block object_list %}
+            <h4>Hosts list</h4>
+            <div class="list-group">
+                {% for host in host_list %}
+                    <a href="{% url 'host_view' host.id %}" class="list-group-item">
+                        {{host.name}}
+                        <span class="badge">{{host.node_set.all|length}} VMs</span>
+                    </a>   
+                {% endfor %}
+            </div>
+        {% endblock %}
+    </div>
+    {% endcomment %}
+{% endblock %}

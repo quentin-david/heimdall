@@ -1,0 +1,29 @@
+{% extends "network/base_network.html" %}
+
+{% block content %}
+    <h3>Add new nework</h3>
+    <form action="" method="post">
+        {% csrf_token %}
+        {# form.as_p #}
+        <div class="col-lg-3">
+            {{ form.non_field_errors }}
+            <div class="form-group">
+                {{ form.name.errors }}
+                <label for="{{ form.owner.id_for_label }}"><b>Name</b></label>
+                {{ form.name }}
+            </div>
+        </div>
+        <div class="col-lg-2">
+            <div class="form-group">
+                {{ form.host.errors }}
+                <label for="{{ form.owner.id_for_label }}"><b>Host</b></label>
+                {{ form.host }}
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="form-group">
+                <input class="btn btn-default btn-bookmark" value="add network" type="submit">
+            </div>
+        </div>
+    </form>
+{% endblock %}

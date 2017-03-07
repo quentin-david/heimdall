@@ -1,0 +1,17 @@
+{% extends "munin/base_munin_server.html" %}
+
+{% block title %} Host {{host.name}} {% endblock %}
+
+{% block content %}
+    <div class="row">
+        {% if host.munin_server.checkApi %}
+            {% for metric in metric_list %}
+                <div class="col-lg-6">
+                    <img src="{% url 'pic' 'host' host.id metric resource_time %}" style="width: 100%">
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="alert alert-danger" role="alert">Munin unreachable</div>
+        {% endif %}
+    </div>
+{% endblock %}

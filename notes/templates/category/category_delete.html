@@ -1,0 +1,26 @@
+{% extends "notes/base_notes.html" %}
+
+{% block content %}
+    <p>You are about to delete the category {{category.name}}</p>
+    <p>
+        {% if category.category_set.all|length > 0 %}
+            All these sub-categories will be impacted :
+            <ul>
+                {% for kid in category.category_set.all %}
+                    <li>{{kid.name}}</li>
+                    <ul>
+                        {% for grandkid in kid.category_set.all %}
+                            <li>{{grandkid.name}}</li>
+                        {% endfor %}
+                    </ul>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </p>
+    
+    <form method="post" action="">
+        {% csrf_token %}
+        <input type="submit" value="Proceed" />
+        <a href="{% url "category_list" %}">Cancel</a>
+    </form>
+{% endblock %}

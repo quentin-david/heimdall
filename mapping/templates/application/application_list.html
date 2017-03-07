@@ -1,0 +1,38 @@
+{% extends "application/base_application.html" %}
+
+{% block title %} Applications {% endblock %}
+
+{% block content %}
+    <ul>
+    {% for appli in application_list %}
+        <div class="object_list_element">
+            <li>
+                <h4>
+                    Application :
+                    <a href="{% url 'application_view' appli.id %}">{{ appli.name|upper }}</a>
+                    <small>({{appli.identifier}})</small>
+                    {% if user.username == appli.owner.username %}
+                        <a href="{% url 'application_update' appli.id %}">
+                            <button type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="right" title="edit application">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                        </a>
+                    {% endif %}
+                </h4>
+            </li>
+                <div class="object_description">{{ appli.description|safe }}</div>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <td>Owner</td>
+                        <td>{{ appli.owner.username }}</td>
+                    </tr>
+                    <tr>
+                        <td>VMs number</td>
+                        <td>{{ appli.node_set.all|length }}</td>
+                    </tr>
+                </table>
+        </div>
+    {% endfor %}
+    </ul>
+    <p>{{var}}</p>
+{% endblock %}

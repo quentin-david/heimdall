@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block left_nav %}
+    <div class="list-group">
+        <a href="{% url "application_list" %}"><button type="button" class="btn btn-default btn-lg btn-block">Applications</button></a>
+        <a href="{% url "host_list" %}"><button type="button" class="btn btn-primary btn-lg btn-block">Hosts</button></a>
+        <a href="{% url "network_list" %}"><button type="button" class="btn btn-default btn-lg btn-block">Networks</button></a>
+    </div>
+    
+    <div class="list-group launcher">
+        {% block launcher %}
+            <a href="{% url 'host_view' node.host.id %}">
+                <button type="button" class="btn btn-default btn-sm">
+                    <span class="glyphicon glyphicon-arrow-left"></span>
+                </button>
+            </a>
+            <a href="{% url 'node_set_params' node.id %}">
+                <button type="button" class="btn btn-default btn-sm">
+                    <span class="glyphicon glyphicon-refresh"></span>
+                </button>
+            </a>
+            {% if user.username == node.application.owner.username %}
+                <a href="{% url 'node_update' node.id %}">
+                    <button type="button" class="btn btn-default btn-sm">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                    </button>
+                </a>
+                <a href="{% url 'node_delete' node.id %}">
+                    <button type="button" class="btn btn-default btn-sm">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </a>
+            {% endif %}
+        {% endblock %}
+    </div>
+
+{% endblock %}

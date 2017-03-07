@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block left_nav %}
+    <div class="launcher">
+        <a href="{% url 'monitoring_home' %}">
+            <button type="button" class="btn btn-default">
+                <span class="glyphicon glyphicon-arrow-left"></span>
+            </button>
+        </a>
+    </div>
+    <div class="launcher">
+        <h4>Precision</h4>
+        <div class="list-group">
+            {% if resource_time == 'day' %}
+                {% if node %}
+                    <a href="{% url 'munin_node_view' node.id resource_time %}" class="list-group-item active">DAY</a>
+                    <a href="{% url 'munin_node_view' node.id 'week' %}" class="list-group-item">WEEK</a>
+                    <a href="{% url 'munin_node_view' node.id 'month' %}" class="list-group-item">MONTH</a>
+                {% endif %}
+                {% if host %}
+                    <a href="{% url 'munin_host_view' host.id resource_time %}" class="list-group-item active">DAY</a>
+                    <a href="{% url 'munin_host_view' host.id 'week' %}" class="list-group-item">WEEK</a>
+                    <a href="{% url 'munin_host_view' host.id 'month' %}" class="list-group-item">MONTH</a>
+                {% endif %}
+            {% elif resource_time == 'week' %}
+                {% if node %}
+                    <a href="{% url 'munin_node_view' node.id 'day' %}" class="list-group-item">DAY</a>
+                    <a href="{% url 'munin_node_view' node.id resource_time %}" class="list-group-item active">WEEK</a>
+                    <a href="{% url 'munin_node_view' node.id 'month' %}" class="list-group-item">MONTH</a>
+                {% endif %}
+                {% if host %}
+                    <a href="{% url 'munin_host_view' host.id 'day' %}" class="list-group-item">DAY</a>
+                    <a href="{% url 'munin_host_view' host.id resource_time %}" class="list-group-item active">WEEK</a>
+                    <a href="{% url 'munin_host_view' host.id 'month' %}" class="list-group-item">MONTH</a>
+                {% endif %}
+            {% elif resource_time == 'month' %}
+                {% if node %}
+                    <a href="{% url 'munin_node_view' node.id 'day' %}" class="list-group-item">DAY</a>
+                    <a href="{% url 'munin_node_view' node.id 'week' %}" class="list-group-item">WEEK</a>
+                    <a href="{% url 'munin_node_view' node.id resource_time %}" class="list-group-item active">MONTH</a>
+                {% endif %}
+                {% if host %}
+                    <a href="{% url 'munin_host_view' host.id 'day' %}" class="list-group-item">DAY</a>
+                    <a href="{% url 'munin_host_view' host.id 'week' %}" class="list-group-item">WEEK</a>
+                    <a href="{% url 'munin_host_view' host.id resource_time %}" class="list-group-item active">MONTH</a>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="launcher">
+        {% block object_list %}
+            <h4>Host</h4>
+            <div class="list-group">
+                {% for host_item in host_list %}
+                    {% if host_item.name == host.name or host_item.name == node.host.name %}
+                        <a href="{% url 'munin_host_view' host_item.id resource_time %}" class="list-group-item active"> {{host_item.name}} </a>
+                    {% else %}
+                        <a href="{% url 'munin_host_view' host_item.id resource_time %}" class="list-group-item"> {{host_item.name}} </a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endblock %}
+    </div>
+    
+    <div class="launcher">
+        {% block object_list2 %}
+            <h4>Node list</h4>
+            <div class="list-group">
+                {% for node_item in node_list %}
+                    {% if node_item.munin_server %}
+                        {% if node.name == node_item.name %}
+                            <a href="{% url 'munin_node_view' node_item.id resource_time %}" class="list-group-item active"> {{node_item.name}} </a>
+                        {% else %}
+                            <a href="{% url 'munin_node_view' node_item.id resource_time %}" class="list-group-item"> {{node_item.name}} </a>
+                        {% endif %}
+                    {% endif %}
+                {% empty %}
+                    zob
+                {% endfor %}
+            </div>
+        {% endblock %}
+    </div>
+{% endblock %}

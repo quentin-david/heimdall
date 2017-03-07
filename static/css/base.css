@@ -1,0 +1,31 @@
+#left_column > a {
+    
+}
+
+#left_column > button:hover {
+    text-decoration: none;
+}
+
+.object_list_element {
+    
+}
+.object_description {
+    border-radius: 4px !important;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12) !important;
+    background-color: #000 !important;
+    color: #56db3a;
+}
+
+form .btn-submit {
+    width: 100% !important;
+    background-color: #4CAF50;
+    color: white;
+    margin-top: 10px;
+}
+
+form .btn-cancel {
+    width: 100% !important;
+    background-color: #b70303;
+    color: white;
+    margin-top: 10px;
+}

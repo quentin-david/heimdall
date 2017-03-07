@@ -1,0 +1,71 @@
+{% extends "notes/base_notes.html" %}
+
+{% block title %} Categories {% endblock %}
+
+{% block content %}
+    <div class="object_description">
+        Categories have 3 level of imbrication <br>
+        Notes and Bookmarks can't be attached directly to a "root" category
+    </div>
+    <br>
+    <form class="form-inline" action="" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.parent.errors }}
+            <label for="{{ form.parent.id_for_label }}">Parent</label>
+            {{ form.parent }}
+        </div>
+        <div class="form-group">
+            {{ form.name.errors }}
+            <label for="{{ form.name.id_for_label }}">Name</label>
+            {{ form.name }}
+        </div>
+        <input class="btn btn-default btn-bookmark" type="submit" value="add Category" />
+    </form>
+    
+    
+    <h3>Root categories</h3>
+    <ul>
+        {% for cat in root_category_list %}
+            <li>
+            {% if cat.category_set.all|length == 0%}
+                <span style="color: red;" data-toggle="tooltip" data-placement="right" title="you have to create subcategories to add notes or bookmarsk">{{cat.name}}</span>
+            {% else %}
+                {{cat.name}}
+            {% endif %}
+                <a href="{% url 'category_delete' cat.id %}">
+                    <button type="button" class="btn btn-default btn-xs">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </a>
+            </li>
+            <ul>
+                {% for kid in cat.category_set.all %}
+                    <li>
+                        {{kid.name}}
+                        <a href="{% url 'category_delete' kid.id %}">
+                            <button type="button" class="btn btn-default btn-xs">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </a>
+                    </li>
+                    <ul>
+                        {% for grandkid in kid.category_set.all %}
+                            <li>
+                                {{grandkid.name}}
+                                <a href="{% url 'category_delete' grandkid.id %}">
+                                    <button type="button" class="btn btn-default btn-xs">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+    </ul>
+    
+    
+    
+{% endblock %}

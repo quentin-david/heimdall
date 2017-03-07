@@ -1,0 +1,40 @@
+{% extends "application/base_application.html" %}
+
+{% block title %} Services {% endblock %}
+
+{% block content %}
+    
+    <h3>Reverse proxies</h3>
+    <div class="row">
+        {% for service in service_list %}
+            {% if service.servicereverseproxy %}
+                <div class="col-lg-6">
+                    {% include "service/snippet/snippet_servicereverseproxy.html" %}
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    
+    <h3>Web servers</h3>
+    <div class="row">
+        {% for service in service_list %}
+                {% if service.servicewebserver %}
+                    <div class="col-lg-6">
+                        {% include "service/snippet/snippet_servicewebserver.html" %}
+                    </div>
+                {% endif %}
+        {% endfor %}
+    </div>
+    
+    <h3>Databases</h3>
+    <div class="row">
+        {% for service in service_list %}
+                {% if service.servicedatabase %}
+                    <div class="col-lg-6">
+                        {% include "service/snippet/snippet_servicedatabase.html" %}
+                    </div>
+                {% endif %}
+        {% endfor %}
+    </div>
+{%endblock%}

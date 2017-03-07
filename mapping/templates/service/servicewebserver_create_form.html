@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Web server to {{appli.name}} {% endblock %}
+
+{% block content %}
+    <form action="" method="post">
+        {% csrf_token %}
+		
+		<div class="row">
+            <div class="col-lg-4">
+                {{ form.non_field_errors }}
+                <div class="input-group">
+                    {{ form.name.errors }}
+                    <span class="input-group-addon" id="sizing-addon1">Name</span>
+                    {{ form.name }}
+                </div>
+
+                <div class="input-group">
+                    {{ form.node.errors }}
+                    <span class="input-group-addon" id="sizing-addon1">Node
+                    {{ form.node }}</span>
+                </div>
+				
+				<div class="input-group">
+                    {{ form.active.errors }}
+                    <span class="input-group-addon" id="sizing-addon1">State
+                    {{ form.active }}</span>
+                </div>
+			</div>
+			<div class="col-lg-3">
+				
+                <div class="input-group">
+                    {{ form.family.errors }}
+                    <span class="input-group-addon" id="sizing-addon1">Family
+                    {{ form.family }}</span>
+                </div>
+				
+                <div class="input-group">
+                    {{ form.servername.errors }}
+                    <span class="input-group-addon" id="sizing-addon1">Servername</span>
+                    {{ form.servername }}
+                </div>
+				
+                <div class="input-group">
+                    {{ form.url_root.errors }}
+                    <span class="input-group-addon" id="sizing-addon1">URL</span>
+                    {{ form.url_root }}
+                </div>
+			</div>
+			<div class="col-lg-5">
+				
+                <div class="input-group">
+                    {{ form.protocol.errors }}
+                    <span class="input-group-addon" id="sizing-addon1">Protocol
+                    {{ form.protocol }}</span>
+                </div>
+				
+				<div class="col-lg-5">
+					<div class="input-group">
+						{{ form.ip.errors }}
+						<span class="input-group-addon" id="sizing-addon1">@IP</span>
+						{{ form.ip }}
+					</div>
+				</div>
+				<div class="col-lg-4">
+					<div class="input-group">
+						{{ form.port.errors }}
+						<span class="input-group-addon" id="sizing-addon1">Port</span>
+						{{ form.port }}
+					</div>
+				</div>
+				
+                <div class="input-group">
+                    {{ form.reverse_proxy.errors }}
+                    <span class="input-group-addon" id="sizing-addon1">Reverse proxy</span>
+                    {{ form.reverse_proxy }}
+                </div>
+            </div>
+		</div>
+		
+		<div class="row">
+            <div class="col-lg-12">
+                <div class="form-group">
+                    {{ form.description.errors }}
+                    {{ form.description }}
+                </div>
+            </div>
+        </div>
+		
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="form-group">
+					<input class="btn-submit" type="submit" value="Submit" />
+					<a href="{% url 'application_view' appli.id %}"><button type="button" class="btn-cancel">Cancel</button></a>
+				</div>
+			</div>
+        </div>
+	
+    </form>
+    
+    <script type="text/javascript">
+		CKEDITOR.replace( 'id_description' );
+	</script>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "notes/base_notes.html" %}
+
+{% block title %} Deleting note "<i>{{note.title}}</i>" {% endblock %}
+
+{% block content %}
+    <div class="alert alert-info" role="alert">
+        You are about to delete the note {{note.title}}
+    </div>
+    
+    {% if note.notesfile_set.all|length > 0 %}
+        <div class="alert alert-warning" role="alert">
+            You have to delete the files first
+        </div>
+    {% endif %}
+    
+    {% include "notes/snippet_note.html" %}
+    <form method="post" action="">
+        {% csrf_token %}
+        <input class="btn-submit" type="submit" value="Proceed" />
+        <a href="{% url "notes_list" %}">
+            <button type="button" class="btn-cancel">Cancel</button>
+        </a>
+    </form>
+{% endblock %}

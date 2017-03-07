@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block left_nav %}
+    <div class="list-group launcher">
+        <h4>Shortcuts</h4>
+        {% for service in service_list %}
+            <a href="{{service.servicewebserver.getFQDN}}" target="_blank">
+                <button type="button" class="btn btn-default btn-block">{{service.name}}</button>
+            </a>
+        {% endfor %}
+    </div>
+    
+    <div class="list-group launcher category-list">
+        <h5>
+            Categories
+            <a href="{% url 'category_list' %}">
+                <button type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="bottom" title="edit category list">
+                    <span class="glyphicon glyphicon-list"></span>
+                </button>
+            </a>
+        </h5>
+        <hr>
+        <ul>
+        {% for cat in root_category_list %}
+            <li><b>{{cat.name}}</b></li>
+            <ul>
+                {% for kid in cat.category_set.all %}
+                    <li>
+                        <a href="{% url 'topic_view' kid.id %}">
+                            {{kid.name}}
+                        </a>
+                    </li>
+                    <ul>
+                        {% for grandkid in kid.category_set.all %}
+                            <li>{{grandkid.name}}</li>
+                        {% endfor %}
+                    </ul>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+         </ul>
+    </div>
+{% endblock %}
+
+{% block page_title %} Heimdall {% endblock %}
+{% block title %} Home {% endblock %}
+
+{% block content %}
+    <h3>Bookmark</h3>
+    <form class="form-inline" action="" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.category.errors }}
+            <label for="{{ form.category.id_for_label }}">Category</label>
+            {{ form.category }}
+        </div>
+        <div class="form-group">
+            {{ form.url.errors }}
+            <label for="{{ form.url.id_for_label }}">URL</label>
+            {{ form.url }}
+        </div>
+        <input class="btn btn-default btn-bookmark" type="submit" value="add Bookmark" />
+    </form>    
+    
+    <h2>Mapping</h2>
+        <h4>By host (KVM hypervisor)</h4>
+            <div class="object_description">
+                List every nodes (guests) per host and their attributes.
+                Infos imported from the Foreman server
+            </div>
+        
+        <h4>By application</h4>
+            <div class="object_description">
+                List of applications and nodes associated    
+            </div>
+            
+        <h4>By network</h4>
+            <div class="object_description">
+                List all virtual networks and the node associated    
+            </div>
+            
+            
+    <h2>Monitoring</h2>
+        <h4>By host/node</h4>
+            <div class="object_description">
+                Gives every graphs and stats for a given server
+                (CPU, RAM, network activity, etc)
+            </div>    
+                
+        <h4>By type of resource</h4>
+            <div class="object_description">
+                Profiling 
+            </div>
+{% endblock %}

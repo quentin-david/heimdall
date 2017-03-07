@@ -1,0 +1,103 @@
+{% extends "host/base_host.html" %}
+
+{% block title %} Hosts {% endblock %}
+
+{% block content %}
+   <h3>Heimdall DB <span class="badge">{{host_list|length}}</span></h3>
+   <ul>
+   {% for host in host_list %}
+      <div class="object_list_element">
+          <li>
+              <h4>
+                  Host :
+                  <a href="{% url 'host_view' host.id %}">{{ host.name|upper }}</a>
+                  <a href="{% url 'host_update' host.id %}">
+                     <button type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="right" title="Edit host">
+                         <span class="glyphicon glyphicon-pencil"></span>
+                     </button>
+                 </a>
+              </h4>
+          </li>
+              <div class="object_description">{{ host.description|safe }}</div>
+              <table class="table table-bordered table-striped">
+                  <tr>
+                     {% if host.node_set.all|length > 0 %}
+                        <td>VMs number</td>
+                        <td>{{host.node_set.all|length}}</td>
+                     {% else %}
+                        <div class="alert alert-info" role="alert">No nodes for this host</div>
+                     {% endif %}
+                  </tr>
+              </table>
+      </div>
+   {% empty %}
+      <div class="alert alert-info" role="alert">No host in Heimdall DB</div>
+   {% endfor %}
+    </ul>
+   
+   
+   <h3>Foreman API <span class="badge">{{foreman_host_list.results|length}}</span></h3>
+   {% if foreman_host_unregistered %}
+   <ul>
+      <h4>Hosts declared in Foreman and not registered in DB</h4>
+      {% for host in foreman_host_unregistered.results %}
+         <div class="object_list_element">
+             <li>
+                 <h4>
+                     Host : {{ host.name|upper }}
+                 </h4>
+             </li>
+                 <div class="object_description">{{ host|safe }}</div>
+                 <div class="object_description">{{ host.description|safe }}</div>
+                 <table class="table table-bordered table-striped">
+                     <tr>
+                         <td>Type</td>
+                         <td>{{host.provider}}</td>
+                     </tr>
+                     <tr>
+                         <td>VMs nb</td>
+                         <td>7?</td>
+                     </tr>
+                 </table>
+         </div>
+      {% empty %}
+         <div class="alert alert-info" role="alert">unregistered host in Foreman</div>
+      {% endfor %}
+   </ul>
+   {% else %}
+      <div class="alert alert-info" role="alert">No more unregistered host in Foreman</div>
+   {% endif %}
+   
+   {% comment %}
+      <h3>----debug : Foreman API -----</h3>
+      <ul>
+      {% if foreman_host_list %}
+         {% for host in foreman_host_list.results %}
+            <div class="object_list_element">
+                <li>
+                    <h4>
+                        Host : {{ host.name|upper }}
+                    </h4>
+                </li>
+                    <div class="object_description">{{ host|safe }}</div>
+                    <div class="object_description">{{ host.description|safe }}</div>
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <td>Type</td>
+                            <td>{{host.provider}}</td>
+                        </tr>
+                        <tr>
+                            <td>VMs nb</td>
+                            <td>7?</td>
+                        </tr>
+                    </table>
+            </div>
+         {% empty %}
+            <div class="alert alert-info" role="alert">No host in Foreman</div>
+         {% endfor %}
+      {% else %}
+         <div class="alert alert-danger" role="alert">Foreman unreachable</div>
+      {% endif %}  
+   {% endcomment %}
+      
+{% endblock %}

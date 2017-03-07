@@ -1,0 +1,46 @@
+
+<table class="table table-bordered table-striped table-hover service">
+        <tr>
+                <th colspan="2" style="text-align: center">
+                    <span class="service-icon service-icon-reverseproxy"></span>
+                    <b>REVERSE PROXY</b> ({{service.servicereverseproxy.family}})
+                    {% if user.username == appli.owner.username and appli %}
+                        <a href="{# url 'service_reverseproxy_delete' appli.id service.id #}">
+                            <button type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top" title="delete service" style="float: right">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </a>
+                        <a href="{% url 'service_reverseproxy_update' appli.id service.id %}">
+                            <button type="button" class="btn btn-default btn-xs"  data-toggle="tooltip" data-placement="top" title="edit service" style="float: right">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                        </a>
+                    {% endif %}
+                </th>
+        <tr>
+                <th>Name</th>
+                <td>{{service.name}}</td>
+        </tr>
+        <tr>
+                <th>URL</th>
+                <td>{{service.servicereverseproxy.protocol}}://{{service.servicereverseproxy.proxy_url}}/</td>
+        </tr>
+        <tr>
+                <th>Node</th>
+                {% if service.servicereverseproxy.node %}
+                    <td>{{service.servicereverseproxy.node.name}} ({{service.servicereverseproxy.ip}})</td>
+                {% else %}
+                    <td>({{service.servicereverseproxy.ip}})</td>
+                {% endif %}
+        </tr>
+        <tr>
+                <th>Applications attached</th>
+                <td>
+                        <ul>
+                        {% for client in service.servicereverseproxy.getApplicationsAttached %}
+                                <li>{{client}}</li>
+                        {% endfor %}
+                        </ul>
+                </td>
+        </tr>
+</table>

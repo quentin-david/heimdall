@@ -1,0 +1,10 @@
+{% extends "host/base_host.html" %}
+
+{% block content %}
+    <p>You are about to delete the host {{host.name}}</p>
+    <form method="post" action="">
+        {% csrf_token %}  <!-- Nous prenons bien soin d'ajouter le csrf_token -->
+        <input type="submit" value="Proceed" />
+        <a href="{% url "host_list" %}">Cancel</a>
+    </form>
+{% endblock %}

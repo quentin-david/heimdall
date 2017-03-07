@@ -1,0 +1,40 @@
+{% extends "foreman/base_foreman.html" %}
+
+{% block title %}Foreman list{% endblock %}
+
+{% block content %}
+    {% for foreman in foreman_list %}
+    <h3>
+        Foreman server {{foreman.ip}}
+        <a href="{% url 'foreman_update' foreman.id %}">
+            <button type="button" class="btn btn-default btn-xs">
+                <span class="glyphicon glyphicon-pencil"></span>
+            </button>
+        </a>
+    </h3>
+    <table class="table">
+        <tr>
+            <th>State</th>
+            <td>
+                {% if foreman.checkApi %}
+                    <span class="label label-success">OK</span>
+                {% else %}
+                    <span class="label label-danger">unreachable</span>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>@IP</th>
+            <td>{{foreman.ip}}</td>
+        </tr>
+        <tr>
+            <th>Protocol</th>
+            <td>{{foreman.protocol}}</td>
+        </tr>
+        <tr>
+            <th>API user</th>
+            <td>{{foreman.api_user}}</td>
+        </tr>
+    </table><br>
+    {% endfor %}
+{% endblock %}

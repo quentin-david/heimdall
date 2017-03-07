@@ -1,0 +1,17 @@
+{% extends "nextcloud/base_nextcloud.html" %}
+
+{% block title %}Nextcloud{%endblock %}
+
+{% block content %}
+    <p>Connected to {{nextcloud.domain}} as {{nextcloud.user}}</p>
+    <h3>File list</h3>
+    <ul>
+        {% for file in file_list %}
+            <li>{{file}}</li>
+            <li>{{file.name}}</li>
+            {% if file.contenttype == 'image/jpeg'%}
+                {#<img src="{% url 'nextcloud_file_download'%}?file_name={{file.name}}"/>#}
+            {% endif %}
+        {% endfor %}
+    </ul>
+{% endblock %}

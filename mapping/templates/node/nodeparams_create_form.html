@@ -1,0 +1,81 @@
+{% extends "node/base_node.html" %}
+
+{% block title %}{% endblock %}
+
+{% block launcher %}
+    <a href="{% url 'node_view' node.id %}">
+        <button type="button" class="btn btn-default">
+            <span class="glyphicon glyphicon-arrow-left"></span>
+        </button>
+    </a>
+{% endblock %}
+
+{% block object_list %}
+    <h4>editing {{host.name}}...</h4>
+{% endblock %}
+
+{% block content %}
+    <form action="" method="post">
+        {% csrf_token %}
+		{{ form.as_p }}
+		
+		{% comment %}
+        <table>
+			<tr><td>
+				<div class="input-group">
+					{{ form.ip_admin.errors }}
+					<span class="input-group-addon" id="sizing-addon1">@IP admin</span>
+					{{ form.ip_admin }}
+				</div>
+			</td></tr>
+			<tr><td>
+				<div class="input-group">
+					{{ form.ip_public.errors }}
+					<span class="input-group-addon" id="sizing-addon1">@IP public</span>
+					{{ form.ip_public }}
+				</div>
+			</td></tr>
+			<tr><td>
+				<div class="input-group">
+					{{ form.nb_ram.errors }}
+					<span class="input-group-addon" id="sizing-addon1">Ram</span>
+					{{ form.nb_ram }}
+				</div>
+			</td></tr>
+			<tr><td>
+				<div class="input-group">
+					{{ form.nb_cpu.errors }}
+					<span class="input-group-addon" id="sizing-addon1">Cpu</span>
+					{{ form.nb_cpu }}
+				</div>
+			</td></tr>
+			<tr><td>
+				<div class="input-group">
+					{{ form.disk_size.errors }}
+					<span class="input-group-addon" id="sizing-addon1">Disk</span>
+					{{ form.disk_size }}
+				</div>
+			</td></tr>
+			<tr><td>
+				<div class="input-group">
+					{{ form.state.errors }}
+					<span class="input-group-addon" id="sizing-addon1">State</span>
+					{{ form.state }}
+				</div>
+			</td></tr>
+		</table>
+		{% endcomment %}
+		
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <input type="submit" value="Submit" />
+                </div>
+            </div>
+        </div>
+    </form>
+    
+    <script type="text/javascript">
+		CKEDITOR.replace( 'id_description' );
+	</script>
+{% endblock %}

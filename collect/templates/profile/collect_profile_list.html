@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block left_nav %}
+    <div class="list-group launcher">
+        {% block launcher %}
+            <a href="{% url 'collect_profile_create' %}">
+                <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="add new profile">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </button>
+            </a>
+            <a href="{% url 'collect_item_create' %}">
+                <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="add new item">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </button>
+            </a>
+            <a href="{% url 'collect_purge' %}">
+                <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="purge all collects">
+                    <span class="glyphicon glyphicon-trash"></span>
+                </button>
+            </a>
+        {% endblock %}
+    </div>
+{% endblock %}
+
+{% block title %} Collect elements {% endblock %}
+
+{% block content %}
+    <h3>Collect profiles</h3>
+    <ul>
+        {% for profile in collect_profile_list %}
+            <li>{{profile.name}} : {{profile.description}}
+                <a href="{% url 'collect_profile_update' profile.id %}">
+                    <button type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top" title="edit profile">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                    </button>
+                </a>
+                <ul>
+                    {% for item in profile.collect_items.all%}
+                        <li>[{{item.family}}] {{item}}</li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul>
+    
+    <h3>Collect items</h3>
+    <ul>
+        {% for item in collect_item_list %}
+            <li>
+                [{{item.family}}] {{item.name}}  [{{item.frequency}}] ({{item.description}})
+            </li>
+        {% endfor %}
+    </ul>
+    
+    <h2>Collect batch</h2>
+    <table class="table table-bordered">
+        <tr>
+            <th>date</th>
+            <th>node</th>
+            <th>item</th>
+            <th>value</th>
+        </tr>
+        {% for coll in collect_list %}
+        <tr>
+            <td>{{coll.date}}</td>
+            <td>
+                <a href="{% url 'node_collect' coll.node.id %}">
+                    {{coll.node}}
+                </a>
+            </td>
+            <td>{{coll.item}}</td>
+            <td>{{coll.data_file}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

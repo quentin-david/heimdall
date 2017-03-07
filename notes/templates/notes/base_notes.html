@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block stylesheets %}
+    {{block.super}}
+    <link rel="stylesheet" href="{% static 'css/notes.css' %}">
+{% endblock %}
+
+{% block left_nav %}    
+    <div class="list-group launcher category-list">
+        <h5>
+            Categories
+            <a href="{% url 'category_list' %}">
+                <button type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="bottom" title="edit category list">
+                    <span class="glyphicon glyphicon-list"></span>
+                </button>
+            </a>
+        </h5>
+        <hr>
+        <ul>
+        {% for cat in root_category_list %}
+            <li><b>{{cat.name}}</b></li>
+            <ul>
+                {% for kid in cat.category_set.all %}
+                    <li>
+                        <a href="{% url 'topic_view' kid.id %}">
+                            {{kid.name}}
+                        </a>
+                    </li>
+                    <ul>
+                        {% for grandkid in kid.category_set.all %}
+                            <li>{{grandkid.name}}</li>
+                        {% endfor %}
+                    </ul>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+         </ul>
+    </div>
+{% endblock %}
+
+{% block title %} Blocnotes {% endblock %}

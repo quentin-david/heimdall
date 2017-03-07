@@ -1,0 +1,45 @@
+
+<table class="table table-bordered table-striped table-hover service">
+<tr>
+    <th colspan="2" style="text-align: center">
+        <b>WEB SERVER</b> ({{service.servicewebserver.family}})
+        {% if user.username == appli.owner.username %}
+            <a href="{% url 'service_delete' appli.id service.id %}">
+                <button type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top" title="delete service" style="float: right">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </button>
+            </a>
+            <a href="{% url 'service_webserver_update' appli.id service.id %}">
+                <button type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top" title="edit service" style="float: right">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </button>
+            </a>
+        {% endif %}
+    </th>
+<tr>
+    <th>Name</th>
+    <td>
+                {{service.name}}
+    </td>
+</tr>
+<tr>
+     <th>public URL</th>
+     <td>
+                <a href="{{service.servicewebserver.getFQDN}}" target="_blank">
+                                {{service.servicewebserver.getFQDN}}
+                </a>
+    </td>
+</tr>
+<tr>
+    <th>Node</th>
+    <td>{{service.node.name}}</td>
+</tr>
+<tr>
+    <th>local URL</th>
+    <td>{{service.servicewebserver.protocol}}://{{service.servicewebserver.ip}}:{{service.servicewebserver.port}}</td>
+</tr>
+<tr>
+    <th>Reverse proxy</th>
+    <td>{{service.servicewebserver.reverse_proxy.ip}}</td>
+</tr>
+</table>

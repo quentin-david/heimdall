@@ -1,0 +1,13 @@
+.service {
+    text-align: center;
+}
+
+.service-icon {
+    float: left;
+    width: 20px;
+    height: 20px;
+}
+
+.service-icon-reverseproxy {
+    background-image: url("../pictures/DeleteRed.png");
+}

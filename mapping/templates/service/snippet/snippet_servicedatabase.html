@@ -1,0 +1,33 @@
+
+<table class="table table-bordered table-striped table-hover service">
+<tr>
+    <th colspan="2" style="text-align: center">
+        <b>DATABASE</b> ({{service.servicedatabase.family}})
+        {% if user.username == appli.owner.username and appli %}
+            <a href="{% url 'service_delete' appli.id service.id %}">
+                <button type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top" title="delete service" style="float: right">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </button>
+            </a>
+            <a href="{% url 'service_webserver_update' appli.id service.id %}">
+                <button type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top" title="edit service" style="float: right">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </button>
+            </a>
+        {% endif %}
+    </th>
+<tr>
+    <th>Name</th>
+    <td>
+                {{service.name}}
+    </td>
+</tr>
+<tr>
+    <th>Node</th>
+    <td>{{service.node.name}}</td>
+</tr>
+<tr>
+    <th>DB name</th>
+    <td>{{service.servicedatabase.dbname}}</td>
+</tr>
+</table>

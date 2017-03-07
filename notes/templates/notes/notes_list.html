@@ -1,0 +1,22 @@
+{% extends "notes/base_notes.html" %}
+
+{% block left_nav %}
+    <div class="list-group launcher">
+        {% block launcher %}
+            <a href="{% url 'notes_create' %}">
+                <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="add new note">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </button>
+            </a>
+            
+        {% endblock %}
+    </div>
+    {{block.super}}
+{% endblock %}
+
+{% block content %}
+    {% for note in notes_list %}
+        {% include "notes/snippet_note.html" %}
+    {% endfor %}
+{% endblock %}
+        

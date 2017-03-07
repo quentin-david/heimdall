@@ -1,0 +1,73 @@
+{% load static %}
+{% block menu %}
+	
+<div class="navbar-header">
+	<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
+	  <span class="icon-bar"></span>
+	  <span class="icon-bar"></span>
+	  <span class="icon-bar"></span>
+	</button>
+	<a class="navbar-brand" href="{% url 'home' %}">
+		<span class="glyphicon glyphicon-home"></span>
+	</a>
+</div>
+
+<div class="collapse navbar-collapse" id="navbar-menu">		
+	<ul class="nav navbar-nav">
+
+		<li class="dropdown">
+			<a href="#" class="dropdown-toggle" data-toggle="dropdown">Topics</a>
+			<ul class="dropdown-menu">
+				<li><a href="{% url 'notes_list' %}">Notes</a></li>
+				<li><a href="{% url 'category_list' %}">Category</a></li>
+				<li><a href="{% url 'bookmark_list' %}">Bookmark</a></li>
+			</ul>
+		</li>
+		
+		<li class=""><a href="{% url 'bugzilla_list' %}" class="" title="document">Bugzilla</a></li>
+		
+		<li class=""><a href="{% url 'nextcloud_home' %}" class="" title="document">Document</a></li>
+	
+		<li class="dropdown">
+			<a href="#" class="dropdown-toggle" data-toggle="dropdown" title="cartographie">Mapping</a>
+			<ul class="dropdown-menu">
+				<li><a href="{% url 'host_list' %}">Hosts</a></li>
+				<li><a href="{% url 'application_list' %}">Applications</a></li>
+				<li><a href="{% url 'network_list' %}">Networks</a></li>
+				<li><a href="{% url 'service_list' %}">Services</a></li>
+				{#<li><a href="">BDD/NFS</a></li>#}
+			</ul>
+		</li>
+		
+		<li class="dropdown">
+			<a href="#" class="dropdown-toggle" data-toggle="dropdown">System</a>
+			<ul class="dropdown-menu">
+				<li><a href="{% url 'monitoring_home' %}">Metrology</a></li>
+				<li><a href="{% url 'collect_home' %}">Collect</a></li>
+				<li><a href="{% url 'foreman_list' %}">Deployment</a></li>
+			</ul>
+		</li>
+		
+		<li class="dropdown">
+			<a href="#" class="dropdown-toggle" data-toggle="dropdown">POC</a>
+			<ul class="dropdown-menu">
+				<li><a href="{% url 'exercice_home' %}">Exercices</a></li>
+			</ul>
+		</li>
+	</ul>
+	<ul class="nav navbar-nav navbar-right">
+		{% if user.is_authenticated %}
+			<li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown" title="My Account"><img src="{% static 'pictures/img_avatar2.png' %}" class="w3-circle" style="height:25px;width:25px" alt="Avatar"></a>
+				<ul class="dropdown-menu">
+					<li><a href="{% url 'profile' %}">Profile</a></li>
+					<li><a href="{% url 'logout' %}">Logout</a></li>
+				</ul>
+			</li>
+		{% else %}
+			<li><a href="{% url 'login' %}">Login</a></li>
+		{% endif %}
+	</ul>
+</div>
+
+{% endblock %}

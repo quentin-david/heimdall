@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block left_nav %}
+    <div class="list-group launcher">
+        <a href="{% url 'exercice_home' %}">
+            <button type="button" class="btn btn-default">
+                <span class="glyphicon glyphicon-arrow-left"></span>
+            </button>
+        </a>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <form action="" method="post">
+        {% csrf_token %}
+        <div class="row">
+            <p>
+                {{ form.date.errors }}
+                    <label for="{{ form.date.id_for_label }}">Date :</label>
+                    {{ form.date }}
+            </p>
+            <p>
+                {{ form.exercice.errors }}
+                    <label for="{{ form.exercice.id_for_label }}">Exercice :</label>
+                    {{ form.exercice }}
+            </p>
+            <p>
+                {{ form.temps_qt.errors }}
+                    <label for="{{ form.temps_qt.id_for_label }}">Temps Quentin : </label>
+                    {{ form.temps_qt }}
+                    
+                    <input type=button id="start_qt" value="START"/>
+                    <input type=button id="stop_qt" value="STOP"/>
+                    <input type=button id="clear_qt" value="RESET"/>
+            </p>
+            <p>
+                {{ form.temps_db.errors }}
+                    <label for="{{ form.temps_db.id_for_label }}">Temps Deborah :</label>
+                    {{ form.temps_db }}
+                    
+                    <input type=button id="start_db" value="START"/>
+                    <input type=button id="stop_db" value="STOP"/>
+                    <input type=button id="clear_db" value="RESET"/>
+            </p>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <input type="submit" value="Submit" />
+            </div>
+        </div>
+    </form>
+    
+    
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+      <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+      <script>
+            $( function() {
+              $( "#id_date" ).datepicker();
+            } );
+    </script>
+    <script type="text/javascript">
+        /*
+        var h1 = document.getElementById('id_temps'),
+        start = document.getElementById('start'),
+        stop = document.getElementById('stop'),
+        clear = document.getElementById('clear'),
+        seconds = 0, minutes = 0, hours = 0,
+        t;
+        
+        function add() {
+            seconds++;
+            if (seconds >= 60) {
+                seconds = 0;
+                minutes++;
+                if (minutes >= 60) {
+                    minutes = 0;
+                    hours++;
+                }
+            }           
+            h1.value = (hours ? (hours > 9 ? hours : "0" + hours) : "00") + ":" + (minutes ? (minutes > 9 ? minutes : "0" + minutes) : "00") + ":" + (seconds > 9 ? seconds : "0" + seconds);
+            timer();
+        }
+        function timer() {
+            t = setTimeout(add, 1000);
+        }
+        timer();   
+        // Start button
+        start.onclick = timer;
+        // Stop button 
+        stop.onclick = function() {
+            clearTimeout(t);
+        }
+        // Clear button
+        clear.onclick = function() {
+            h1.value = "00:00:00";
+            seconds = 0; minutes = 0; hours = 0;
+        }
+    */
+        
+        /*
+        var compteur_qt = document.getElementById('id_temps_qt'),
+        compteur_db = document.getElementById('id_temps_db'),
+        seconds = 0, minutes = 0, hours = 0,
+        t_qt,
+        t_db;
+        
+        function add(field) {
+            seconds++;
+            if (seconds >= 60) {
+                seconds = 0;
+                minutes++;
+                if (minutes >= 60) {
+                    minutes = 0;
+                    hours++;
+                }
+            }           
+            field.value = (hours ? (hours > 9 ? hours : "0" + hours) : "00") + ":" + (minutes ? (minutes > 9 ? minutes : "0" + minutes) : "00") + ":" + (seconds > 9 ? seconds : "0" + seconds);
+            timer();
+        }
+        function timer(t,field) {
+            t = setTimeout(add(field), 1000);
+        }
+        timer();   
+        // Start button
+        document.getElementById('start_db').onclick = timer(t_db,compteur_db);
+        document.getElementById('start_qt').onclick = timer(t_qt,compteur_qt);
+        // Stop button
+        document.getElementById('stop_db').onclick = function() {
+            clearTimeout(t_db);
+        }
+        document.getElementById('stop_qt').onclick = function() {
+            clearTimeout(t_qt);
+        }
+        // Clear button
+        document.getElementById('clear_db').onclick = function() {
+            compteur_db.value = "00:00:00";
+            seconds = 0; minutes = 0; hours = 0;
+        }
+        document.getElementById('clear_qt').onclick = function() {
+            compteur_qt.value = "00:00:00";
+            seconds = 0; minutes = 0; hours = 0;
+        }
+        //
+    </script>
+{% endblock %}
