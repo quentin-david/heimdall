@@ -11,7 +11,7 @@ from mapping.models import Node
 def collectHome(request):
     collect_profile_list = CollectProfile.objects.all()
     collect_item_list = CollectItem.objects.all()
-    collect_history = Collect.objects.all()
+    collect_history = Collect.objects.order_by('-date')
     node_list = Node.objects.filter(is_collected=True)
     collect_late_node = Collect().getLateCollectNode(node_list)
     return render(request, 'collect/collect_home.html', locals())

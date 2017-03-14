@@ -2,7 +2,7 @@
 <table class="table table-bordered table-striped table-hover service">
 <tr>
     <th colspan="2" style="text-align: center">
-        <b>WEB SERVER</b> ({{service.servicewebserver.family}})
+        <b>{{service.name}}</b> ({{service.servicewebserver.family}})
         {% if user.username == appli.owner.username %}
             <a href="{% url 'service_delete' appli.id service.id %}">
                 <button type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top" title="delete service" style="float: right">
@@ -16,11 +16,6 @@
             </a>
         {% endif %}
     </th>
-<tr>
-    <th>Name</th>
-    <td>
-                {{service.name}}
-    </td>
 </tr>
 <tr>
      <th>public URL</th>
@@ -40,6 +35,6 @@
 </tr>
 <tr>
     <th>Reverse proxy</th>
-    <td>{{service.servicewebserver.reverse_proxy.ip}}</td>
+    <td>{{service.servicewebserver.reverse_proxy}} ({{service.servicewebserver.reverse_proxy.ip}})</td>
 </tr>
 </table>

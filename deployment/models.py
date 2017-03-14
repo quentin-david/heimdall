@@ -74,3 +74,22 @@ class Foreman(models.Model):
         return parameter
     
     
+    """
+    Node creation from Heimdall
+    """
+    def apiPostCall(self,resource,data):
+        with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+            url = self.protocol+'://'+self.ip+'/api/'+resource
+            cmd = executor.submit(requests.post, url, data, auth=(self.api_user, self.api_user_pwd), verify=False)
+            try:
+                data = cmd.result()
+            except Exception as exc:
+                return False
+            else:
+                return data.json()
+            
+    def createForemanNodeFromNode(self,node):
+        return False
+
+
+ 

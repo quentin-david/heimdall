@@ -1,0 +1,241 @@
+{% extends "node/base_node.html" %}
+
+{% block title %}{% endblock %}
+
+{% block launcher %}
+	{% if node %}
+    <a href="{% url 'node_view' node.id %}">
+        <button type="button" class="btn btn-default">
+            <span class="glyphicon glyphicon-arrow-left"></span>
+        </button>
+    </a>
+{% endif %}
+{% endblock %}
+
+{% block object_list %}
+    <h4>editing {{node.name}}...</h4>
+{% endblock %}
+
+{% block content %}
+    <form action="" method="post">
+        {% csrf_token %}
+		
+        <div>
+			<h3>Node {{node.name}}</h3>
+				
+			<ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active">
+                    <a href="#general" aria-controls="general" role="tab" data-toggle="tab">General</a>
+                </li>
+				<li role="presentation">
+                    <a href="#system" aria-controls="system" role="tab" data-toggle="tab">System</a>
+                </li>
+				<li role="presentation">
+                    <a href="#network" aria-controls="network" role="tab" data-toggle="tab">Network</a>
+                </li>
+				<li role="presentation">
+                    <a href="#collect" aria-controls="collect" role="tab" data-toggle="tab">Collect</a>
+                </li>
+			</ul>
+			
+			<div class="tab-content">
+                <div role="tabpanel" class="tab-pane fade in active" id="general">
+					<div class="row">
+						<div class="col-lg-4">
+							<div class="input-group">
+								{{ form.application.errors }}
+								<span class="input-group-addon" id="sizing-addon1">Application</span>
+								{{ form.application }}
+							</div>
+							<div class="input-group">
+								{{ form.host.errors }}
+								<span class="input-group-addon" id="sizing-addon1">Host</span>
+								{{ form.host }}
+							</div>
+						</div>
+						<div class="col-lg-4">
+							<div class="input-group">
+								{{ form.name.errors }}
+								<span class="input-group-addon" id="sizing-addon1">Name</span>
+								{{ form.name }}
+							</div>
+							<div class="input-group">
+								{{ form.short_description.errors }}
+								<span class="input-group-addon" id="sizing-addon1">Short description</span>
+								{{ form.short_description }}
+							</div>
+						</div>
+						<div class="col-lg-4">
+							<div class="input-group">
+								{{ form.managed_by_heimdall.errors }}
+								<span class="input-group-addon" id="sizing-addon1">Managed by Heimdall</span>
+								{{ form.managed_by_heimdall }}
+							</div>
+							<div class="input-group">
+								{{ form.state.errors }}
+								<span class="input-group-addon" id="sizing-addon1">State</span>
+								{{ form.state }}
+							</div>
+							<div class="input-group">
+								{{ form.foreman_status_label.errors }}
+								<span class="input-group-addon" id="sizing-addon1">Foreman status</span>
+								{{ form.foreman_status_label }}
+							</div>
+						</div>
+						
+							<div class="col-lg-12">
+								<div style="margin-top: 15px">
+									{{ form.description.errors }}
+									{{ form.description }}
+								</div>
+							</div>
+						
+					</div>
+				</div>
+				
+				<div role="tabpanel" class="tab-pane fade" id="system">
+					<div class="row">
+						<div class="col-lg-3">
+							<div class="input-group">
+								{{ form.nb_ram.errors }}
+								<span class="input-group-addon" id="sizing-addon1">RAM</span>
+								{{ form.nb_ram }}
+							</div>
+							<div class="input-group">
+								{{ form.nb_cpu.errors }}
+								<span class="input-group-addon" id="sizing-addon1">CPU</span>
+								{{ form.nb_cpu }}
+							</div>
+						</div>
+						<div class="col-lg-4">
+							<div class="input-group">
+								{{ form.os.errors }}
+								<span class="input-group-addon" id="sizing-addon1">OS</span>
+								{{ form.os }}
+							</div>
+							<div class="input-group">
+								{{ form.disk_size.errors }}
+								<span class="input-group-addon" id="sizing-addon1">Disk size</span>
+								{{ form.disk_size }}
+							</div>
+						</div>
+						<div class="col-lg-3">
+							<div class="input-group">
+								{{ form.munin_server.errors }}
+								<span class="input-group-addon" id="sizing-addon1">Munin Server</span>
+								{{ form.munin_server }}
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div role="tabpanel" class="tab-pane fade" id="network">
+					<div class="row">
+						<div class="col-lg-4">
+							<div class="input-group">
+								{{ form.ip_public.errors }}
+								<span class="input-group-addon" id="sizing-addon1">@IP public</span>
+								{{ form.ip_public }}
+							</div>
+						</div>
+						<div class="col-lg-4">
+							<div class="input-group">
+								{{ form.ip_admin.errors }}
+								<span class="input-group-addon" id="sizing-addon1">@IP admin</span>
+								{{ form.ip_admin }}
+							</div>
+						</div>
+						<div class="col-lg-4">
+							<div class="input-group">
+								{{ form.nb_nics.errors }}
+								<span class="input-group-addon" id="sizing-addon1">nb nics</span>
+								{{ form.nb_nics }}
+							</div>
+						</div>
+					
+						<div class="col-lg-8">
+							{% comment %}
+							<div class="input-group">
+								{{ form.network_links.errors }}
+								<span class="input-group-addon" id="sizing-addon1">Network links</span>
+								{{ form.network_links }}
+							</div>
+							{% endcomment%}
+							<table>
+								<tr>
+									<th>Network</th>
+									<th>@IP</th>
+									<th>@MAC</th>
+									<th>iface</th>
+									<th>type</th>
+								</tr>
+								{%comment %}
+								<tr>
+									<td>{{network_link_form.0.network}}</td>
+									<td>{{network_link_form.node}}</td>
+									<td>{{network_link_form.ip}}</td>
+									<td>{{network_link_form.mac}}</td>
+									<td>{{network_link_form.iface}}</td>
+									<td>{{network_link_form.nic_type}}</td>
+								</tr>
+							{% endcomment%}
+								{{network_link_form.management_form}}
+								{% for net in network_link_form %}
+									<tr>
+										{{net.id}}
+										<td>{{net.network}} {{net.network.errors}}</td>
+										<td>{{net.node}} {{net.node.errors}}</td>
+										<td>{{net.ip}} {{net.ip.errors}}</td>
+										<td>{{net.mac}} {{net.mac.errors}}</td>
+										<td>{{net.iface}} {{net.iface.errors}}</td>
+										<td>{{net.nic_type}} {{net.nic_type.errors}}</td>
+									</tr>
+								{% endfor %}
+							</table>
+							{#network_link_form.as_ul#}
+						</div>	
+					</div>
+				</div>
+				
+				<div role="tabpanel" class="tab-pane fade" id="collect">
+					<div class="row">
+						<div class="col-lg-3">
+							<div class="input-group">
+								{{ form.is_collected.errors }}
+								<span class="input-group-addon" id="sizing-addon1">Collected</span>
+								{{ form.is_collected }}
+							</div>
+						</div>
+						<div class="col-lg-3">
+							<div class="input-group">
+								{{ form.collect_profile.errors }}
+								<span class="input-group-addon" id="sizing-addon1">Collect profile</span>
+								{{ form.collect_profile }}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>		
+ 
+				
+        <br>
+        
+	
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="form-group">
+					<input class="btn-submit" type="submit" value="Submit" />
+					{% if node %}
+						<a href="{% url 'node_view' node.id %}"><button type="button" class="btn-cancel">Cancel</button></a>
+					{% endif %}
+				</div>
+			</div>
+        </div>
+    </form>
+    
+	
+    <script type="text/javascript">
+		CKEDITOR.replace( 'id_description' );
+	</script>
+{% endblock %}

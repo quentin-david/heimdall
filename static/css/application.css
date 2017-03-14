@@ -1,5 +1,6 @@
-.service {
+.service th, .service td{
     text-align: center;
+    vertical-align: middle !important;
 }
 
 .service-icon {

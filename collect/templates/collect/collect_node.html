@@ -33,7 +33,7 @@
             <td>{{coll.item.family}}</td>
             <td>{{coll.item}}</td>
             {% if coll.item.family == 'file' %}
-                <td>{{coll.data_file}}</td>
+                <td>{{coll.data_file|linebreaks}}</td>
             {% elif coll.item.family == 'script' %}
                 <td>{{coll.data_json}}</td>
             {% endif %}

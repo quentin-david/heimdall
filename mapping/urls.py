@@ -7,7 +7,8 @@ urlpatterns = [
     # Applications
     url(r'app$', login_required(views.ApplicationList.as_view()), name='application_list'),
     url(r'app/new$', login_required(views.ApplicationCreate.as_view()), name='application_create'),
-    url(r'app/(?P<pk>\d+)$', login_required(views.ApplicationView.as_view()), name='application_view'),
+    #url(r'app/(?P<pk>\d+)$', login_required(views.ApplicationView.as_view()), name='application_view'),
+    url(r'app/(?P<appli_id>\d+)$', login_required(views.applicationView), name='application_view'),
     url(r'app/edit/(?P<pk>\d+)$', login_required(views.ApplicationUpdate.as_view()), name='application_update'),
     url(r'app/delete/(?P<pk>\d+)$', login_required(views.ApplicationDelete.as_view()), name='application_delete'),
     # Hosts
@@ -22,8 +23,11 @@ urlpatterns = [
     url(r'host/(?P<host_id>\d+)/create_unregistered_nodes$', views.hostCreateAllUnregisteredNodes, name='host_create_unregistered_nodes'),
     url(r'node/(?P<pk>\d+)$', views.nodeView, name='node_view'),
     url(r'node/delete/(?P<pk>\d+)$', login_required(views.NodeDelete.as_view()), name='node_delete'),
-    url(r'node/edit/(?P<pk>\d+)$', login_required(views.NodeUpdate.as_view()), name='node_update'),
+    #url(r'node/edit/(?P<pk>\d+)$', login_required(views.NodeUpdate.as_view()), name='node_update'),
+    url(r'node/edit/(?P<node_id>\d+)$', login_required(views.nodeCreateOrUpdate), name='node_update'),
     url(r'node/(?P<node_id>\d+)/set_params$', views.nodeSetParamsFromForeman, name='node_set_params'),
+    #url(r'^node/new$', login_required(views.NodeCreate.as_view()), name='node_create'),
+    url(r'^node/new$', login_required(views.nodeCreateOrUpdate), name='node_create'),
     # Networks
     url(r'network$', views.networkList, name='network_list'),
     url(r'network/new$', views.NetworkCreate.as_view(), name='network_create'),

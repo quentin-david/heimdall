@@ -118,18 +118,76 @@
     </div>
 
     {% if appli.service_set.all %}
-        <div class="row">
-        {% for service in appli.service_set.all %}
-            <div class="col-lg-6">
-                {% if service.servicewebserver %}
-                    {% include "service/snippet/snippet_servicewebserver.html" %}
-                {% elif service.servicereverseproxy %}
-                    {% include "service/snippet/snippet_servicereverseproxy.html" %}
-                {% elif service.servicedatabase %}
-                    {% include "service/snippet/snippet_servicedatabase.html" %}
-                {% endif %}
+        <div>
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active">
+                    <a href="#webserver" aria-controls="webserver" role="tab" data-toggle="tab">
+                        Webservice  ({{servicewebserver_list|length}})
+                    </a>
+                </li>
+                <li role="presentation">
+                    <a href="#reverse" aria-controls="reverse" role="tab" data-toggle="tab">
+                        Reverse  ({{servicereverseproxy_list|length}})
+                    </a>
+                </li>
+                <li role="presentation">
+                    <a href="#database" aria-controls="database" role="tab" data-toggle="tab">
+                        Database  ({{servicedatabase_list|length}})
+                    </a>
+                </li>
+                <li role="presentation" class="dropdown">
+                    <a id="myTabDrop1" class="dropdown-toggle" href="#" data-toggle="dropdown" aria-controls="myTabDrop1-contents" aria-expanded="false">
+                        New
+                        <span class="caret"></span>
+                    </a>
+                    <ul id="myTabDrop1-contents" class="dropdown-menu" aria-labelledby="myTabDrop1">
+                        <li><a id="dropdown1-tab" href="#dropdown1" role="tab" data-toggle="tab" aria-controls="dropdown1">Web server</a></li>
+                        <li><a id="dropdown2-tab" href="#dropdown2" role="tab" data-toggle="tab" aria-controls="dropdown2">Reverse proxy</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a id="dropdown3-tab" href="#dropdown3" role="tab" data-toggle="tab" aria-controls="dropdown3">Database</a></li>
+                    </ul>
+                </li>
+            </ul>
+            
+             <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="webserver">
+                    {% if servicewebserver_list %}
+                        {% for service in servicewebserver_list %}
+                            {% include "service/snippet/snippet_servicewebserver.html" %}
+                        {% endfor %}
+                    {% else %}
+                        <div class="alert alert-info" role="alert">No web service</div>
+                    {% endif %}
+                </div>
+                <div role="tabpanel" class="tab-pane" id="reverse">
+                    {% if servicereverseproxy_list %}
+                        {% for service in servicereverseproxy_list %}
+                            {% include "service/snippet/snippet_servicereverseproxy.html" %}
+                        {% endfor %}
+                    {% else %}
+                        <div class="alert alert-info" role="alert">No reverse proxy</div>
+                    {% endif %}
+                </div>
+                <div role="tabpanel" class="tab-pane" id="database">
+                    {% if servicedatabase_list%}
+                        {% for service in servicedatabase_list %}
+                            {% include "service/snippet/snippet_servicedatabase.html" %}
+                        {% endfor %}
+                    {% else %}
+                        <div class="alert alert-info" role="alert">No database</div>
+                    {% endif %}
+                </div>
+                
+                <div role="tabpanel" class="tab-pane" id="dropdown1">
+                    {% include "service/forms/form_servicewebserver.html" %}
+                </div>
+                <div role="tabpanel" class="tab-pane" id="dropdown2">
+                    {# include "service/forms/form_servicereverseproxy.html" #}
+                </div>
+                <div role="tabpanel" class="tab-pane" id="dropdown3">
+                    {# include "service/forms/form_servicedatabase.html" #}
+                </div>
             </div>
-        {% endfor %}
         </div>
     {% else %}
         <div class="alert alert-info" role="alert">No service attached</div>

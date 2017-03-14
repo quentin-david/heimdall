@@ -3,11 +3,13 @@
 {% block title %}{% endblock %}
 
 {% block launcher %}
+	{% if node %}
     <a href="{% url 'node_view' node.id %}">
         <button type="button" class="btn btn-default">
             <span class="glyphicon glyphicon-arrow-left"></span>
         </button>
     </a>
+{% endif %}
 {% endblock %}
 
 {% block object_list %}
@@ -63,7 +65,9 @@
 					<div class="col-lg-12">
 						<div class="form-group">
 							<input class="btn-submit" type="submit" value="Submit" />
-							<a href="{% url 'node_view' node.id %}"><button type="button" class="btn-cancel">Cancel</button></a>
+							{% if node %}
+								<a href="{% url 'node_view' node.id %}"><button type="button" class="btn-cancel">Cancel</button></a>
+							{% endif %}
 						</div>
 					</div>
 				</div>

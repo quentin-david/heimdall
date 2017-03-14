@@ -1,0 +1,99 @@
+
+    <form action="{% url 'service_webserver_create' appli.id %}" method="post">
+        {% csrf_token %}
+		
+		<div class="row">
+            <div class="col-lg-4">
+                {{ form_webserver.non_field_errors }}
+                <div class="input-group">
+                    {{ form_webserver.name.errors }}
+                    <span class="input-group-addon" id="sizing-addon1">Name</span>
+                    {{ form_webserver.name }}
+                </div>
+
+                <div class="input-group">
+                    {{ form_webserver.node.errors }}
+                    <span class="input-group-addon" id="sizing-addon1">Node
+                    {{ form_webserver.node }}</span>
+                </div>
+				
+				<div class="input-group">
+                    {{ form_webserver.active.errors }}
+                    <span class="input-group-addon" id="sizing-addon1">State
+                    {{ form_webserver.active }}</span>
+                </div>
+			</div>
+			<div class="col-lg-3">
+				
+                <div class="input-group">
+                    {{ form_webserver.family.errors }}
+                    <span class="input-group-addon" id="sizing-addon1">Family
+                    {{ form_webserver.family }}</span>
+                </div>
+				
+                <div class="input-group">
+                    {{ form_webserver.servername.errors }}
+                    <span class="input-group-addon" id="sizing-addon1">Servername</span>
+                    {{ form_webserver.servername }}
+                </div>
+				
+                <div class="input-group">
+                    {{ form_webserver.url_root.errors }}
+                    <span class="input-group-addon" id="sizing-addon1">URL</span>
+                    {{ form_webserver.url_root }}
+                </div>
+			</div>
+			<div class="col-lg-5">
+				
+                <div class="input-group">
+                    {{ form_webserver.protocol.errors }}
+                    <span class="input-group-addon" id="sizing-addon1">Protocol
+                    {{ form_webserver.protocol }}</span>
+                </div>
+				
+				<div class="col-lg-5">
+					<div class="input-group">
+						{{ form_webserver.ip.errors }}
+						<span class="input-group-addon" id="sizing-addon1">@IP</span>
+						{{ form_webserver.ip }}
+					</div>
+				</div>
+				<div class="col-lg-4">
+					<div class="input-group">
+						{{ form_webserver.port.errors }}
+						<span class="input-group-addon" id="sizing-addon1">Port</span>
+						{{ form_webserver.port }}
+					</div>
+				</div>
+				
+                <div class="input-group">
+                    {{ form_webserver.reverse_proxy.errors }}
+                    <span class="input-group-addon" id="sizing-addon1">Reverse proxy</span>
+                    {{ form_webserver.reverse_proxy }}
+                </div>
+            </div>
+		</div>
+		
+		<div class="row">
+            <div class="col-lg-12">
+                <div class="form-group">
+                    {{ form_webserver.description.errors }}
+                    {{ form_webserver.description }}
+                </div>
+            </div>
+        </div>
+		
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="form-group">
+					<input class="btn-submit" type="submit" value="Submit" />
+					{#<a href="{% url 'application_view' appli.id %}"><button type="button" class="btn-cancel">Cancel</button></a>#}
+				</div>
+			</div>
+        </div>
+	
+    </form>
+    
+    <script type="text/javascript">
+		CKEDITOR.replace( 'id_description' );
+	</script>

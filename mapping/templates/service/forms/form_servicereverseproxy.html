@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}Reverse proxy {% endblock %}
+
+{% block content %}
+    <form action="{% url 'service_reverseproxy_create' appli.id %}" method="post">
+        {% csrf_token %}
+		
+		<div class="row">
+            <div class="col-lg-4">
+                {{ form_reverseproxy.non_field_errors }}
+                <div class="input-group">
+                    {{ form_reverseproxy.name.errors }}
+                    <span class="input-group-addon" id="sizing-addon1">Name</span>
+                    {{ form_reverseproxy.name }}
+                </div>
+
+                <div class="input-group">
+                    {{ form_reverseproxy.node.errors }}
+                    <span class="input-group-addon" id="sizing-addon1">Node
+                    {{ form_reverseproxy.node }}</span>
+                </div>
+
+                <div class="input-group">
+                    {{ form_reverseproxy.application.errors }}
+                    <span class="input-group-addon" id="sizing-addon1">Application
+                    {{ form_reverseproxy.application }}</span>
+                </div>
+			</div>
+			<div class="col-lg-3">
+                <div class="input-group">
+                    {{ form_reverseproxy.active.errors }}
+                    <span class="input-group-addon" id="sizing-addon1">State
+                    {{ form_reverseproxy.active }}</span>
+                </div>
+				
+                <div class="input-group">
+                    {{ form_reverseproxy.family.errors }}
+                    <span class="input-group-addon" id="sizing-addon1">Family
+                    {{ form_reverseproxy.family }}</span>
+                </div>
+				
+                <div class="input-group">
+                    {{ form_reverseproxy.proxy_url.errors }}
+                    <span class="input-group-addon" id="sizing-addon1">URL</span>
+                    {{ form_reverseproxy.proxy_url }}
+                </div>
+			</div>
+			<div class="col-lg-5">
+                <div class="input-group">
+                    {{ form_reverseproxy.protocol.errors }}
+                    <span class="input-group-addon" id="sizing-addon1">Protocol
+                    {{ form_reverseproxy.protocol }}</span>
+                </div>
+				
+				<div class="col-lg-5">
+					<div class="input-group">
+						{{ form_reverseproxy.ip.errors }}
+						<span class="input-group-addon" id="sizing-addon1">@IP</span>
+						{{ form_reverseproxy.ip }}
+					</div>
+				</div>
+				<div class="col-lg-4">
+					<div class="input-group">
+						{{ form_reverseproxy.port.errors }}
+						<span class="input-group-addon" id="sizing-addon1">Port</span>
+						{{ form_reverseproxy.port }}
+					</div>
+				</div>
+            </div>
+		</div>
+		
+		<div class="row">
+            <div class="col-lg-12">
+                <div class="form-group">
+                    {{ form_reverseproxy.description.errors }}
+                    {{ form_reverseproxy.description }}
+                </div>
+            </div>
+        </div>
+		
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="form-group">
+					<input class="btn-submit" type="submit" value="Submit" />
+					{#<a href="{% url 'application_view' appli.id %}"><button type="button" class="btn-cancel">Cancel</button></a>#}
+				</div>
+			</div>
+        </div>
+
+    </form>
+    
+    <script type="text/javascript">
+		CKEDITOR.replace( 'id_description' );
+	</script>
+{% endblock %}

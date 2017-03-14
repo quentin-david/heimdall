@@ -135,6 +135,7 @@ class Collect(models.Model):
                     return True
         return True
     
+    
     """
     get all nodes who are late on their collect
     """

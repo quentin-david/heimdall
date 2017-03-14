@@ -117,9 +117,10 @@ class Node(Vm):
     state = models.CharField(max_length=2, choices=states, default='UN')
     foreman_status_label = models.CharField(max_length=10, blank=True,null=True)
     nb_nics = models.IntegerField(default=0)
-    network_links = models.ManyToManyField('mapping.Network', through='NetworkLink')
+    network_links = models.ManyToManyField('mapping.Network', through='NetworkLink', through_fields=('node','network') , blank=True)
     collect_profile = models.ForeignKey('collect.CollectProfile', null=True, blank=True)
     is_collected = models.BooleanField(default=True)
+    managed_by_heimdall = models.BooleanField(default=False)
     
     class Meta:
         #ordering = ['-date_check_foreman']
@@ -236,9 +237,9 @@ class NetworkLink(models.Model):
     network = models.ForeignKey(Network, on_delete=models.CASCADE)
     node = models.ForeignKey(Node, on_delete=models.CASCADE)
     ip = models.GenericIPAddressField(null=True, blank=True)
-    mac = models.CharField(max_length=20)
-    iface = models.CharField(max_length=20, default='')
-    nic_type = models.CharField(max_length=20, default='')
+    mac = models.CharField(max_length=20, null=True, blank=True)
+    iface = models.CharField(max_length=20, default='ens', null=True, blank=True)
+    nic_type = models.CharField(max_length=20, default='virtio', null=True, blank=True)
 
 
 
@@ -265,6 +266,9 @@ class ServiceReverseProxy(Service):
     family = models.CharField(max_length=20, choices=families, default='apache')
     protocols = (('http','http'),('https','https'),)
     protocol = models.CharField(max_length=20, choices=protocols, default='http')
+    
+    def getAttachedApplications(self):
+        return self.servicewebserver_set.all()
       
 
 class ServiceWebServer(Service):
