@@ -1,7 +1,7 @@
 <div class="panel panel-default note">
         <table class="table table-bordered">
         <tr class="header-line">
-            <th colspan="2" style="text-align: center">
+            <th colspan="2" style="">
                 <span style="float: left">[{{note.category.name}}]</span>
                 <span style="float: left"> ({{note.date_update}})</span>
                 
@@ -9,11 +9,11 @@
                 
                 <span style="float: right">
                         {% if note.notesfile_set.all|length > 0 %}
-                                <button id="btn-show-files" type="button" class="btn btn-default btn-xs">
+                                <button type="button" class="btn btn-default btn-xs btn-show-files-{{note.id}}">
                                         <span class="glyphicon glyphicon-paperclip"></span>
                                 </button>
                                 <script>
-                                       $("#btn-show-files").click(function(){
+                                       $(".btn-show-files-{{note.id}}").click(function(){
                                                 $(".note-files-line-{{note.id}}").toggle();
                                        });
                                 </script>
@@ -60,7 +60,7 @@
                 </tr>
         {% endif %}
         <tr>
-            <td colspan="2">{{note.content|safe}}</td>
+            <td class="note-content" colspan="2">{{note.content|safe}}</td>
         </tr>
     </table>
 </div>

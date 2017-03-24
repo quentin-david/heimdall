@@ -8,9 +8,16 @@
     </a>
 {% endblock %}
 
-{% block title %}Create new Note {%endblock%}
+{% block title %}
+	{% if note_to_edit %}
+		edit {{note_to_edit.title}}
+	{% else %}
+		Create new note
+	{% endif %}
+{%endblock%}
 
 {% block content %}
+	{% comment %}
     <form action="" enctype="multipart/form-data" method="post">
         {% csrf_token %}
         <div class="row">
@@ -86,7 +93,11 @@
 			<div class="col-lg-12">
 				<div class="form-group">
 					<input class="btn-submit" type="submit" value="Submit" />
-					<a href="{% url 'notes_list' %}"><button type="button" class="btn-cancel">Cancel</button></a>
+					{% if note_to_edit %}
+						<a href="{% url 'topic_view' note_to_edit.category.id %}"><button type="button" class="btn-cancel">Cancel</button></a>
+					{% else %}
+						<a href="{% url 'notes_list' %}"><button type="button" class="btn-cancel">Cancel</button></a>
+					{% endif %}
 				</div>
 			</div>
         </div>
@@ -95,4 +106,7 @@
     <script type="text/javascript">
 		CKEDITOR.replace( 'id_content' );
 	</script>
+{% endcomment %}
+	{% include "notes/snippet_form_note.html" %}
+
 {% endblock %}

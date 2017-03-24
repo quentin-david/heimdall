@@ -22,7 +22,8 @@ class NodeForm(forms.ModelForm):
 class NodeFullForm(forms.ModelForm):
     class Meta:
         model = Node
-        fields = '__all__'
+        #fields = '__all__'
+        exclude = ['application', 'foreman_status_label']
     
     #def __init__(self, *args, **kwargs):
         #super(NodeFullForm, self).__init__(*args, **kwargs)

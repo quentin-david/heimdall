@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'app/(?P<appli_id>\d+)$', login_required(views.applicationView), name='application_view'),
     url(r'app/edit/(?P<pk>\d+)$', login_required(views.ApplicationUpdate.as_view()), name='application_update'),
     url(r'app/delete/(?P<pk>\d+)$', login_required(views.ApplicationDelete.as_view()), name='application_delete'),
+    
     # Hosts
     url(r'host$', login_required(views.hostList), name='host_list'),
     url(r'host/new$', login_required(views.HostCreate.as_view()), name='host_create'),
@@ -18,19 +19,24 @@ urlpatterns = [
     url(r'host/edit/(?P<pk>\d+)', login_required(views.HostUpdate.as_view()), name='host_update'),
     url(r'host/delete/(?P<pk>\d+)$', login_required(views.HostDelete.as_view()), name='host_delete'),
     url(r'host/(?P<host_id>\d+)/set_nodes_params$', login_required(views.hostSetAllNodesParamsFromForeman), name='host_set_nodes_params'),
-     # Nodes
+    
+    # Nodes
     url(r'host/(?P<host_id>\d+)/(?P<foreman_node_id>\d+)$', views.hostCreateNode, name='host_create_node'),
     url(r'host/(?P<host_id>\d+)/create_unregistered_nodes$', views.hostCreateAllUnregisteredNodes, name='host_create_unregistered_nodes'),
     url(r'node/(?P<pk>\d+)$', views.nodeView, name='node_view'),
     url(r'node/delete/(?P<pk>\d+)$', login_required(views.NodeDelete.as_view()), name='node_delete'),
     #url(r'node/edit/(?P<pk>\d+)$', login_required(views.NodeUpdate.as_view()), name='node_update'),
-    url(r'node/edit/(?P<node_id>\d+)$', login_required(views.nodeCreateOrUpdate), name='node_update'),
+    #url(r'node/edit/(?P<node_id>\d+)$', login_required(views.nodeUpdate), name='node_update'),
+    url(r'^app/(?P<appli_id>\d+)/node/edit/(?P<node_id>\d+)$', login_required(views.nodeCreateOrUpdate), name='node_update'),
     url(r'node/(?P<node_id>\d+)/set_params$', views.nodeSetParamsFromForeman, name='node_set_params'),
     #url(r'^node/new$', login_required(views.NodeCreate.as_view()), name='node_create'),
-    url(r'^node/new$', login_required(views.nodeCreateOrUpdate), name='node_create'),
+    #url(r'^node/new$', login_required(views.nodeCreateOrUpdate), name='node_create'),
+    url(r'^app/(?P<appli_id>\d+)/node/new$', login_required(views.nodeCreateOrUpdate), name='node_create'),
+    
     # Networks
     url(r'network$', views.networkList, name='network_list'),
     url(r'network/new$', views.NetworkCreate.as_view(), name='network_create'),
+    
     # Services
     url(r'^service$', login_required(views.ServiceList.as_view()), name='service_list'),
     

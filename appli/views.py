@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from mapping.models import ServiceWebServer
 from notes.forms import BookmarkForm
-from notes.models import Category
+from notes.models import Category, Notes, NotesFile
 
 def home(request):
     service_list = ServiceWebServer.objects.all()
@@ -18,3 +18,9 @@ def home(request):
 def profile(request):
     user = User.objects.get(username=request.user.username)
     return render(request, 'appli/profile.html', locals())
+
+def statistics(request):
+    user_list = User.objects.all()
+    note_list = Notes.objects.all()
+    file_list = NotesFile.objects.all()
+    return render(request, 'about/statistics.html', locals())

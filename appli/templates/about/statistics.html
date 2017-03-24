@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %} Heimdall statistics {% endblock %}
+{% block content %}
+    <h2>Notes : {{note_list|length}}</h2>
+    <ul>
+        {% for user in user_list %}
+        <li>{{user.username}} ({{user.notes_set|length}})</li>
+        {% endfor %}
+    </ul>
+    <h3>Files</h3>
+    <ul>
+        {% for file in file_list %}
+            <li>{{file}}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

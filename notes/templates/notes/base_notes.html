@@ -27,11 +27,13 @@
                             {{kid.name}}
                         </a>
                     </li>
+                    {% comment%}
                     <ul>
                         {% for grandkid in kid.category_set.all %}
                             <li>{{grandkid.name}}</li>
                         {% endfor %}
                     </ul>
+                {% endcomment%}
                 {% endfor %}
             </ul>
         {% endfor %}

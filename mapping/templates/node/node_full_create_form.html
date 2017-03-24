@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block object_list %}
-    <h4>editing {{node.name}}...</h4>
+    <h4>editing {{node_to_edit.name}}...</h4>
 {% endblock %}
 
 {% block content %}
@@ -21,7 +21,11 @@
         {% csrf_token %}
 		
         <div>
-			<h3>Node {{node.name}}</h3>
+			{% if node_to_edit %}
+				<h3>Node {{node_to_edit.name}}</h3>
+			{% else %}
+				<h3>New node</h3>
+			{% endif %}
 				
 			<ul class="nav nav-tabs" role="tablist">
                 <li role="presentation" class="active">
@@ -43,18 +47,6 @@
 					<div class="row">
 						<div class="col-lg-4">
 							<div class="input-group">
-								{{ form.application.errors }}
-								<span class="input-group-addon" id="sizing-addon1">Application</span>
-								{{ form.application }}
-							</div>
-							<div class="input-group">
-								{{ form.host.errors }}
-								<span class="input-group-addon" id="sizing-addon1">Host</span>
-								{{ form.host }}
-							</div>
-						</div>
-						<div class="col-lg-4">
-							<div class="input-group">
 								{{ form.name.errors }}
 								<span class="input-group-addon" id="sizing-addon1">Name</span>
 								{{ form.name }}
@@ -67,19 +59,21 @@
 						</div>
 						<div class="col-lg-4">
 							<div class="input-group">
-								{{ form.managed_by_heimdall.errors }}
-								<span class="input-group-addon" id="sizing-addon1">Managed by Heimdall</span>
-								{{ form.managed_by_heimdall }}
+								{{ form.host.errors }}
+								<span class="input-group-addon" id="sizing-addon1">Host</span>
+								{{ form.host }}
 							</div>
 							<div class="input-group">
 								{{ form.state.errors }}
 								<span class="input-group-addon" id="sizing-addon1">State</span>
 								{{ form.state }}
 							</div>
+						</div>
+						<div class="col-lg-4">
 							<div class="input-group">
-								{{ form.foreman_status_label.errors }}
-								<span class="input-group-addon" id="sizing-addon1">Foreman status</span>
-								{{ form.foreman_status_label }}
+								{{ form.managed_by_heimdall.errors }}
+								<span class="input-group-addon" id="sizing-addon1">Managed by Heimdall</span>
+								{{ form.managed_by_heimdall }}
 							</div>
 						</div>
 						
@@ -152,16 +146,9 @@
 								{{ form.nb_nics }}
 							</div>
 						</div>
-					
-						<div class="col-lg-8">
-							{% comment %}
-							<div class="input-group">
-								{{ form.network_links.errors }}
-								<span class="input-group-addon" id="sizing-addon1">Network links</span>
-								{{ form.network_links }}
-							</div>
-							{% endcomment%}
-							<table>
+						
+						<div class="col-lg-12">
+							<table style="width: 100%">
 								<tr>
 									<th>Network</th>
 									<th>@IP</th>
@@ -169,22 +156,12 @@
 									<th>iface</th>
 									<th>type</th>
 								</tr>
-								{%comment %}
-								<tr>
-									<td>{{network_link_form.0.network}}</td>
-									<td>{{network_link_form.node}}</td>
-									<td>{{network_link_form.ip}}</td>
-									<td>{{network_link_form.mac}}</td>
-									<td>{{network_link_form.iface}}</td>
-									<td>{{network_link_form.nic_type}}</td>
-								</tr>
-							{% endcomment%}
 								{{network_link_form.management_form}}
 								{% for net in network_link_form %}
 									<tr>
 										{{net.id}}
 										<td>{{net.network}} {{net.network.errors}}</td>
-										<td>{{net.node}} {{net.node.errors}}</td>
+										{#<td>{{net.node}} {{net.node.errors}}</td>#}
 										<td>{{net.ip}} {{net.ip.errors}}</td>
 										<td>{{net.mac}} {{net.mac.errors}}</td>
 										<td>{{net.iface}} {{net.iface.errors}}</td>
@@ -216,18 +193,13 @@
 					</div>
 				</div>
 			</div>
-		</div>		
- 
-				
-        <br>
-        
-	
+		</div>
 		<div class="row">
 			<div class="col-lg-12">
 				<div class="form-group">
 					<input class="btn-submit" type="submit" value="Submit" />
-					{% if node %}
-						<a href="{% url 'node_view' node.id %}"><button type="button" class="btn-cancel">Cancel</button></a>
+					{% if node_to_edit %}
+						<a href="{% url 'node_view' node_to_edit.id %}"><button type="button" class="btn-cancel">Cancel</button></a>
 					{% endif %}
 				</div>
 			</div>

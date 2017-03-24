@@ -3,20 +3,71 @@
 {% block title %}topic <i>{{category.parent.name|upper}}</i> > <i>{{category.name|upper}}</i> {% endblock %}
 
 {% block content %}
-    <h3>Bookmark list</h3>
+    <h3>
+        Bookmark list
+        <button id="btn-add-bookmark" type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top" title="add new bookmark">
+            <span class="glyphicon glyphicon-plus"></span>
+        </button>
+        <script>
+            $("#btn-add-bookmark").click(function(){
+                $("#form-bookmark").toggle();
+            });
+        </script>
+    </h3>
+    
+    <div style="display: none" id="form-bookmark" >
+        <form class="form-inline" action="" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ bookmark_form.url.errors }}
+                {#<label for="{{ bookmark_form.url.id_for_label }}">URL</label>#}
+                {{ bookmark_form.url }}
+            </div>
+            <input class="btn btn-default btn-bookmark" type="submit" value="add Bookmark" />
+        </form>
+    </div>
+    
     <ul class="bookmark-list">
         {% for book in bookmark_list %}
             {% include "bookmark/snippet_bookmark_list.html" %}
         {% endfor %}
     </ul>
     
-    <h3>Notes list</h3>
+    <h3>
+        Notes list
+        <button id="btn-add-note" type="button" class="btn btn-default btn-xs" data-toggle="modal"  data-target="#noteModal">
+            <span class="glyphicon glyphicon-plus"></span>
+        </button>
+        
+    </h3>
+    
+    <!-- Modal -->
+    <div class="modal fade" id="noteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">new note on category "<i>{{category.name}}</i>"</h4>
+          </div>
+          
+          <div class="modal-body">
+                {% include "notes/snippet_form_note.html" %}
+          </div>
+          
+        </div>
+      </div>
+    </div>
+    
+    
+    
+    
+    
     {% for note in notes_list %}
        {% include "notes/snippet_note.html" %}
     {% endfor %}
     
+    
     <h3>Files</h3>
-    <p>Coming soon...</p>
     <ul>
     {% for note in notes_list %}
         {% for file in note.notesfile_set.all %}
@@ -29,4 +80,16 @@
         {% endfor %}
     {% endfor %}
     </ul>
+    
+    <ul>
+    {% for file in file_list %}
+        <li>
+            <a href="{{file.uploaded_file.url}}">
+                {{file.short_name}}
+            </a>
+                ({{file.uploaded_file.size|filesizeformat}})
+        </li>
+    {% endfor %}
+    </ul>
+    
 {% endblock %}

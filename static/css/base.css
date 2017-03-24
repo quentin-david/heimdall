@@ -42,3 +42,9 @@ table th, table td {
     background-color: #eee;
     border-radius: 4px;
 }
+
+.tab-pane > table, .tab-pane > .alert {
+    margin-bottom: 0px;
+}
+
+

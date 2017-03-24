@@ -25,7 +25,20 @@
     background-color: #d1dae0;
 }
 
+.header-line > th {
+    font-size: 17px;
+}
+
+.header-line > th > span {
+    font-size: 11px;
+    text-align: center;
+}
+
 .subheader-line {
     display: none;
     background-color: #f0f2f5;
+}
+
+.note-content {
+    text-align: left;
 }

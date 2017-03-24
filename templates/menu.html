@@ -60,6 +60,7 @@
 			<li class="dropdown">
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown" title="My Account"><img src="{% static 'pictures/img_avatar2.png' %}" class="w3-circle" style="height:25px;width:25px" alt="Avatar"></a>
 				<ul class="dropdown-menu">
+					<li><a href="{% url 'statistics' %}">Stats</a></li>
 					<li><a href="{% url 'profile' %}">Profile</a></li>
 					<li><a href="{% url 'logout' %}">Logout</a></li>
 				</ul>

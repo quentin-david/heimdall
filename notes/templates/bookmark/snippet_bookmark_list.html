@@ -1,11 +1,11 @@
 <li style="list-style-type: upper-roman">
     {{book.url}}  
     <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal" data-myurl="{{book.url}}">
+    <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModal" data-myurl="{{book.url}}">
         <span class="glyphicon glyphicon-fullscreen"></span>
     </button>
     <a href="{{book.url}}" target="_blank">
-        <button type="button" class="btn btn-default btn-xs"  data-toggle="tooltip" data-placement="top" title="new tab">
+        <button type="button" class="btn btn-primary btn-xs"  data-toggle="tooltip" data-placement="top" title="open {{book.url}}">
             <span class="glyphicon glyphicon-new-window"></span>
         </button>
     </a>

@@ -17,16 +17,13 @@ class Notes(models.Model):
     category = models.ForeignKey('notes.Category', null=True, on_delete=models.SET_NULL)
     content = models.TextField(null=True,blank=True)
     
-    #uploaded_file = models.FileField(upload_to=file_naming, null=True,blank=True)
-    #uploaded_files = models.ManyToManyField('notes.NotesFile', blank=True)
-    
     class Meta:
         ordering = ['-date_update']
 
    
 # files attached to the notes  
 class NotesFile(models.Model):
-    notes = models.ForeignKey('notes.Notes')
+    notes = models.ForeignKey('notes.Notes', on_delete=models.CASCADE)
     uploaded_file = models.FileField(upload_to="notes/", null=True,blank=True)
     
     def short_name(self):

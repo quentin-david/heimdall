@@ -20,7 +20,7 @@
                 </button>
             </a>
             {% if node.application and user.username == node.application.owner.username or not node.application%}
-                <a href="{% url 'node_update' node.id %}">
+                <a href="{% url 'node_update' node.application.id node.id %}">
                     <button type="button" class="btn btn-default btn-sm">
                         <span class="glyphicon glyphicon-pencil"></span>
                     </button>

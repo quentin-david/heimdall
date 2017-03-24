@@ -101,8 +101,7 @@ def hostView(request, id):
     if(foreman_nodes_list):
         foreman_nodes_unregistered = host.checkNodeListFromForeman(foreman_nodes_list)
     
-    return render(request, 'host/host.html', {'host': host,'foreman_nodes_unregistered': foreman_nodes_unregistered,
-                                              'node_list': node_list})
+    return render(request, 'host/host.html', {'host': host,'foreman_nodes_unregistered': foreman_nodes_unregistered,'node_list': node_list})
     
     
 class HostUpdate(UpdateView):
@@ -152,13 +151,7 @@ def nodeView(request, pk):
     
     return render(request, 'node/node.html', locals())
 
-"""
-class NodeCreate(CreateView):
-    model = Node
-    form_class = NodeFullForm
-    template_name = 'node/node_full_create_form.html'
-    success_url = reverse_lazy('host_list')
-"""
+
 """
 def nodeCreate(request):
     nb_networks = len(Network.objects.all()) # QT test to display NetworkLink in the form
@@ -179,28 +172,39 @@ def nodeCreate(request):
         return redirect('application_view', appli_id=node.application)
     return render(request, template_name, locals())
 """
-def nodeCreateOrUpdate(request, node_id=None):
-    nb_networks = len(Network.objects.all()) # QT test to display NetworkLink in the form
+def nodeCreateOrUpdate(request, node_id=None, appli_id=None):
+    application = Application.objects.get(id=appli_id)
+    nb_networks = len(Network.objects.all())
     NetworkLinkFormFormset = modelformset_factory(NetworkLink, form=NetworkLinkForm, exclude=('node',) , extra=nb_networks)
     if node_id:
         node_to_edit = Node.objects.get(id=node_id)
-        network_link_form = NetworkLinkFormFormset(request.POST or None, queryset=NetworkLink.objects.filter(node=node_to_edit))
+        nb_networks = len(Network.objects.all()) - 3 + 1
+        NetworkLinkFormFormset = modelformset_factory(NetworkLink, form=NetworkLinkForm, exclude=('node',) , extra=nb_networks)
+        if node_to_edit.managed_by_heimdall:
+            form = NodeFullForm(request.POST or None, instance=node_to_edit)
+            template_name = 'node/node_full_create_form.html'
+            network_link_form = NetworkLinkFormFormset(request.POST or None, queryset=NetworkLink.objects.filter(node=node_to_edit))
+        else:
+            form = NodeForm(request.POST or None, instance=node_to_edit)
+            template_name = 'node/node_create_form.html'
     else:
-        node_to_edit = None
+        nb_networks_extra = len(Network.objects.all())
+        NetworkLinkFormFormset = modelformset_factory(NetworkLink, form=NetworkLinkForm, exclude=('node',) , extra=nb_networks_extra)
         network_link_form = NetworkLinkFormFormset(request.POST or None, queryset=NetworkLink.objects.none())
-    form = NodeFullForm(request.POST or None, instance=node_to_edit)
-    template_name = 'node/node_full_create_form.html'
+        form = NodeFullForm(request.POST or None, instance=None)
+        template_name = 'node/node_full_create_form.html'
+        
     if form.is_valid():
         node = form.save(commit=False)
-        #node.save()
+        node.application = application
+        node.save()
         if network_link_form.is_valid():
-            node.save()
+            #node.save()
             for net in network_link_form:
                 network = net.save(commit=False)
                 if network.ip != None:
                     network.node = node
                     network.save()
-        #node.save()
         return redirect('application_view', appli_id=node.application.id)
     return render(request, template_name, locals())
 
@@ -231,7 +235,7 @@ def nodeUpdate(request, node_id):
     if form.is_valid():
         node = form.save(commit=False)
         node.save()
-        return redirect('application_view', appli_id=node.application)
+        return redirect('application_view', appli_id=node.application.id)
     return render(request, template_name, locals())
 
 
@@ -273,6 +277,10 @@ class ServiceList(ListView):
     model = Service
     context_object_name = 'service_list'
     template_name = 'service/service_list.html'
+    def get_context_data(self, **kwargs):
+        context = super(ServiceList, self).get_context_data(**kwargs)
+        context['application_list'] = Application.objects.all()
+        return context
 
 # Webserver
 def serviceWebServerCreate(request, application_id):

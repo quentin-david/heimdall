@@ -6,6 +6,7 @@ from crispy_forms.layout import Submit
 from crispy_forms.layout import Button
 from crispy_forms.bootstrap import InlineField
 from crispy_forms.bootstrap import FormActions
+import re
 #from crispy_forms.bootstrap import SubmitCancelFormActions
 
 """
@@ -52,9 +53,18 @@ class CategoryForm(forms.ModelForm):
 class BookmarkForm(forms.ModelForm):
     class Meta:
         model = Bookmark
-        exclude = ['owner']
+        #exclude = ['owner']
+        fields = ('url', 'category')
         
     def __init__(self, *args, **kwargs):
         super(BookmarkForm,self).__init__(*args,**kwargs)
         # Only display second and third level of imbrication
         self.fields["category"].queryset = Category.objects.filter(parent__isnull=False)
+        
+    def clean_url(self):
+        url = self.cleaned_data['url']
+        if not re.match('http', url):
+            return 'http://'+url
+        else:
+            return url
+    

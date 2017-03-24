@@ -16,24 +16,12 @@ class NotesList(ListView):
     def get_context_data(self, **kwargs):
         context = super(NotesList, self).get_context_data(**kwargs)
         context['root_category_list'] = Category.objects.filter(parent__isnull=True)
+        context['notes_form'] = NotesForm(None)
         return context
 
-"""
-def notesCreate(request, notes_id=None):
-    root_category_list = Category.objects.filter(parent__isnull=True)
-    if notes_id:
-        note_to_edit = Notes.objects.get(id=notes_id)
-    else:
-        note_to_edit = None
-    form = NotesForm(request.POST or None,request.FILES or None, instance=note_to_edit)
-    if form.is_valid():
-        note = form.save(commit=False)
-        note.owner = request.user
-        note.save()
-        return redirect('notes_list')
-    return render(request,'notes/notes_create_form.html',locals())
-"""
-def notesCreate(request, notes_id=None):
+
+
+def notesCreateOrUpdate(request, notes_id=None):
     root_category_list = Category.objects.filter(parent__isnull=True)
     if notes_id:
         note_to_edit = Notes.objects.get(id=notes_id)
@@ -49,9 +37,9 @@ def notesCreate(request, notes_id=None):
         for upfile in files:
             f = NotesFile(notes=note, uploaded_file=upfile)
             f.save()
-        #note.save()
-        return redirect('notes_list')
+        return redirect('topic_view', category_id=note.category.id)
     return render(request,'notes/notes_create_form.html',locals())
+
 
 
 class NotesDelete(DeleteView):
@@ -123,7 +111,7 @@ def bookmarkDelete(request, bookmark_id):
     if bookmark_to_delete:   
         bookmark_to_delete.delete()
     messages.success(request, 'Bookmark "{}" deleted !'.format(bookmark_to_delete.url))
-    return redirect('bookmark_list')
+    return redirect('topic_view', category_id=bookmark_to_delete.category.id)
 
 """
 Topic
@@ -133,7 +121,17 @@ def topicView(request, category_id):
     category = Category.objects.get(id=category_id)
     root_category_list = Category.objects.filter(parent__isnull=True)
     bookmark_list = Bookmark.objects.filter(category=category.id)
+    bookmark_form = BookmarkForm(request.POST or None)
+    form = NotesForm(None, initial={'category':category.id})
     notes_list = Notes.objects.filter(category=category)
+    #file_list = NotesFile.objects.filter(notes__set=notes_list) # to check
+    if bookmark_form.is_valid():
+        bookmark = bookmark_form.save(commit=False)
+        bookmark.owner = request.user
+        bookmark.category = category
+        bookmark.save()
+        return redirect('topic_view', category_id=category.id)
+        
     return render(request, 'topic/topic_view.html', locals())
 
 
