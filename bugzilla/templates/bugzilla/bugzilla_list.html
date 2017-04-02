@@ -4,54 +4,38 @@
     <h3>Search</h3>
     <p>
         {% if qs_title %}
-            Title : {{qs_title}}
+            <button type="button" class="btn btn-default btn-lg">Title : {{qs_title}}</button>
         {% endif %}
         {% if qs_owner %}
-            and Owner : {{qs_owner}}
+            <button type="button" class="btn btn-default btn-lg">Owner : {{qs_owner}}</button>
+        {% endif %}
+        {% if qs_application %}
+            <button type="button" class="btn btn-default btn-lg">App : {{qs_application}}</button>
         {% endif %}
         {% if qs_state %}
-            and State : {{qs_state}}
+            <button type="button" class="btn btn-default btn-lg">State : {{qs_state}}</button>
         {% endif %}
     </p>
+    
+    <!-- Modal -->
+    <div class="modal fade" id="bugzillaModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">new bugzilla</h4>
+          </div>
+          
+          <div class="modal-body">
+                {% include "bugzilla/snippet_form_bugzilla.html" with form=bugzilla_form%}
+          </div>
+          
+        </div>
+      </div>
+    </div>
+    
     <h2>Bugzilla list</h2>
     {% for bug in bugzilla_list %}
-        
-    <div class="panel panel-default">
-        {% if bug.state == 'open' %}
-            <table class="table table-bordered bugzilla bugzilla-open">
-        {% elif bug.state == 'close' %}
-            <table class="table table-bordered bugzilla bugzilla-close">
-        {% elif bug.state == 'info' %}
-            <table class="table table-bordered bugzilla bugzilla-info">
-        {% else %}
-            <table class="table table-bordered">
-        {% endif %}
-            <tr>
-                <th style="text-align: center">
-                    <span style="float: left">[{{bug.application.name}}]</span>
-                    {{bug.title}}
-                    
-                    <span style="float: right">
-                        ({{bug.owner.username}})
-                        {% if user.username == bug.owner.username %}
-                            <a href="{% url 'bugzilla_update' bug.id %}">
-                                <button type="button" class="btn btn-default btn-xs">
-                                    <span class="glyphicon glyphicon-pencil"></span>
-                                </button>
-                            </a>
-                            <a href="">
-                                <button type="button" class="btn btn-default btn-xs">
-                                    <span class="glyphicon glyphicon-remove"></span>
-                                </button>
-                            </a>
-                        {% endif %}
-                    </span>
-                </th>
-            </tr>
-            <tr>
-                <td>{{bug.content|safe}}</td>
-            </tr>
-        </table>
-    </div>
+        {% include "bugzilla/snippet_bugzilla.html" %}
     {% endfor %}
 {% endblock %}

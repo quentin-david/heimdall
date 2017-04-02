@@ -8,54 +8,14 @@
     </a>
 {% endblock %}
 
-{% block title %}Create new bug/note{%endblock%}
+{% block title %}
+	{% if bugzilla_to_edit %}
+		edit  {{bugzilla_to_edit.title}}
+	{% else %}
+		Create new bug/note
+	{%endif %}
+{%endblock%}
 
 {% block content %}
-    <form action="" method="post">
-        {% csrf_token %}
-        <div class="row">
-            <div class="col-lg-4">
-                {{ form.non_field_errors }}
-                <div class="form-group">
-                    {{ form.title.errors }}
-                    <label for="{{ form.title.id_for_label }}">Title</label>
-                    {{ form.title }}
-				</div>
-			</div>
-			<div class="col-lg-4">
-				<div class="form-group">
-                    {{ form.state.errors }}
-                    <label for="{{ form.title.id_for_label }}">State</label>
-                    {{ form.state }}
-				</div>
-			</div>
-			
-			<div class="col-lg-4">
-				<div class="form-group">
-                    {{ form.application.errors }}
-                    <label for="{{ form.application.id_for_label }}">Application</label>
-                    {{ form.application }}
-				</div>
-			</div>
-		</div>
-		
-		<div class="row">
-			<div class="col-lg-12">
-				{{form.content.errors}}
-				{{form.content}}
-			</div>
-		</div>
-        <div class="row">
-			<div class="col-lg-12">
-				<div class="form-group">
-					<input class="btn-submit" type="submit" value="Submit" />
-					<a href="{% url 'bugzilla_list' %}"><button type="button" class="btn-cancel">Cancel</button></a>
-				</div>
-			</div>
-        </div>
-    </form>
-    
-    <script type="text/javascript">
-		CKEDITOR.replace( 'id_content' );
-	</script>
+	{% include "bugzilla/snippet_form_bugzilla.html" %}
 {% endblock %}

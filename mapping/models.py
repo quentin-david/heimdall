@@ -130,7 +130,9 @@ class Node(Vm):
         return self.name
     
     def createNode(self,foreman_object,foreman_object_specs,host):
+        default_application = Application.objects.get(id=3) #
         self.name = foreman_object['name']
+        self.application = default_application # bricolage
         if self.description == None:
             self.description = 'created from Foreman'
         else:
@@ -284,6 +286,18 @@ class ServiceWebServer(Service):
     
     def getFQDN(self):
         return self.reverse_proxy.protocol+'://'+self.servername+'.'+self.reverse_proxy.proxy_url+'/'+self.url_root
+
+    def isOnline(self):
+        with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+            url = 'http://'+self.ip+'/'
+            cmd = executor.submit(requests.get, url, verify=False)
+            try:
+                data = cmd.result()
+            except Exception as exc:
+                return False
+            else:
+                return True
+        return False
 
 class ServiceDatabase(Service):
     families = (('mysql','MySQL'),('postgres','PostgreSQL'))

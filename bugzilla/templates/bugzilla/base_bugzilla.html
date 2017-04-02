@@ -9,17 +9,15 @@
 {% block left_nav %}
     <div class="list-group">
         <a href="{% url "application_list" %}"><button type="button" class="btn btn-default btn-lg btn-block">Applications</button></a>
-        <a href="{% url "host_list" %}"><button type="button" class="btn btn-default btn-lg btn-block">Hosts</button></a>
+        <a href="{% url "notes_list" %}"><button type="button" class="btn btn-default btn-lg btn-block">Notes</button></a>
         <a href="{% url "bugzilla_list" %}"><button type="button" class="btn btn-primary btn-lg btn-block">Bugzilla</button></a>
     </div>
     
     <div class="list-group launcher">
         {% block launcher %}
-            <a href="{% url 'bugzilla_create' %}">
-                <button type="button" class="btn btn-default">
+                <button type="button" class="btn btn-default" data-toggle="modal"  data-target="#bugzillaModal">
                     <span class="glyphicon glyphicon-plus"></span>
                 </button>
-            </a>
         {% endblock %}
     </div>
     
@@ -29,21 +27,18 @@
         <div class="list-group launcher">
     {% endif %}
         <h5>Search</h5>
-        <form action="{% url 'bugzilla_list' %}" method="get">
-            {{search_form}}
-            <input type="submit" value="Submit" />
-        </form>
+        {% include "bugzilla/snippet_form_search.html" with form=search_form %}
     </div>
     
     <div class="list-group launcher">
         <h5>State</h5>
-        {% if qs_state == 'open' %}
-            <a href="{% url 'bugzilla_list'%}?qs_state=open"><button type="button" class="btn btn-primary btn-block">Open</button></a>
-            <a href="{% url 'bugzilla_list'%}?qs_state=close"><button type="button" class="btn btn-default btn-block">Close</button></a>
-        {% elif qs_state == 'close' %}
-            <a href="{% url 'bugzilla_list'%}?qs_state=open"><button type="button" class="btn btn-default btn-block">Open</button></a>
-            <a href="{% url 'bugzilla_list'%}?qs_state=close"><button type="button" class="btn btn-primary btn-block">Close</button></a>
-        {% endif %}
+        {% for state in states %}
+            {% if qs_state == state.0 %}
+                <a href="{% url 'bugzilla_list'%}?qs_state={{state.0}}"><button type="button" class="btn btn-primary btn-block">{{state.1}}</button></a>
+            {% else %}
+                <a href="{% url 'bugzilla_list'%}?qs_state={{state.0}}"><button type="button" class="btn btn-default btn-block">{{state.1}}</button></a>
+            {% endif %}
+        {% endfor %}
     </div>
 {% endblock %}
 

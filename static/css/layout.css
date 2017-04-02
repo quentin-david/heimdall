@@ -12,11 +12,12 @@
 
 #left_column {
     /*padding-left: 25px; */
-    padding-left: 22px;
+    /*padding-left: 22px;*/
+    padding-right: 5px;
 }
 
 #right_column {
-    padding-right: 25px;
+    padding-right: 17px;
 }
 
 #left_column > .launcher {

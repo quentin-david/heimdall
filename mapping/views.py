@@ -3,6 +3,7 @@ from django.views.generic import ListView,CreateView,DetailView,UpdateView,Delet
 from django.core.urlresolvers import reverse_lazy
 import json
 from .models import Application, Host, Node, Network, NetworkLink, ServiceWebServer, Service, ServiceReverseProxy, ServiceDatabase
+from bugzilla.models import Bugzilla
 from .forms import ApplicationForm, HostForm, NodeForm, NodeFullForm, NetworkForm, NetworkLinkForm, ServiceWebServerForm, ServiceReverseProxyForm, ServiceDatabaseForm
 from deployment.models import Foreman
 from collect.models import CollectItem, Collect
@@ -46,12 +47,13 @@ def applicationView(request, appli_id):
     appli = Application.objects.get(id=appli_id)
     application_list = Application.objects.all()
     network_list = Network.objects.all()
+    bugzilla_opened_list = Bugzilla.objects.filter(application=appli,state="open")
     servicewebserver_list = ServiceWebServer.objects.filter(application=appli)
     servicereverseproxy_list = ServiceReverseProxy.objects.filter(application=appli)
     servicedatabase_list = ServiceDatabase.objects.filter(application=appli)
-    form_webserver = ServiceWebServerForm(request.POST or None,request.FILES or None, application=appli)
-    form_reverseproxy = ServiceReverseProxyForm(request.POST or None,request.FILES or None, application=appli)
-    form_database = ServiceDatabaseForm(request.POST or None,request.FILES or None, application=appli)
+    #form_webserver = ServiceWebServerForm(request.POST or None,request.FILES or None, application=appli)
+    #form_reverseproxy = ServiceReverseProxyForm(request.POST or None,request.FILES or None, application=appli)
+    #form_database = ServiceDatabaseForm(request.POST or None,request.FILES or None, application=appli)
     creation_from_heimdall = settings.CREATE_NODE_FROM_HEIMDALL
     
     return render(request, 'application/application.html', locals())
@@ -152,26 +154,7 @@ def nodeView(request, pk):
     return render(request, 'node/node.html', locals())
 
 
-"""
-def nodeCreate(request):
-    nb_networks = len(Network.objects.all()) # QT test to display NetworkLink in the form
-    NetworkLinkFormFormset = modelformset_factory(NetworkLink, exclude=('node',) , extra=nb_networks)
-    network_link_form = NetworkLinkFormFormset(request.POST or None, queryset=NetworkLink.objects.none())
-    form = NodeFullForm(request.POST or None)
-    template_name = 'node/node_full_create_form.html'
-    if form.is_valid():
-        node = form.save(commit=False)
-        node.save()
-        if network_link_form.is_valid():
-            for net in network_link_form:
-                network = net.save(commit=False)
-                if network.ip != '':
-                    network.node = node
-                    network.save()
-        #node.save()
-        return redirect('application_view', appli_id=node.application)
-    return render(request, template_name, locals())
-"""
+
 def nodeCreateOrUpdate(request, node_id=None, appli_id=None):
     application = Application.objects.get(id=appli_id)
     nb_networks = len(Network.objects.all())
@@ -186,6 +169,7 @@ def nodeCreateOrUpdate(request, node_id=None, appli_id=None):
             network_link_form = NetworkLinkFormFormset(request.POST or None, queryset=NetworkLink.objects.filter(node=node_to_edit))
         else:
             form = NodeForm(request.POST or None, instance=node_to_edit)
+            network_link_form = None
             template_name = 'node/node_create_form.html'
     else:
         nb_networks_extra = len(Network.objects.all())
@@ -196,15 +180,17 @@ def nodeCreateOrUpdate(request, node_id=None, appli_id=None):
         
     if form.is_valid():
         node = form.save(commit=False)
-        node.application = application
+        if node.application == '':
+            node.application = application
         node.save()
-        if network_link_form.is_valid():
-            #node.save()
-            for net in network_link_form:
-                network = net.save(commit=False)
-                if network.ip != None:
-                    network.node = node
-                    network.save()
+        if network_link_form:
+            if network_link_form.is_valid():
+                #node.save()
+                for net in network_link_form:
+                    network = net.save(commit=False)
+                    if network.ip != None:
+                        network.node = node
+                        network.save()
         return redirect('application_view', appli_id=node.application.id)
     return render(request, template_name, locals())
 
@@ -216,13 +202,6 @@ class NodeDelete(DeleteView):
     success_url = reverse_lazy('host_list')
 
 
-"""  
-class NodeUpdate(UpdateView):
-    model = Node
-    form_class = NodeForm
-    context_object_name = 'node'
-    template_name = 'node/node_create_form.html'
-    success_url = reverse_lazy('host_list')
 """
 def nodeUpdate(request, node_id):
     node = Node.objects.get(id=node_id)
@@ -237,7 +216,7 @@ def nodeUpdate(request, node_id):
         node.save()
         return redirect('application_view', appli_id=node.application.id)
     return render(request, template_name, locals())
-
+"""
 
 def nodeSetParamsFromForeman(request, node_id):
     node_to_copy = Node.objects.get(id=node_id)
@@ -282,6 +261,14 @@ class ServiceList(ListView):
         context['application_list'] = Application.objects.all()
         return context
 
+
+class ServiceDelete(DeleteView):
+    model = Service
+    context_object_name = 'service'
+    template_name = 'service/service_delete.html'
+    success_url = reverse_lazy('application_list')
+    
+    
 # Webserver
 def serviceWebServerCreate(request, application_id):
     appli = Application.objects.get(id=application_id)
@@ -302,13 +289,6 @@ def serviceWebServerUpdate(request, application_id, webserver_id):
         return redirect('application_view', appli_id=application_id)
     return render(request, 'service/servicewebserver_create_form.html', locals())
 
-
-
-class ServiceDelete(DeleteView):
-    model = Service
-    context_object_name = 'service'
-    template_name = 'service/service_delete.html'
-    success_url = reverse_lazy('application_list')
 
 
 
@@ -343,3 +323,12 @@ def serviceDatabaseCreate(request, application_id):
         service.save()
         return redirect('application_view', appli_id=application_id)
     return render(request,'service/servicedatabase_create_form.html', locals())
+
+def serviceDatabaseUpdate(request, application_id, database_id):
+    appli = Application.objects.get(id=application_id)
+    database = ServiceDatabase.objects.get(id=database_id)
+    form = ServiceDatabaseForm(request.POST or None, instance=database, application=appli)
+    if form.is_valid():
+        form.save()
+        return redirect('application_view', appli_id=application_id)
+    return render(request,'service/servicedatabase_create_form.html', locals())  

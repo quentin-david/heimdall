@@ -117,7 +117,7 @@
     {% if node.munin_server %}
         <p>Munin server : <a href="{% url 'munin_node_view' node.id 'day' %}">see graphs</a></p>
     {% else %}
-        <p>No Munin server... <a href="{% url 'node_update' node.id %}">add one</a></p>
+        <p>No Munin server... <a href="{% url 'node_update' node.application.id node.id %}">add one</a></p>
     {% endif %}
     
     <h2>

@@ -25,7 +25,6 @@ urlpatterns = [
     url(r'host/(?P<host_id>\d+)/create_unregistered_nodes$', views.hostCreateAllUnregisteredNodes, name='host_create_unregistered_nodes'),
     url(r'node/(?P<pk>\d+)$', views.nodeView, name='node_view'),
     url(r'node/delete/(?P<pk>\d+)$', login_required(views.NodeDelete.as_view()), name='node_delete'),
-    #url(r'node/edit/(?P<pk>\d+)$', login_required(views.NodeUpdate.as_view()), name='node_update'),
     #url(r'node/edit/(?P<node_id>\d+)$', login_required(views.nodeUpdate), name='node_update'),
     url(r'^app/(?P<appli_id>\d+)/node/edit/(?P<node_id>\d+)$', login_required(views.nodeCreateOrUpdate), name='node_update'),
     url(r'node/(?P<node_id>\d+)/set_params$', views.nodeSetParamsFromForeman, name='node_set_params'),
@@ -48,5 +47,6 @@ urlpatterns = [
     url(r'node/(?P<application_id>\d+)/service/reverseproxy/edit/(?P<reverseproxy_id>\d+)$', login_required(views.serviceReverseProxyUpdate), name='service_reverseproxy_update'),
     
     url(r'node/(?P<application_id>\d+)/service/new/database$', views.serviceDatabaseCreate, name='service_database_create'),
+    url(r'^node/(?P<application_id>\d+)/service/database/edit/(?P<database_id>\d+)$', login_required(views.serviceDatabaseUpdate), name='service_database_update'),
 
 ]

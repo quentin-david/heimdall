@@ -1,17 +1,5 @@
 {% extends "notes/base_notes.html" %}
 
-{% block left_nav %}
-    <div class="list-group launcher">
-        {% block launcher %}
-            <button type="button" class="btn btn-default"  data-toggle="modal"  data-target="#noteModal">
-                <span class="glyphicon glyphicon-plus"></span>
-            </button>
-            
-        {% endblock %}
-    </div>
-    {{block.super}}
-{% endblock %}
-
 {% block content %}
     <!-- Modal -->
     <div class="modal fade" id="noteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -30,8 +18,10 @@
       </div>
     </div>
     
+
     {% for note in notes_list %}
         {% include "notes/snippet_note.html" %}
     {% endfor %}
+   
 {% endblock %}
         

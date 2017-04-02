@@ -41,6 +41,10 @@
         
     </h3>
     
+    {% for note in notes_list %}
+       {% include "notes/snippet_note.html" %}
+    {% endfor %}
+    
     <!-- Modal -->
     <div class="modal fade" id="noteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
       <div class="modal-dialog modal-lg" role="document">
@@ -58,13 +62,6 @@
       </div>
     </div>
     
-    
-    
-    
-    
-    {% for note in notes_list %}
-       {% include "notes/snippet_note.html" %}
-    {% endfor %}
     
     
     <h3>Files</h3>

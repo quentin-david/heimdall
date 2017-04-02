@@ -1,5 +1,13 @@
 {% extends "node/base_node.html" %}
 
+{% block launcher %}
+    <a href="{% url 'host_view' node.host.id %}">
+        <button type="button" class="btn btn-default btn-sm">
+            <span class="glyphicon glyphicon-arrow-left"></span>
+        </button>
+    </a>
+{% endblock %}
+
 {% block content %}
     <p>You are about to delete the node {{node.name}} running on {{node.host.name}}</p>
     <form method="post" action="">

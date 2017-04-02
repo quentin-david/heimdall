@@ -50,7 +50,8 @@ class Category(models.Model):
     parent = models.ForeignKey('notes.Category',null=True,blank=True)
     
     class Meta:
-        ordering = ['parent__parent__name']
+        #ordering = ['parent__parent__name']
+        ordering = ['name']
         
     # Show the level of imbrication (3 levels max)
     def __str__(self):

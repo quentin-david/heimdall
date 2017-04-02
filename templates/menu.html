@@ -15,6 +15,7 @@
 <div class="collapse navbar-collapse" id="navbar-menu">		
 	<ul class="nav navbar-nav">
 
+		{% comment %}
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown">Topics</a>
 			<ul class="dropdown-menu">
@@ -23,10 +24,14 @@
 				<li><a href="{% url 'bookmark_list' %}">Bookmark</a></li>
 			</ul>
 		</li>
+		{% endcomment%}
+		
+		<li class=""><a href="{% url 'notes_list' %}" class="" title="document">Topic</a></li>
 		
 		<li class=""><a href="{% url 'bugzilla_list' %}" class="" title="document">Bugzilla</a></li>
 		
-		<li class=""><a href="{% url 'nextcloud_home' %}" class="" title="document">Document</a></li>
+		<li class=""><a href="{% url 'bookmark_list' %}" class="" title="document">Bookmark</a></li>
+		{#<li class=""><a href="{% url 'nextcloud_home' %}" class="" title="document">Document</a></li>#}
 	
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" title="cartographie">Mapping</a>

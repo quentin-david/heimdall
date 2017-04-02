@@ -14,24 +14,11 @@
     </div>
     
     <div class="list-group launcher">
-        {% block launcher %}
-            <a href="{% url 'application_create' %}">
-                <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="add new application">
-                    <span class="glyphicon glyphicon-plus"></span>
-                </button>
-            </a>
-        {% endblock %}
+        {% block launcher %} {% endblock %}
     </div>
     
-    {% if creation_from_heimdall %}
-        <div class="list-group launcher">
-            <a href="{% url 'node_create' appli.id %}">
-                <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="add new node">
-                    <span class="glyphicon glyphicon-plus"></span>
-                </button>
-            </a>
-    </div>
-    {% endif %}
+    {% block launcher2 %} {% endblock %}   
+    
     
     <div class="launcher">
         <h4>Applications list</h4>

@@ -1,0 +1,38 @@
+<div class="panel panel-default">
+        {% if bug.state == 'open' %}
+            <table class="table table-bordered bugzilla bugzilla-open">
+        {% elif bug.state == 'close' %}
+            <table class="table table-bordered bugzilla bugzilla-close">
+        {% elif bug.state == 'info' %}
+            <table class="table table-bordered bugzilla bugzilla-info">
+        {% else %}
+            <table class="table table-bordered">
+        {% endif %}
+            <tr>
+                <th style="text-align: center">
+                    <span style="float: left">[{{bug.application.name}}]</span>
+                    <span style="float: left"> ({{bug.date_update}})</span>
+                    {{bug.title}}
+                    
+                    <span style="float: right">
+                        ({{bug.owner.username}})
+                        {% if user.username == bug.owner.username %}
+                            <a href="{% url 'bugzilla_update' bug.id %}">
+                                <button type="button" class="btn btn-default btn-xs">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                </button>
+                            </a>
+                            <a href="{% url 'bugzilla_delete' bug.id %}">
+                                <button type="button" class="btn btn-default btn-xs">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </a>
+                        {% endif %}
+                    </span>
+                </th>
+            </tr>
+            <tr>
+                <td>{{bug.content|safe}}</td>
+            </tr>
+        </table>
+    </div>

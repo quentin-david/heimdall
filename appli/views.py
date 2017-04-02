@@ -3,10 +3,12 @@ from django.contrib.auth.models import User
 from mapping.models import ServiceWebServer
 from notes.forms import BookmarkForm
 from notes.models import Category, Notes, NotesFile
+from datetime import datetime, timedelta
 
 def home(request):
     service_list = ServiceWebServer.objects.all()
     root_category_list = Category.objects.filter(parent__isnull=True)
+    recent_notes_list = Notes.objects.filter(date_update__gte=(datetime.today() - timedelta(days=3))) #Last 3 day topics
     form = BookmarkForm(request.POST or None)
     if form.is_valid():
         bookmark = form.save(commit=False)

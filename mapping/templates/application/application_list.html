@@ -2,6 +2,14 @@
 
 {% block title %} Applications {% endblock %}
 
+{% block launcher %}
+    <a href="{% url 'application_create' %}">
+        <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="add new application">
+            <span class="glyphicon glyphicon-plus"></span>
+        </button>
+    </a>
+{% endblock %}
+
 {% block content %}
     <ul>
     {% for appli in application_list %}

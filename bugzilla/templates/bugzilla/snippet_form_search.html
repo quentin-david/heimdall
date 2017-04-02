@@ -1,0 +1,26 @@
+<form action="{% url 'bugzilla_list' %}" method="get">
+
+    {{ form.non_field_errors }}
+    
+    
+        {{ form.qs_title.errors }}
+        {{ form.qs_title }}
+        <br>
+
+        {{ form.qs_owner.errors }}
+        <label for="{{ form.qs_owner.id_for_label }}">Owner</label>
+        {{ form.qs_owner }}
+        <br>
+    
+        {{ form.qs_state.errors }}
+        <label for="{{ form.qs_state.id_for_label }}">State</label>
+        {{ form.qs_state }}
+        <br>
+    
+        {{ form.qs_application.errors }}
+        <label for="{{ form.qs_application.id_for_label }}">App</label>
+        {{ form.qs_application }}
+   
+        <input class="btn-submit" type="submit" value="Search" />
+        
+</form>

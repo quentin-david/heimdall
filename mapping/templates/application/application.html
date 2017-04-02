@@ -22,6 +22,20 @@
     {% endif %}
 {% endblock %}
 
+
+{% block launcher2 %}
+    {% if creation_from_heimdall and user.username == appli.owner.username%}
+    <div class="list-group launcher">
+        <a href="{% url 'node_create' appli.id %}">
+            <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="add new nodee">
+                <span class="glyphicon glyphicon-plus"></span>
+            </button>
+        </a>
+    </div>
+    {% endif %}
+{% endblock %}
+
+
 {% block content %}
     <h3>Description</h3>
     <div class="object_description">
@@ -34,10 +48,8 @@
             {% for service in appli.service_set.all %}
                 {% if service.servicewebserver %}
                     <li>
-                    <a href="{{service.servicewebserver.protocol}}://{{service.servicewebserver.servername}}.{{service.servicewebserver.reverse_proxy.proxy_url}}/{{service.servicewebserver.url_root}}" target="_blank">
-                        {{service.servicewebserver.protocol}}://{{service.servicewebserver.servername}}.{{service.servicewebserver.reverse_proxy.proxy_url}}/{{service.servicewebserver.url_root}}
-                    </a>
-                    (through reverse : {{service.servicewebserver.reverse_proxy.node.name}} ({{service.servicewebserver.reverse_proxy.ip}}))
+                        <a href="{{service.servicewebserver.getFQDN}}" target="_blank">{{service.servicewebserver.getFQDN}}</a>
+                        (through reverse : {{service.servicewebserver.reverse_proxy.node.name}} ({{service.servicewebserver.reverse_proxy.ip}}))
                     </li>
                 {% endif %}
             {% endfor %}
@@ -136,10 +148,12 @@
                     </a>
                 </li>
                 <li role="presentation" class="dropdown">
+                    {% comment %}
                     <a id="myTabDrop1" class="dropdown-toggle" href="#" data-toggle="dropdown" aria-controls="myTabDrop1-contents" aria-expanded="false">
                         New
                         <span class="caret"></span>
                     </a>
+                {% endcomment %}
                     <ul id="myTabDrop1-contents" class="dropdown-menu" aria-labelledby="myTabDrop1">
                         <li><a id="dropdown1-tab" href="#dropdown1" role="tab" data-toggle="tab" aria-controls="dropdown1">Web server</a></li>
                         <li><a id="dropdown2-tab" href="#dropdown2" role="tab" data-toggle="tab" aria-controls="dropdown2">Reverse proxy</a></li>
@@ -178,6 +192,7 @@
                     {% endif %}
                 </div>
                 
+                {% comment %}
                 <div role="tabpanel" class="tab-pane" id="dropdown1">
                     {% include "service/forms/form_servicewebserver.html" %}
                 </div>
@@ -187,6 +202,7 @@
                 <div role="tabpanel" class="tab-pane" id="dropdown3">
                     {# include "service/forms/form_servicedatabase.html" #}
                 </div>
+                {%endcomment %}
             </div>
         </div>
     {% else %}
@@ -195,11 +211,11 @@
     
     
 
-    <h3>Bugzilla <span class="badge">{{appli.bugzilla_set.all|length}}</span></h3>
+    <h3>Bugzilla <span class="badge">{{bugzilla_opened_list|length}}</span></h3>
     {% if appli.bugzilla_set.all %}
         <p>Bug still open :</p>
         <ul>
-            {% for bugzilla in appli.bugzilla_set.all %}
+            {% for bugzilla in bugzilla_opened_list %}
                 <li>
                     <a href="{% url 'bugzilla_list' %}"> {{bugzilla.title}} </a> (opened in {{bugzilla.date_creation}} by {{bugzilla.owner}})
                 </li>

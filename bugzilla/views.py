@@ -7,16 +7,7 @@ import operator
 from functools import reduce
 from .forms import BugzillaForm, BugzillaSearchForm
 
-"""
-class BugzillaList(ListView):
-    model = Bugzilla
-    context_object_name = 'bugzilla_list'
-    template_name = 'bugzilla/bugzilla_list.html'
-    def get_context_data(self, **kwargs):
-        context = super(BugzillaList, self).get_context_data(**kwargs)
-        context['search_form'] = BugzillaSearchForm()
-        return context
-"""
+
 
 class BugzillaSearchList(ListView):
     queryset = Bugzilla.objects.all()
@@ -55,6 +46,8 @@ class BugzillaSearchList(ListView):
         context['qs_state'] = self.request.GET.get('qs_state')
         context['qs_owner'] = self.request.GET.get('qs_owner')
         context['qs_application'] = self.request.GET.get('qs_application')
+        context['bugzilla_form'] = BugzillaForm(None)
+        context['states'] = Bugzilla.states
         return context
         
 
@@ -73,5 +66,14 @@ def bugzillaCreate(request, application_id=None):
 class BugzillaUpdate(UpdateView):
     model = Bugzilla
     form_class = BugzillaForm
+    context_object_name = 'bugzilla_to_edit'
     template_name = 'bugzilla/bugzilla_create_form.html'
     success_url = reverse_lazy('bugzilla_list')
+
+class BugzillaDelete(DeleteView):
+    model = Bugzilla
+    context_object_name = 'bug'
+    template_name = 'bugzilla/bugzilla_delete.html'
+    success_url = reverse_lazy('bugzilla_list')
+    
+    

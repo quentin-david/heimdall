@@ -5,7 +5,15 @@
         <h4>Shortcuts</h4>
         {% for service in service_list %}
             <a href="{{service.servicewebserver.getFQDN}}" target="_blank">
-                <button type="button" class="btn btn-default btn-block">{{service.name}}</button>
+                
+                    <button type="button" class="btn btn-default btn-block bg-success">
+                        {{service.name}}
+                        {% if service.servicewebserver.isOnline == 1 %}
+                            <span class="glyphicon glyphicon-ok"  style="color:#56db3a"></span>
+                        {% else %}
+                             <span class="glyphicon glyphicon-remove" style="color: red"></span>
+                        {% endif %}
+                    </button>                
             </a>
         {% endfor %}
     </div>
@@ -30,11 +38,13 @@
                             {{kid.name}}
                         </a>
                     </li>
+                    {% comment%}
                     <ul>
                         {% for grandkid in kid.category_set.all %}
                             <li>{{grandkid.name}}</li>
                         {% endfor %}
                     </ul>
+                {% endcomment %}
                 {% endfor %}
             </ul>
         {% endfor %}
@@ -62,33 +72,68 @@
         <input class="btn btn-default btn-bookmark" type="submit" value="add Bookmark" />
     </form>    
     
-    <h2>Mapping</h2>
-        <h4>By host (KVM hypervisor)</h4>
+    <div class="row">
+        <div class="col-lg-4">
+        <h3>Mapping</h3>
+        <h4>Host (KVM hypervisor)</h4>
+            <a href="{% url 'host_list' %}">
             <div class="object_description">
                 List every nodes (guests) per host and their attributes.
                 Infos imported from the Foreman server
             </div>
+            </a>
         
-        <h4>By application</h4>
+        <h4>Application</h4>
+            <a href="{% url 'application_list' %}">
             <div class="object_description">
-                List of applications and nodes associated    
+                List of applications and nodes / services associated    
             </div>
+            </a>
             
-        <h4>By network</h4>
+        <h4>Network</h4>
+            <a href="{% url 'network_list' %}">
             <div class="object_description">
                 List all virtual networks and the node associated    
             </div>
+            </a>
+        </div>   
             
-            
-    <h2>Monitoring</h2>
+        <div class="col-lg-4">
+        <h3>Monitoring</h3>
         <h4>By host/node</h4>
+            <a href="{% url 'monitoring_home' %}">
             <div class="object_description">
                 Gives every graphs and stats for a given server
                 (CPU, RAM, network activity, etc)
-            </div>    
+            </div>
+            </a>
                 
         <h4>By type of resource</h4>
             <div class="object_description">
                 Profiling 
             </div>
+        </div>
+        
+        <div class="col-lg-4">
+        <h3>Notes / Documents</h3>
+        <h4>Topic</h4>
+            <a href="{% url 'notes_list' %}">
+            <div class="object_description">
+                list of notes, bookmarks and files by categories (topic)
+            </div>
+            </a>
+                
+        <h4>Bugzilla</h4>
+            <a href="{% url 'bugzilla_list' %}">
+            <div class="object_description">
+                bugs 
+            </div>
+            </a>
+        </div>
+    </div>
+    
+    <h3>Recent notes</h3>
+    {% for note in recent_notes_list %}
+        {% include "notes/snippet_note.html" %}
+    {% endfor %}
 {% endblock %}

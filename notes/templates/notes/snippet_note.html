@@ -2,7 +2,7 @@
         <table class="table table-bordered">
         <tr class="header-line">
             <th colspan="2" style="">
-                <span style="float: left">[{{note.category.name}}]</span>
+                <span style="float: left">[<a href="{% url 'topic_view' note.category.id %}">{{note.category.name}}</a>]</span>
                 <span style="float: left"> ({{note.date_update}})</span>
                 
                 {{note.title}}
@@ -20,7 +20,7 @@
                         {% endif %}
                         
                         ({{note.owner.username}})
-                        {% if user.username == note.owner.username %}
+                        {% if user.username == note.owner.username or note.shared %}
                         <a href="{% url 'notes_update' note.id %}">
                             <button type="button" class="btn btn-default btn-xs">
                                 <span class="glyphicon glyphicon-pencil"></span>

@@ -1,0 +1,17 @@
+{% extends "bugzilla/base_bugzilla.html" %}
+
+{% block title %} Deleting bugzilla "<i>{{bug.title}}</i>" {% endblock %}
+
+{% block content %}
+    <div class="alert alert-info" role="alert">
+        You are about to delete the bugzilla {{bug.title}}
+    </div>
+    
+    <form method="post" action="">
+        {% csrf_token %}
+        <input class="btn-submit" type="submit" value="Proceed" />
+        <a href="{% url "bugzilla_list" %}">
+            <button type="button" class="btn-cancel">Cancel</button>
+        </a>
+    </form>
+{% endblock %}
