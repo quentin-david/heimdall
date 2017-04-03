@@ -289,7 +289,10 @@ class ServiceWebServer(Service):
 
     def isOnline(self):
         with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
-            url = 'http://'+self.ip+'/'
+            if not self.port:
+                url = 'http://'+self.ip+'/'
+            else:
+                url = 'http://'+self.ip+':'+str(self.port)+'/'
             cmd = executor.submit(requests.get, url, verify=False)
             try:
                 data = cmd.result()

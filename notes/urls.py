@@ -18,4 +18,5 @@ urlpatterns = [
     url(r'bookmark/(?P<bookmark_id>\d+)/delete$', login_required(views.bookmarkDelete), name='bookmark_delete'),
     # Topic
     url(r'topic/(?P<category_id>\d+)/view$', login_required(views.topicView), name='topic_view'),
+    #url(r'topic/(?P<category_id>\d+)/viewPDF$', login_required(views.topicViewPdf), name='topic_view_pdf'),
 ]

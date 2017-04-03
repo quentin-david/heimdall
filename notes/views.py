@@ -5,6 +5,8 @@ from django.core.urlresolvers import reverse_lazy
 from .models import Notes, Category, Bookmark, NotesFile
 from .forms import NotesForm, CategoryForm, BookmarkForm
 from django.views.decorators.csrf import csrf_exempt
+from reportlab.pdfgen import canvas
+from django.http import HttpResponse
 
 """
 Notes
@@ -135,3 +137,21 @@ def topicView(request, category_id):
     return render(request, 'topic/topic_view.html', locals())
 
 
+"""
+def topicViewPdf(request, category_id):
+    # Create the HttpResponse object with the appropriate PDF headers.
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="somefilename.pdf"'
+    # Create the PDF object, using the response object as its "file."
+    p = canvas.Canvas(response)
+    # Topic text
+    category = Category.objects.get(id=category_id)
+    text_to_render = category.get_topic_pdf_render()
+    # Draw things on the PDF. Here's where the PDF generation happens.
+    # See the ReportLab documentation for the full list of functionality.
+    p.drawString(10, 10, text_to_render)
+    # Close the PDF object cleanly, and we're done.
+    p.showPage()
+    p.save()
+    return response
+"""

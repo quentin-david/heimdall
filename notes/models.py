@@ -62,3 +62,15 @@ class Category(models.Model):
                 return self.parent.name+' > '+self.name
         else:
             return self.name
+        
+    # PDF render of a topic
+    """
+    def get_topic_pdf_render(self):
+        notes_list = Notes.objects.filter(category=self)
+        formatted_text = ''
+        for note in notes_list:
+            formatted_text += '<h1>'+note.title+'</h1>'
+            formatted_text += note.content
+        return formatted_text
+    """
+        
