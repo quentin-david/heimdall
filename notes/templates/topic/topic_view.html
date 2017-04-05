@@ -1,6 +1,6 @@
 {% extends "notes/base_notes.html" %}
 
-{% block title %}topic <i>{{category.parent.name|upper}}</i> > <i>{{category.name|upper}}</i> {% endblock %}
+{% block title %}<i>{{category.parent.name|upper}}</i> > <i>{{category.name|upper}}</i> {% endblock %}
 
 {% block content %}
     <h3>
@@ -68,24 +68,17 @@
     <ul>
     {% for note in notes_list %}
         {% for file in note.notesfile_set.all %}
-            <li>
-                <a href="{{file.uploaded_file.url}}">
-                    {{file.short_name}}
-                </a>
-                    ({{file.uploaded_file.size|filesizeformat}})
-            </li>
+            {% if file.is_present %}
+                <li>
+                    <a href="{{file.uploaded_file.url}}">
+                        {{file.short_name}}
+                    </a>
+                        ({{file.uploaded_file.size|filesizeformat}})
+                </li>
+            {%else %}
+                <div class="alert alert-danger" role="alert">{{file.uploaded_file.name}} has been deleted...</div>
+            {% endif %}
         {% endfor %}
-    {% endfor %}
-    </ul>
-    
-    <ul>
-    {% for file in file_list %}
-        <li>
-            <a href="{{file.uploaded_file.url}}">
-                {{file.short_name}}
-            </a>
-                ({{file.uploaded_file.size|filesizeformat}})
-        </li>
     {% endfor %}
     </ul>
     

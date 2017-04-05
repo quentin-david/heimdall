@@ -1,9 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
+import os.path
 
 
 def file_naming(instance,name):
-    return "notes/{}-{}".format(instance.id, name)
+    return "notes/{}-{}".format(instance.notes.id, name)
 
 class Notes(models.Model):
     title = models.CharField(max_length=50,null=False,blank=False,unique=True)
@@ -24,11 +25,23 @@ class Notes(models.Model):
 # files attached to the notes  
 class NotesFile(models.Model):
     notes = models.ForeignKey('notes.Notes', on_delete=models.CASCADE)
-    uploaded_file = models.FileField(upload_to="notes/", null=True,blank=True)
+    uploaded_file = models.FileField(upload_to=file_naming,null=True,blank=True)
     
     def short_name(self):
         return str(self.uploaded_file).split('/')[-1]
     
+    def delete_physical_file(self):
+        file_path = 'media/'+self.uploaded_file.name
+        if os.path.isfile(file_path):
+            os.unlink(file_path)
+        else:
+            return False
+    
+    def is_present(self):
+        if os.path.exists('media/'+self.uploaded_file.name):
+            return True
+        else:
+            return False
      
 """
 draft : collection de site

@@ -42,13 +42,23 @@ def notesCreateOrUpdate(request, notes_id=None):
         return redirect('topic_view', category_id=note.category.id)
     return render(request,'notes/notes_create_form.html',locals())
 
-
-
+"""
 class NotesDelete(DeleteView):
     model = Notes
     context_object_name = 'note'
     template_name = 'notes/notes_delete.html'
     success_url = reverse_lazy('notes_list')
+"""
+def notesDelete(request, notes_id):
+    notes_to_delete = Notes.objects.get(id=notes_id)
+    if notes_to_delete:
+        # Deletion of all the physical files
+        for notes_file in NotesFile.objects.filter(notes=notes_to_delete):
+            notes_file.delete_physical_file()
+        notes_to_delete.delete()
+    messages.success(request, 'Notes "{}" deleted !'.format(notes_to_delete.title))
+    return redirect('topic_view', category_id=notes_to_delete.category.id)
+
 
 
 """
@@ -58,10 +68,11 @@ NotesFile
 @csrf_exempt
 def notesFileDelete(request, notes_file_id):
     file_to_delete = NotesFile.objects.get(id=notes_file_id)
-    if file_to_delete:   
+    if file_to_delete:
+        file_to_delete.delete_physical_file()
         file_to_delete.delete()
     messages.success(request, 'File "{}" deleted !'.format(file_to_delete.uploaded_file))
-    return redirect('notes_list')
+    return redirect('topic_view', category_id=file_to_delete.notes.category.id)
 
 
 """

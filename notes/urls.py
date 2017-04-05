@@ -7,7 +7,8 @@ urlpatterns = [
     url(r'^$', login_required(views.NotesList.as_view()), name='notes_list'),
     url(r'new/$', login_required(views.notesCreateOrUpdate), name='notes_create'),
     url(r'^(?P<notes_id>\d+)/edit$', login_required(views.notesCreateOrUpdate), name='notes_update'),
-    url(r'^(?P<pk>\d+)/delete$', login_required(views.NotesDelete.as_view()), name='notes_delete'),
+    #url(r'^(?P<pk>\d+)/delete$', login_required(views.NotesDelete.as_view()), name='notes_delete'),
+    url(r'^(?P<notes_id>\d+)/delete$', login_required(views.notesDelete), name='notes_delete'),
     # NotesFile
     url(r'^file/(?P<notes_file_id>\d+)/delete', login_required(views.notesFileDelete), name='notes_file_delete'),
     # Categories
