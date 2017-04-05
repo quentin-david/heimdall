@@ -4,8 +4,11 @@ import sys, os
 import datetime
 import json
 from django.utils.timezone import utc
-sys.path.insert(0,'/usr/local/bin/collect_scripts')
-import collect_download_file as cdf
+from django.conf import settings
+
+if settings.HEIMDALL_COLLECT:
+    sys.path.insert(0,'/usr/local/bin/collect_scripts')
+    import collect_download_file as cdf
 
 
 class CollectItem(models.Model):
