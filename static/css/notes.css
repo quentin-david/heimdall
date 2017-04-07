@@ -22,24 +22,18 @@
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12) !important;
 }
 
-.header-line {
-    background-color: #d1dae0;
+.note .panel-heading {
+    font-size: 12px;
+    background-color: #d1dae0 !important;
 }
 
-.header-line > th {
+.note .note-title {
     font-size: 17px;
-}
-
-.header-line > th > span {
-    font-size: 11px;
-    text-align: center;
+    
 }
 
 .subheader-line {
     display: none;
-    background-color: #f0f2f5;
-}
-
-.note-content {
-    text-align: left;
+    /*background-color: #f0f2f5;*/
+    background-color: #d1dae0 !important;
 }
