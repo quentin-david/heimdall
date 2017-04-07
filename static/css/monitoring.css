@@ -6,3 +6,8 @@
 .list-item-node {
     text-align: center;
 }
+
+.munin-picture {
+    padding-left: 6 px;
+    padding-right: 6px; 
+}

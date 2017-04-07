@@ -12,7 +12,7 @@
             {% endfor %}
             
             {% for metric in metric_list_ok %}
-                <div class="col-lg-6 col-xs-12">
+                <div class="col-lg-6 col-xs-12 munin-picture">
                     <img src="{% url 'pic' 'node' node.id metric resource_time %}" style="width: 100%">
                 </div>
             {% endfor %}
@@ -30,7 +30,7 @@
             {% endfor %}
             
             {% for metric in network_metric_list_ok %}
-                <div class="col-lg-6 col-xs-12">
+                <div class="col-lg-6 col-xs-12 munin-picture">
                     <img src="{% url 'pic' 'node' node.id metric resource_time %}" style="width: 100%">
                 </div>
             {% endfor %}
