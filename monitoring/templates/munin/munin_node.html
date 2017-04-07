@@ -6,24 +6,35 @@
     <div class="row">
         <h2>System</h2>
         {% if node.munin_server.checkApi %}
-            {% for metric in metric_list %}
-                <div class="col-lg-6">
+            
+            {% for failed_metric in metric_list_ko %}
+                <div class="alert alert-warning" role="alert">Metric {{failed_metric}} not found</div>
+            {% endfor %}
+            
+            {% for metric in metric_list_ok %}
+                <div class="col-lg-6 col-xs-12">
                     <img src="{% url 'pic' 'node' node.id metric resource_time %}" style="width: 100%">
                 </div>
             {% endfor %}
+            
         {% else %}
             <div class="alert alert-danger" role="alert">Munin unreachable</div>
         {% endif %}
-        {{debug}}
     </div>
     <div class="row">
         <h2>Network</h2>
         {% if node.munin_server.checkApi %}
-            {% for metric in network_metric_list %}
+            
+            {% for failed_metric in network_metric_list_ko %}
+                <div class="alert alert-warning" role="alert">Metric {{failed_metric}} not found</div>
+            {% endfor %}
+            
+            {% for metric in network_metric_list_ok %}
                 <div class="col-lg-6">
                     <img src="{% url 'pic' 'node' node.id metric resource_time %}" style="width: 100%">
                 </div>
             {% endfor %}
+            
         {% else %}
             <div class="alert alert-danger" role="alert">Munin unreachable</div>
         {% endif %}

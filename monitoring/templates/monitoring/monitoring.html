@@ -43,51 +43,45 @@
         {% for munin in munin_server_list %}
             <h3>
                 {{munin.server.name}}
+                {% if munin.checkApi %}
+                    <span class="label label-success">OK</span>
+                {% else %}
+                    <span class="label label-danger">unreachable</span>
+                {% endif %}
                 <a href="{% url 'munin_update' munin.id %}">
                     <button type="button" class="btn btn-default btn-xs">
                         <span class="glyphicon glyphicon-pencil"></span>
                     </button>
                 </a>
             </h3>
-            <table class="table table-bordered">
-                <tr>
-                    <th>@IP</th>
-                    <td>
+                <ul>
+                    <li>
+                        @IP
                         {{munin.ip}}
                         {% if munin.server %}
                             (<a href="{% url 'node_view' munin.server.id %}">{{munin.server.name}}</a>)
                         {% endif %}
                         (external <a href="https://www.infra.quentin-david.ovh/munin/" target="_blank">link</a>)
-                    </td>
-                </tr>
-                <tr>
-                    <th>Method</th>
-                    <td>{{munin.method}}</td>
-                </tr>
-                <tr>
-                    <th>Service state</th>
-                    <td>
-                        {% if munin.checkApi %} OK {% else %} ... {% endif %}
-                    </td>
-                </tr>
-                <tr>
-                    <th>Nodes monitored</th>
-                    <td>
-                        {# regroup node_list by application  as node_listing #}
-                        {% regroup munin.node_set.all by application as node_listing %}
-                        <ul>
-                        {% for application in node_listing %}
-                            <li> {{ application.grouper }}
-                                <ul>
-                                    {% for node in application.list %}
-                                        <li><a href="{% url 'munin_node_view' node.id 'day' %}">{{node}}</a></li>
-                                    {% endfor %}
-                                </ul>
-                        {% endfor %}
-                        </ul>
-                    </td>
-                </tr>
-            </table>
+                        ({{munin.method}})
+                    </li>
+                </ul>
+                </ul>
+                {% for appli in application_list %}
+                
+                    <ul class="list-group">
+                        
+                        <div class="col-lg-3 col-xs-12">
+                            <li class="list-group-item list-item-appli">{{appli.name}}</li>
+                        </div>
+                        <div class="col-lg-9 col-xs-12">
+                            {%for node in appli.node_set.all %}
+                               <a class="list-group-item list-item-node" href="{% url 'munin_node_view' node.id 'day' %}">{{node}}</a>
+                            {%endfor%}
+                        </div>
+                        
+                    </ul>
+                
+                {% endfor %}
         {% endfor %}
     {% endif %}
     

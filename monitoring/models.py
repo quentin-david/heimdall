@@ -34,11 +34,10 @@ class Munin(models.Model):
             except Exception as exc:
                 return False
             else:
-                if data.status_code == '404':
+                if str(data.status_code) == '404':
                     return False
                 else:
                     return data.raw
-                #return data.status_code
                 
 
     
