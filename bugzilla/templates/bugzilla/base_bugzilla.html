@@ -21,25 +21,27 @@
         {% endblock %}
     </div>
     
-    {% if qs_state or qs_owner or qs_title or qs_application %}
-        <div class="list-group launcher search_active">
-    {% else %}
+    {% block launcher2 %}
+        {% if qs_state or qs_owner or qs_title or qs_application %}
+            <div class="list-group launcher search_active">
+        {% else %}
+            <div class="list-group launcher">
+        {% endif %}
+            <h5>Search</h5>
+            {% include "bugzilla/snippet_form_search.html" with form=search_form %}
+        </div>
+        
         <div class="list-group launcher">
-    {% endif %}
-        <h5>Search</h5>
-        {% include "bugzilla/snippet_form_search.html" with form=search_form %}
-    </div>
-    
-    <div class="list-group launcher">
-        <h5>State</h5>
-        {% for state in states %}
-            {% if qs_state == state.0 %}
-                <a href="{% url 'bugzilla_list'%}?qs_state={{state.0}}"><button type="button" class="btn btn-primary btn-block">{{state.1}}</button></a>
-            {% else %}
-                <a href="{% url 'bugzilla_list'%}?qs_state={{state.0}}"><button type="button" class="btn btn-default btn-block">{{state.1}}</button></a>
-            {% endif %}
-        {% endfor %}
-    </div>
+            <h5>State</h5>
+            {% for state in states %}
+                {% if qs_state == state.0 %}
+                    <a href="{% url 'bugzilla_list'%}?qs_state={{state.0}}"><button type="button" class="btn btn-primary btn-block">{{state.1}}</button></a>
+                {% else %}
+                    <a href="{% url 'bugzilla_list'%}?qs_state={{state.0}}"><button type="button" class="btn btn-default btn-block">{{state.1}}</button></a>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endblock %}
 {% endblock %}
 
 {% block title %} Bugzilla {% endblock %}

@@ -33,12 +33,10 @@ def muninPic(request, node_or_host, node_id, resource_type,resource_time):
     # node_or_host = 'host' or 'node'
     if(node_or_host == 'node'):
         node = Node.objects.get(id=node_id)
-        node_munin_name = node.name.split('.')[0]
-        munin = node.munin_server
     elif(node_or_host == 'host'):
         node = Host.objects.get(id=node_id)
-        node_munin_name = node.name.split('.')[0]
-        munin = node.munin_server
+    node_munin_name = node.name.split('.')[0]
+    munin = node.munin_server
     pic = munin.getMuninPicture(node_munin_name,resource_type,resource_time)
     response = HttpResponse(pic,content_type="image/png")
     return response
@@ -47,13 +45,17 @@ def muninPic(request, node_or_host, node_id, resource_type,resource_time):
 # All the graphs for one node
 def muninNodeView(request,node_id,resource_time):
     node = Node.objects.get(id=node_id)
-    metric_list = ['memory','diskstats_iops','load','fw_packets','cpu']
+    metric_list = [i for i in ['memory','booool', 'diskstats_iops','load','fw_packets','cpu'] if node.munin_server.getMuninPicture(node.name,i,'day')]
+    #network_metric_list = [nic for nic in NetworkLink.objects.filter(node=node) for i in ['if_','if_err_'] if node.munin_server.getMuninPicture(node.name,i+nic.iface,'day')]
     network_metric_list = []
+    debug = []
     for nic in NetworkLink.objects.filter(node=node):
         network_metric_list.append('if_'+nic.iface)
         network_metric_list.append('if_err_'+nic.iface)
+    debug = node.munin_server.getMuninPicture(node.name,'memoryzkejfez','day')
     node_list = node.host.node_set.order_by('name')
     host_list = Host.objects.all()
+    
     return render(request, 'munin/munin_node.html', locals())
 
 # All the graphs for one host

@@ -1,0 +1,38 @@
+{% if bug.state == 'open' %}
+    <div class="panel panel-default panel-danger">
+{% elif bug.state == 'close' %}
+    <div class="panel panel-default panel-success">
+{% elif bug.state == 'info' %}
+    <div class="panel panel-default panel-info">
+{% else %}
+    <div class="panel panel-default">
+{% endif %}
+        
+        <div class="panel-heading" style="text-align: center">
+                <div class="row">                        
+                        <div class="col-lg-4 col-xs-12">[{{bug.application.name}}]  ({{bug.date_update}})</div>
+                        <div class="col-lg-5 col-xs-12"><b>{{bug.title}}</b> (#{{bug.id}})</div>
+                        <div class="col-lg-3 col-xs-12" style="text-align: right">
+                                ({{bug.owner.username}})
+                            {% if user.username == bug.owner.username %}
+                                <a href="{% url 'bugzilla_update' bug.id %}">
+                                    <button type="button" class="btn btn-default btn-xs">
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                    </button>
+                                </a>
+                                <a href="{% url 'bugzilla_delete' bug.id %}">
+                                    <button type="button" class="btn btn-default btn-xs">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </a>
+                            {% endif %}                                
+                        </div>
+                </div>
+                
+        </div>
+            
+        <div class="panel-body">
+               {{bug.content|safe}}
+        </div>
+             
+</div>

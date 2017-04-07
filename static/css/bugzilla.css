@@ -2,18 +2,3 @@
     border: 3px solid grey !important;
     background-color: #b3d9ff !important;
 }
-
-.bugzilla-open tr th {
-    background-color: #cc0000;
-    color: white;
-}
-
-.bugzilla-close th {
-    background-color: #4CAF50;
-    color: white;
-}
-
-.bugzilla-info th {
-    background-color: #4da6ff;
-    color: white;
-}

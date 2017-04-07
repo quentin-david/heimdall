@@ -1,22 +1,24 @@
 {% extends "bugzilla/base_bugzilla.html" %}
 
+
+{% block title %}
+    Bugzilla
+    {% if qs_title %}
+        <button type="button" class="btn btn-default btn-lg">Title : {{qs_title}}</button>
+    {% endif %}
+    {% if qs_owner %}
+        <button type="button" class="btn btn-default btn-lg">Owner : {{qs_owner}}</button>
+    {% endif %}
+    {% if qs_application %}
+        <button type="button" class="btn btn-default btn-lg">App : {{qs_application}}</button>
+    {% endif %}
+    {% if qs_state %}
+        <button type="button" class="btn btn-default btn-lg">State : {{qs_state}}</button>
+    {% endif %}
+
+{% endblock %}
+
 {% block content %}
-    <h3>Search</h3>
-    <p>
-        {% if qs_title %}
-            <button type="button" class="btn btn-default btn-lg">Title : {{qs_title}}</button>
-        {% endif %}
-        {% if qs_owner %}
-            <button type="button" class="btn btn-default btn-lg">Owner : {{qs_owner}}</button>
-        {% endif %}
-        {% if qs_application %}
-            <button type="button" class="btn btn-default btn-lg">App : {{qs_application}}</button>
-        {% endif %}
-        {% if qs_state %}
-            <button type="button" class="btn btn-default btn-lg">State : {{qs_state}}</button>
-        {% endif %}
-    </p>
-    
     <!-- Modal -->
     <div class="modal fade" id="bugzillaModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
       <div class="modal-dialog modal-lg" role="document">
@@ -36,6 +38,6 @@
     
     <h2>Bugzilla list</h2>
     {% for bug in bugzilla_list %}
-        {% include "bugzilla/snippet_bugzilla.html" %}
+        {% include "bugzilla/snippet_bugzilla_div.html" %}
     {% endfor %}
 {% endblock %}

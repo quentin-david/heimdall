@@ -34,7 +34,12 @@ class Munin(models.Model):
             except Exception as exc:
                 return False
             else:
-                return data.raw
+                if data.status_code == '404':
+                    return False
+                else:
+                    return data.raw
+                #return data.status_code
+                
 
     
     def getMuninPicture(self,node_name,resource_type,resource_time):
@@ -42,3 +47,4 @@ class Munin(models.Model):
         url = node_name+'/'+node_name+'/'+resource_type+'-'+resource_time+'.png'
         response = self.apiAsyncCall(url)
         return response
+
