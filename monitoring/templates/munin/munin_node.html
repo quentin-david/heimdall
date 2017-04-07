@@ -3,7 +3,7 @@
 {% block title %} Node {{node.name}} {% endblock %}
 
 {% block content %}
-    <div class="row">
+   
         <h2>System</h2>
         {% if node.munin_server.checkApi %}
             
@@ -20,8 +20,8 @@
         {% else %}
             <div class="alert alert-danger" role="alert">Munin unreachable</div>
         {% endif %}
-    </div>
-    <div class="row">
+    
+  
         <h2>Network</h2>
         {% if node.munin_server.checkApi %}
             
@@ -30,7 +30,7 @@
             {% endfor %}
             
             {% for metric in network_metric_list_ok %}
-                <div class="col-lg-6">
+                <div class="col-lg-6 col-xs-12">
                     <img src="{% url 'pic' 'node' node.id metric resource_time %}" style="width: 100%">
                 </div>
             {% endfor %}
@@ -38,5 +38,5 @@
         {% else %}
             <div class="alert alert-danger" role="alert">Munin unreachable</div>
         {% endif %}
-    </div>
+   
 {% endblock %}
