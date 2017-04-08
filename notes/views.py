@@ -114,14 +114,7 @@ def bookmarkList(request):
     unsorted_bookmark_list = Bookmark.objects.filter(category__isnull=True)
     root_category_list = Category.objects.filter(parent__isnull=True)
     bookmark_form = BookmarkForm(None)
-    """
-    form = BookmarkForm(request.POST or None)
-    if form.is_valid():
-        bookmark = form.save(commit=False)
-        bookmark.owner = request.user
-        bookmark.save()
-        return redirect('bookmark_list')
-    """
+
     return render(request, 'bookmark/bookmark_list.html', locals())
 
 

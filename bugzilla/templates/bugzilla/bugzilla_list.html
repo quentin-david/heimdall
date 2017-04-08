@@ -36,7 +36,29 @@
       </div>
     </div>
     
-    <h2>Bugzilla list</h2>
+    <h2>
+        Bugzilla list
+        
+        <button id="btn-hide-bugs" type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top" title="hide all bugs">
+            <span class="glyphicon glyphicon-menu-up"></span>
+        </button>
+        <button style="display: none" id="btn-show-bugs" type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top" title="show all bugs">
+            <span class="glyphicon glyphicon-menu-down"></span>
+        </button>
+        <script>
+            $("#btn-hide-bugs").click(function(){
+                $(".panel-body").hide();
+                $("#btn-show-bugs").show();
+                $(this).hide();
+            });
+            $("#btn-show-bugs").click(function(){
+                $(".panel-body").show();
+                $("#btn-hide-bugs").show();
+                $(this).hide();
+            });
+        </script>
+    
+    </h2>
     {% for bug in bugzilla_list %}
         {% include "bugzilla/snippet_bugzilla_div.html" %}
     {% endfor %}

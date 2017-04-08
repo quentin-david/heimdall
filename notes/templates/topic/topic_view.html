@@ -8,6 +8,7 @@
         <button id="btn-add-bookmark" type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top" title="add new bookmark">
             <span class="glyphicon glyphicon-plus"></span>
         </button>
+        
         <script>
             $("#btn-add-bookmark").click(function(){
                 $("#form-bookmark").toggle();
@@ -16,17 +17,6 @@
     </h3>
     
     <div style="display: none" id="form-bookmark" >
-        {%comment%}
-        <form class="form-inline" action="" method="post">
-            {% csrf_token %}
-            <div class="form-group">
-                {{ bookmark_form.url.errors }}
-                {#<label for="{{ bookmark_form.url.id_for_label }}">URL</label>#}
-                {{ bookmark_form.url }}
-            </div>
-            <input class="btn btn-default btn-bookmark" type="submit" value="add Bookmark" />
-        </form>
-        {% endcomment%}
         {% include "bookmark/snippet_form_bookmark.html" %}
     </div>
     
@@ -41,7 +31,24 @@
         <button id="btn-add-note" type="button" class="btn btn-default btn-xs" data-toggle="modal"  data-target="#noteModal">
             <span class="glyphicon glyphicon-plus"></span>
         </button>
-        
+        <button id="btn-hide-notes" type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top" title="hide all notes">
+            <span class="glyphicon glyphicon-menu-up"></span>
+        </button>
+        <button style="display: none" id="btn-show-notes" type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top" title="show all notes">
+            <span class="glyphicon glyphicon-menu-down"></span>
+        </button>
+        <script>
+            $("#btn-hide-notes").click(function(){
+                $(".panel-body").hide();
+                $("#btn-show-notes").show();
+                $(this).hide();
+            });
+            $("#btn-show-notes").click(function(){
+                $(".panel-body").show();
+                $("#btn-hide-notes").show();
+                $(this).hide();
+            });
+        </script>
     </h3>
     
     {% for note in notes_list %}

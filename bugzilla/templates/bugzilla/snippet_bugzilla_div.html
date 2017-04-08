@@ -8,7 +8,7 @@
     <div class="panel panel-default">
 {% endif %}
         
-        <div class="panel-heading" style="text-align: center">
+        <div id="bug-{{bug.id}}-heading" class="panel-heading" style="text-align: center">
                 <div class="row">                        
                         <div class="col-lg-4 col-xs-12" style="text-align: left">[{{bug.application.name}}]  ({{bug.date_update}})</div>
                         <div class="col-lg-5 col-xs-12"><b>{{bug.title}}</b> (#{{bug.id}})</div>
@@ -31,8 +31,12 @@
                 
         </div>
             
-        <div class="panel-body">
+        <div id="bug-{{bug.id}}-body" class="panel-body">
                {{bug.content|safe}}
-        </div>
-             
+        </div>       
 </div>
+<script>
+        $("#bug-{{bug.id}}-heading").click(function(){
+                $("#bug-{{bug.id}}-body").toggle();   
+        });
+</script> 

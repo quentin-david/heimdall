@@ -1,5 +1,5 @@
 <div class="panel panel-default note">
-        <div class="panel-heading" style="text-align: center">
+        <div id="note-{{note.id}}-heading" class="panel-heading" style="text-align: center">
         <div class="row">
                 <div class="col-lg-4 col-xs-12" style="text-align: left">
                         <b>[<a href="{% url 'topic_view' note.category.id %}">{{note.category.name}}</a>]
@@ -76,8 +76,14 @@
         </div>
         {% endif %}
  </div>
-        <div class="panel-body">
+        <div id="note-{{note.id}}-body" class="panel-body">
             {{note.content|safe}}
         </div>
     
 </div>
+        
+<script>
+        $("#note-{{note.id}}-heading").click(function(){
+                $("#note-{{note.id}}-body").toggle()     
+        });
+</script>        
