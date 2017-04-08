@@ -42,13 +42,7 @@ def notesCreateOrUpdate(request, notes_id=None):
         return redirect('topic_view', category_id=note.category.id)
     return render(request,'notes/notes_create_form.html',locals())
 
-"""
-class NotesDelete(DeleteView):
-    model = Notes
-    context_object_name = 'note'
-    template_name = 'notes/notes_delete.html'
-    success_url = reverse_lazy('notes_list')
-"""
+
 def notesDelete(request, notes_id):
     notes_to_delete = Notes.objects.get(id=notes_id)
     if notes_to_delete:
@@ -107,15 +101,27 @@ class CategoryDelete(DeleteView):
 """
 Bookmark
 """
+def bookmarkCreate(request):
+    form = BookmarkForm(request.POST or None)
+    if form.is_valid():
+        bookmark = form.save(commit=False)
+        bookmark.owner = request.user
+        bookmark.save()
+        return redirect('topic_view', category_id=bookmark.category.id)
+    return render(request, 'bookmark/bookmark_list.html', locals())
+
 def bookmarkList(request):
     unsorted_bookmark_list = Bookmark.objects.filter(category__isnull=True)
     root_category_list = Category.objects.filter(parent__isnull=True)
+    bookmark_form = BookmarkForm(None)
+    """
     form = BookmarkForm(request.POST or None)
     if form.is_valid():
         bookmark = form.save(commit=False)
         bookmark.owner = request.user
         bookmark.save()
         return redirect('bookmark_list')
+    """
     return render(request, 'bookmark/bookmark_list.html', locals())
 
 
@@ -134,35 +140,9 @@ def topicView(request, category_id):
     category = Category.objects.get(id=category_id)
     root_category_list = Category.objects.filter(parent__isnull=True)
     bookmark_list = Bookmark.objects.filter(category=category.id)
-    bookmark_form = BookmarkForm(request.POST or None)
+    bookmark_form = BookmarkForm(None, initial={'category':category.id})
     form = NotesForm(None, initial={'category':category.id})
     notes_list = Notes.objects.filter(category=category)
-    #file_list = NotesFile.objects.filter(notes__set=notes_list) # to check
-    if bookmark_form.is_valid():
-        bookmark = bookmark_form.save(commit=False)
-        bookmark.owner = request.user
-        bookmark.category = category
-        bookmark.save()
-        return redirect('topic_view', category_id=category.id)
-        
+    
     return render(request, 'topic/topic_view.html', locals())
 
-
-"""
-def topicViewPdf(request, category_id):
-    # Create the HttpResponse object with the appropriate PDF headers.
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="somefilename.pdf"'
-    # Create the PDF object, using the response object as its "file."
-    p = canvas.Canvas(response)
-    # Topic text
-    category = Category.objects.get(id=category_id)
-    text_to_render = category.get_topic_pdf_render()
-    # Draw things on the PDF. Here's where the PDF generation happens.
-    # See the ReportLab documentation for the full list of functionality.
-    p.drawString(10, 10, text_to_render)
-    # Close the PDF object cleanly, and we're done.
-    p.showPage()
-    p.save()
-    return response
-"""

@@ -3,20 +3,7 @@
 {% block title %}Bookmarks{% endblock %}
 
 {% block content %}
-     <form class="form-inline" action="" method="post">
-        {% csrf_token %}
-        <div class="form-group">
-            {{ form.category.errors }}
-            <label for="{{ form.category.id_for_label }}">Category</label>
-            {{ form.category }}
-        </div>
-        <div class="form-group">
-            {{ form.url.errors }}
-            <label for="{{ form.url.id_for_label }}">URL</label>
-            {{ form.url }}
-        </div>
-        <input class="btn btn-default btn-bookmark" type="submit" value="add Bookmark" />
-    </form>
+   {% include 'bookmark/snippet_form_bookmark.html' %}
      
    
    <h3>My bookmarks</h3>

@@ -53,7 +53,6 @@ class CategoryForm(forms.ModelForm):
 class BookmarkForm(forms.ModelForm):
     class Meta:
         model = Bookmark
-        #exclude = ['owner']
         fields = ('url', 'category')
         
     def __init__(self, *args, **kwargs):

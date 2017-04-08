@@ -1,0 +1,9 @@
+<form class="form-inline" action="{% url 'bookmark_create' %}" method="post">
+    {% csrf_token %}
+    <div class="form-group">
+        {{ bookmark_form.url.errors }}
+        {{ bookmark_form.category }}
+        {{ bookmark_form.url }}
+    </div>
+    <input class="btn btn-default btn-bookmark" type="submit" value="add Bookmark" />
+</form>

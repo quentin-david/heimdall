@@ -38,13 +38,6 @@
                             {{kid.name}}
                         </a>
                     </li>
-                    {% comment%}
-                    <ul>
-                        {% for grandkid in kid.category_set.all %}
-                            <li>{{grandkid.name}}</li>
-                        {% endfor %}
-                    </ul>
-                {% endcomment %}
                 {% endfor %}
             </ul>
         {% endfor %}
@@ -57,20 +50,7 @@
 
 {% block content %}
     <h3>Bookmark</h3>
-    <form class="form-inline" action="" method="post">
-        {% csrf_token %}
-        <div class="form-group">
-            {{ form.category.errors }}
-            <label for="{{ form.category.id_for_label }}">Category</label>
-            {{ form.category }}
-        </div>
-        <div class="form-group">
-            {{ form.url.errors }}
-            <label for="{{ form.url.id_for_label }}">URL</label>
-            {{ form.url }}
-        </div>
-        <input class="btn btn-default btn-bookmark" type="submit" value="add Bookmark" />
-    </form>    
+    {% include 'bookmark/snippet_form_bookmark.html' %}
     
     <div class="row">
         <div class="col-lg-4">
@@ -133,7 +113,11 @@
     </div>
     
     <h3>Recent notes</h3>
-    {% for note in recent_notes_list %}
-        {% include "notes/snippet_note_div.html" %}
-    {% endfor %}
+    {% if recent_notes_list %}
+        {% for note in recent_notes_list %}
+            {% include "notes/snippet_note_div.html" %}
+        {% endfor %}
+    {% else %}
+        <div class="alert alert-info">No new note in the last 3 days</div>
+    {% endif %}
 {% endblock %}

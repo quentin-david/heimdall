@@ -9,12 +9,8 @@ def home(request):
     service_list = ServiceWebServer.objects.all()
     root_category_list = Category.objects.filter(parent__isnull=True)
     recent_notes_list = Notes.objects.filter(date_update__gte=(datetime.today() - timedelta(days=3))) #Last 3 day topics
-    form = BookmarkForm(request.POST or None)
-    if form.is_valid():
-        bookmark = form.save(commit=False)
-        bookmark.owner = request.user
-        bookmark.save()
-        return redirect('home')
+    bookmark_form = BookmarkForm(None)
+
     return render(request, 'appli/home.html', locals())
 
 def profile(request):
