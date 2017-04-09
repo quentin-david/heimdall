@@ -285,7 +285,7 @@ class ServiceWebServer(Service):
     reverse_proxy = models.ForeignKey(ServiceReverseProxy, null=True, blank=True)
     
     def getFQDN(self):
-        return self.reverse_proxy.protocol+'://'+self.servername+'.'+self.reverse_proxy.proxy_url+'/'+self.url_root
+        return str(self.reverse_proxy.protocol)+'://'+str(self.servername)+'.'+str(self.reverse_proxy.proxy_url)+'/'+str(self.url_root)
 
     def isOnline(self):
         with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
