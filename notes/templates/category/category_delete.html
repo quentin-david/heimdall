@@ -1,7 +1,7 @@
 {% extends "notes/base_notes.html" %}
 
 {% block content %}
-    <p>You are about to delete the category {{category.name}}</p>
+    <h3>You are about to delete the category "{{category.name}}"</h3>
     <p>
         {% if category.category_set.all|length > 0 %}
             All these sub-categories will be impacted :
@@ -20,7 +20,9 @@
     
     <form method="post" action="">
         {% csrf_token %}
-        <input type="submit" value="Proceed" />
-        <a href="{% url "category_list" %}">Cancel</a>
+        <input type="submit" class="btn-submit" value="Proceed" />
+        <a href="{% url "category_list" %}">
+            <button type="button" class="btn-cancel">Cancel</button>
+        </a>
     </form>
 {% endblock %}

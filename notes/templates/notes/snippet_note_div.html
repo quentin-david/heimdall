@@ -6,7 +6,7 @@
                         ({{note.date_update}})</b>
                 </div>
                 
-                <div class="col-lg-5 col-xs-12 note-title"><b>{{note.title}}</b></div>
+                <div id="note-{{note.id}}-title" class="col-lg-5 col-xs-12 note-title"><b>{{note.title}}</b></div>
                 
                 <div class="col-lg-3 col-xs-12" style="text-align: right">
                         {% if note.notesfile_set.all|length > 0 %}
@@ -22,7 +22,7 @@
                         
                         ({{note.owner.username}})
                         {% if user.username == note.owner.username or note.shared %}
-                        <a href="{% url 'notes_update' note.id %}">
+                        <a href="{% url 'notes_update' note.category.id note.id %}">
                             <button type="button" class="btn btn-default btn-xs">
                                 <span class="glyphicon glyphicon-pencil"></span>
                             </button>
@@ -83,7 +83,7 @@
 </div>
         
 <script>
-        $("#note-{{note.id}}-heading").click(function(){
-                $("#note-{{note.id}}-body").toggle()     
+        $("#note-{{note.id}}-title").click(function(){
+                $("#note-{{note.id}}-body").toggle();    
         });
 </script>        

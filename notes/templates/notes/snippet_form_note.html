@@ -1,43 +1,37 @@
 {% if note_to_edit %}
 	<form action="" enctype="multipart/form-data" method="post">
 {% else %}
-	<form action="{% url 'notes_create' %}" enctype="multipart/form-data" method="post">
+	<form action="{% url 'notes_create' category.id%}" enctype="multipart/form-data" method="post">
 {% endif %}
         {% csrf_token %}
         
-        <div class="col-lg-11 input-group">
+		<div class="col-lg-5">
+			<div class="input-group">
                 {{ form.non_field_errors }}
                     {{ form.title.errors }}
                     <div class="input-group-addon"><b>Title</b></div>
                     {{ form.title }}
-	</div>
-	<div class="col-lg-4">
-                {{ form.non_field_errors }}
-                <div class="form-group">
-                    {{ form.category.errors }}
-                    <label for="{{ form.category.id_for_label }}">Category</label>
-                    {{ form.category }}
+			</div>
 		</div>
-	</div>
         
-	<div class="col-lg-3">
-		<div class="form-group">
-			{{ form.state.errors }}
-			<label for="{{ form.title.id_for_label }}">State</label>
-			{{ form.state }}
+		<div class="col-lg-3">
+			<div class="form-group">
+				{{ form.state.errors }}
+				<label for="{{ form.title.id_for_label }}">State</label>
+				{{ form.state }}
+			</div>
+			<div class="form-group">			
+				{{ form.public.errors }}
+				<label for="{{ form.public.id_for_label }}">Public</label>
+				{{ form.public }}
+				
+				{{ form.shared.errors }}
+				<label for="{{ form.shared.id_for_label }}">Shared</label>
+				{{ form.shared }}
+			</div>
 		</div>
-		<div class="form-group">			
-			{{ form.public.errors }}
-			<label for="{{ form.public.id_for_label }}">Public</label>
-			{{ form.public }}
-			
-			{{ form.shared.errors }}
-			<label for="{{ form.shared.id_for_label }}">Shared</label>
-			{{ form.shared }}
-		</div>
-	</div>
-            
-			
+				
+				
         <div class="col-lg-4">
 		{% if upfiles %}
 			<label for="{{ form.uploaded_files.id_for_label }}">existing files</label>

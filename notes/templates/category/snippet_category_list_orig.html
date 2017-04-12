@@ -15,42 +15,31 @@
             <input type="search" class="form-control search" id="inputSearch" placeholder="Search">
         </div>
     </h5>
-    <hr style="margin: 10px">
     
     
     
-    <ul class="list list-group" style="padding-left: 0px; margin-bottom: 0px;text-align: center;">
+    <ul class="list">
     {% for community in communities %}
-        <li class="list-group-item" style="background-color: #d1dae0; padding: 1px 15px;">
+        <hr style="margin: 15px">
         <h4 class="community-name">
-            {% if community.owner == user %}
-                <span class="glyphicon glyphicon-user"></span>
-                {{community.title}}
-            {% else %}
-                <span class="glyphicon glyphicon-globe"></span>
-                {{community.title}}
-                ({{community.owner.username}})
-            {% endif %}
-            
+            <span class="glyphicon glyphicon-user"></span>
+            {{community.title}}
         </h4>
-        </li>
         
         {% if community.get_root_categories_by_community|length > 0 %}
             {% for cat in community.get_root_categories_by_community %}
-                <li class="list-group-item" style="padding: 10px 2px 2px 2px">
+                <li>
                     <b class="category-name">{{cat.name}}</b>
                 
-                    <div class="list-group" style="margin-bottom: 0px">
+                <ul>
                     {% for kid in cat.category_set.all %}
-                        {% if kid.name == category.name %}
-                            <a style="padding: 2px 15px" class="subcategory-name list-group-item active" href="{% url 'topic_view' kid.id %}">
-                        {% else %}
-                            <a style="padding: 2px 15px" class="subcategory-name list-group-item" href="{% url 'topic_view' kid.id %}">
-                        {% endif %}
+                        <li>
+                            <a class="subcategory-name" href="{% url 'topic_view' kid.id %}">
                                 {{kid.name}}
                             </a>
+                        </li>
                     {% endfor %}
-                    </div>
+                </ul>
                 </li>
             {% endfor %}
         {% else %}

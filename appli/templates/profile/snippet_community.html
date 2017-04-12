@@ -1,0 +1,84 @@
+<div class="object_description">Communities are a way to share ressources with other users</div>
+<div class="row">
+    <div class="col-lg-6">
+        <h4>
+            My communities
+            <a href="{% url 'community_create' %}">
+                <button id="btn-add-bookmark" type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="right" title="add new community">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </button>
+            </a>
+        </h4>
+        <ul class="list-group">
+            {% for community in personal_communities %}
+                <li class="list-group-item" style="text-align: center">
+                    <b>{{community.title}}</b>
+                    
+                    {% if community.community_users.all|length < 1%}
+                    <span style="float: left">
+                        <button type="button" class="btn btn-default btn-xl" data-toggle="tooltip" data-placement="right" title="private community">
+                            <span class="glyphicon glyphicon-lock"></span>
+                        </button>
+                    </span>
+                    {% endif %}
+                    
+					<span style="float: right">
+                        <a href="{% url 'community_delete' community.id %}">
+							<button type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="bottom" title="delete community">
+								<span class="glyphicon glyphicon-remove"></span>
+							</button>
+                        </a>
+                    </span>
+                    <span style="float: right">
+                        <a href="{% url 'community_update' community.id %}">
+							<button type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="left" title="edit community">
+								<span class="glyphicon glyphicon-pencil"></span>
+							</button>
+                        </a>
+                    </span>
+					
+                    
+                    {% if community.community_users.all|length > 0%}
+                        <p>Shared with :
+                        {% for contrib in community.community_users.all %}
+                            {{contrib}}, 
+                        {%endfor %}
+                        </p>
+                    {% else %}
+                        <p>private</p>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    
+    <div class="col-lg-6">
+        <h4>Communities I'm in</h4>
+        <ul class="list-group">
+            {% for community in my_communities %}
+                <li class="list-group-item" style="text-align: center">
+                    <button style="float: left" id="btn-enable-community" type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="right" title="enable/disable this community">
+                        <span class="glyphicon glyphicon-off"></span>
+                    </button>
+                    <script>
+						$("#btn-enable-community").click(function(){
+							$.ajax({
+								type: "POST",
+								url: "{% url 'community_toggle_community' community.community.id %}",
+								success: function(result){
+                                    location.reload();
+								}
+							});
+						});
+					</script>
+                    {{community.community.title}} ({{community.community.owner}})
+                    {% if community.user_visa == 1 %}
+                        <span class="glyphicon glyphicon-ok" style="color:#56db3a; float: right;"></span>
+                    {% else %}
+                        <span class="glyphicon glyphicon-remove" style="color: red; float: right;"></span>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>

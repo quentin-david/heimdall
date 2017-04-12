@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block left_nav %}    
+    {% include 'category/snippet_category_list.html' with communities=community_list%}
+{% endblock %}
+
+{% block title %} My profile {% endblock %}
+{% block content %}
+<div>  
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="active" role="presentation">
+            <a href="#community" aria-controls="community" role="tab" data-toggle="tab"> Communities </a>
+        </li>
+        <li role="presentation">
+            <a href="#personal" aria-controls="personal" role="tab" data-toggle="tab"> Personal </a>
+        </li>
+        <li role="presentation">
+            <a href="#resource" aria-controls="resource" role="tab" data-toggle="tab"> Resources </a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        
+        <div id="community" class="tab-pane active" role="tabpanel">
+            {% include 'profile/snippet_community.html' %}
+        </div>
+        
+        
+        <div id="personal" class="tab-pane" role="tabpanel">
+            <div class="row">
+                <div class="col-lg-5">
+                    <ul>
+                        <li>Username : {{user.username}}</li>
+                        <li>Mail : {{user.email}}</li>
+                        <li>Last login : {{last_login}}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        
+        <div id="resource" class="tab-pane" role="tabpanel">
+            <div class="row">
+            <div class="col-lg-5">
+                <h4>My applications</h4>
+                {% if user.application_set.all|length > 0 %}
+                    <ul class="list-group"  style="text-align: center">
+                        {% for appli in user.application_set.all %}
+                            <li class="list-group-item">{{appli.name}}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <div class="alert alert-info">No application</div>
+                {% endif %}
+            </div>
+            </div>
+        </div>
+        
+    </div>
+</div>   
+        
+{% endblock %}

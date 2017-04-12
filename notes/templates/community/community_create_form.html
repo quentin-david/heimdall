@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block launcher %}
+    <a href="{% url 'profile' %}">
+        <button type="button" class="btn btn-default">
+            <span class="glyphicon glyphicon-arrow-left"></span>
+        </button>
+    </a>
+{% endblock %}
+
+{% block title %}
+	{% if community_to_edit %}
+		edit community {{community_to_edit.title}}
+	{% else %}
+		Create new community
+	{% endif %}
+{%endblock%}
+
+{% block content %}
+
+<form action="" enctype="multipart/form-data" method="post">
+	{% csrf_token %}
+	<div class="row">
+		<div class="col-lg-4">
+			<div class="input-group">
+				{{ form.non_field_errors }}
+				{{ form.name.errors }}
+				<div class="input-group-addon"><b>Name</b></div>
+				{{ form.name }}
+			</div>
+		</div>
+		<div class="col-lg-4">
+			<div class="input-group">
+				{{ form.title.errors }}
+				<div class="input-group-addon"><b>Fancy title</b></div>
+				{{ form.title }}
+			</div>
+		</div>
+		{%comment %}
+		<div class="col-lg-4">
+			<div class="input-group">
+				{{ form.community_users.errors }}
+				<div class="input-group-addon"><b>Contributors</b></div>
+				{{ form.community_users }}
+			</div>
+		</div>
+	{%endcomment%}
+	</div>
+	
+	<h4>Contributors</h4>
+		<table class="table table-striped" style="width: 100%">
+			<tr>
+				<th>User</th>
+				<th>can_add</th>
+				<th>can_edit</th>
+			</tr>
+			
+		{{community_users_form.management_form}}
+		{% for user in community_users_form %}
+			<tr>
+				{{user.id}}
+				<td>{{user.user}} {{user.user.errors}}</td>
+				<td>{{user.can_add}}</td>
+				<td>{{user.can_edit}}</td>
+			</tr>
+		{% endfor %}
+		</table>
+	
+	
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="form-group" style="margin-bottom: 0px">
+				<input class="btn-submit" type="submit" value="Submit" />
+					<a href="{% url 'profile' %}"><button type="button" class="btn-cancel">Cancel</button></a>
+			</div>
+		</div>
+	</div>
+</form>
+
+{% endblock %}

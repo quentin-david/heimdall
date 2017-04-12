@@ -1,0 +1,32 @@
+{% if category_to_edit %}
+    <form class="form-inline" action="{% url 'category_update2' category_to_edit.id %}" method="post">
+{% else %}
+    <form class="form-inline" action="{% url 'category_create' %}" method="post">
+{% endif %}
+    {% csrf_token %}
+    <div class="form-group">
+        {{ form.parent.errors }}
+        <label for="{{ form.parent.id_for_label }}">Parent</label>
+        {{ form.parent }}
+    </div>
+    <div class="form-group">
+        {{ form.community.errors }}
+        <label for="{{ form.community.id_for_label }}">Community</label>
+        {{ form.community }}
+    </div>
+    <div class="form-group">
+        {{ form.name.errors }}
+        <label for="{{ form.name.id_for_label }}">Name</label>
+        {{ form.name }}
+    </div>
+    {% if category_to_edit %}
+        <input class="btn btn-default btn-bookmark" type="submit" value="edit Category" />
+    {% else %}
+        <input class="btn btn-default btn-bookmark" type="submit" value="add Category" />
+    {% endif %}
+    {% if category_to_edit %}
+        <a href="{% url 'category_delete' category_to_edit.id %}">
+            <input style="background-color: red" class="btn btn-default btn-bookmark" type="button" value="delete Category" />
+        </a>
+    {% endif %}
+</form>

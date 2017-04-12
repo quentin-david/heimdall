@@ -1,0 +1,35 @@
+{% extends "notes/base_notes.html" %}
+
+{% block content %}
+    <h3>You are about to delete the whole community "{{community_to_delete.title}}"</h3>
+    <p>
+    {% if community_to_delete.category_set.all|length > 0%}
+        {% for category in  community_to_delete.category_set.all %}   
+            {% if category.category_set.all|length > 0 %}
+                All these Categories will be impacted :
+                <ul>
+                    {% for kid in category.category_set.all %}
+                        <li>{{kid.name}}</li>
+                        <ul>
+                            {% for grandkid in kid.category_set.all %}
+                                <li>{{grandkid.name}}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    </p>
+    <p>
+        These categories and resources will be attached to your personal community.
+    </p>
+    
+    <form method="post" action="">
+        {% csrf_token %}
+        <input type="submit" class="btn-submit" value="Proceed" />
+        <a href="{% url "profile" %}">
+            <button type="button" class="btn-cancel">Cancel</button>
+        </a>
+    </form>
+{% endblock %}

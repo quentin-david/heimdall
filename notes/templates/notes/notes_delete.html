@@ -1,10 +1,10 @@
 {% extends "notes/base_notes.html" %}
 
-{% block title %} Deleting note "<i>{{note.title}}</i>" {% endblock %}
+{% block title %} Deleting note "<i>{{notes_to_delete.title}}</i>" {% endblock %}
 
 {% block content %}
-    <div class="alert alert-info" role="alert">
-        You are about to delete the note {{note.title}}
+    <div class="alert alert-danger" role="alert">
+        You are about to delete the note {{notes_to_delete.title}}
     </div>
     
     {% if note.notesfile_set.all|length > 0 %}
@@ -13,11 +13,11 @@
         </div>
     {% endif %}
     
-    {% include "notes/snippet_note.html" %}
+    {% include "notes/snippet_note_div.html" with note=notes_to_delete %}
     <form method="post" action="">
         {% csrf_token %}
         <input class="btn-submit" type="submit" value="Proceed" />
-        <a href="{% url "notes_list" %}">
+        <a href="{% url "topic_view" notes_to_delete.category.id %}">
             <button type="button" class="btn-cancel">Cancel</button>
         </a>
     </form>

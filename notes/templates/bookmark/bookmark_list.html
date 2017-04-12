@@ -15,42 +15,52 @@
          {% endfor %}
       </ul>
        
-   {% for cat in root_category_list %}
-      <hr>
-       <li>
-         {% if cat.category_set.all|length == 0%}
-            <span style="color: red;" data-toggle="tooltip" data-placement="right" title="you have to create subcategories to add a bookmark"><b>{{cat.name|upper}}</b></span>
-         {% else %}
-            <b>{{cat.name|upper}}</b>
-         {% endif %} 
-       </li>
-       <ul class="bookmark-list">
-         {% for book in cat.bookmark_set.all %}
-            {% include "bookmark/snippet_bookmark_list.html" %}
-         {% endfor %}
-      </ul>
-       <ul>
-           {% for kid in cat.category_set.all %}
-               <li><b>{{kid.name|upper}}</b></li>
-               <ul class="bookmark-list">
-                  {% for book in kid.bookmark_set.all %}
-                     {% include "bookmark/snippet_bookmark_list.html" %}
-                  {% endfor %}
-               </ul>
-               <ul>
-                   {% for grandkid in kid.category_set.all %}
-                       <li><b>{{grandkid.name|upper}}</b></li>
-                           <ul class="bookmark-list">
-                              {% for book in grandkid.bookmark_set.all %}
-                                 {% include "bookmark/snippet_bookmark_list.html" %}
-                              {% endfor %}
-                           </ul>
-                   {% endfor %}
-               </ul>
-           {% endfor %}
-       </ul>
+   {% for community in community_list %}
+      {# for cat in root_category_list #}
+      {% for cat in community.get_root_categories_by_community %}
+         {% if cat.get_nb_total_bookmark > 0 %}
+            <hr>
+             <li>
+               {% if cat.category_set.all|length == 0%}
+                  <span style="color: red;" data-toggle="tooltip" data-placement="right" title="you have to create subcategories to add a bookmark"><b>{{cat.name|upper}}</b></span>
+               {% else %}
+                  <b>{{cat.name|upper}} <span class="badge">{{cat.get_nb_total_bookmark}}</span></b>
+               {% endif %} 
+             </li>
+          
+            <ul class="bookmark-list">
+              {% for book in cat.bookmark_set.all %}
+                 {% include "bookmark/snippet_bookmark_list.html" %}
+              {% endfor %}
+           </ul>
+            <ul>
+                {% for kid in cat.category_set.all %}
+                   {% if kid.get_nb_total_bookmark > 0 %}
+                    <li><b>{{kid.name|upper}}</b></li>
+                    <ul class="bookmark-list">
+                        {% for book in kid.bookmark_set.all %}
+                           {% include "bookmark/snippet_bookmark_list.html" %}
+                        {% endfor %}
+                    </ul>
+                    <ul>
+                        {% for grandkid in kid.category_set.all %}
+                          {% if grandkid.bookmark_set.all|length > 0%}
+                             <li><b>{{grandkid.name|upper}}</b></li>
+                                <ul class="bookmark-list">
+                                   {% for book in grandkid.bookmark_set.all %}
+                                      {% include "bookmark/snippet_bookmark_list.html" %}
+                                   {% endfor %}
+                                </ul>
+                          {% endif %}
+                        {% endfor %}
+                    </ul>
+                  {% endif %}
+                {% endfor %}
+            </ul>
+         {% endif %}
+      {% endfor %}
    {% endfor %}
-    </ul>
+   </ul>
     
     <!-- Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
