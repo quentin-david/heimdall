@@ -21,6 +21,7 @@ urlpatterns = [
     # Bookmarks
     url(r'^bookmark$', login_required(views.bookmarkList), name='bookmark_list'),
     url(r'^bookmark/new/$', login_required(views.bookmarkCreate), name='bookmark_create'),
+    url(r'^bookmark/(?P<category_id>\d+)/new/$', login_required(views.bookmarkCreate), name='bookmark_create'),
     url(r'^bookmark/(?P<bookmark_id>\d+)/delete$', login_required(views.bookmarkDelete), name='bookmark_delete'),
     # Topic
     url(r'^topic/(?P<category_id>\d+)/view$', login_required(views.topicView), name='topic_view'),

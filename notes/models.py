@@ -70,7 +70,8 @@ class Bookmark(models.Model):
     class Meta:
         ordering = ['-date']
 
-
+    def get_bookmarks_by_user(user):
+        return self.objects.filter(category__in = Category.get_subcategories_by_user(user))
 """
 Categories : applied to notes, bookmarks, etc
 """
@@ -109,6 +110,12 @@ class Category(models.Model):
     #   - OR is part of the community AND has enabled it
     def get_subcategories_by_user(user):
         return Category.objects.filter(Q(community__owner=user) | (Q(community__communityusers__user=user) & Q(community__communityusers__user_visa=True)) | (Q(parent__community__communityusers__user=user) & Q(parent__community__communityusers__user_visa=True)), parent__isnull=False).distinct()
+    
+    def get_root_categories_by_user(user):
+        return Category.objects.filter(Q(community__owner=user) | (Q(community__communityusers__user=user) & Q(community__communityusers__user_visa=True)), parent__isnull=True).distinct()
+    
+    def get_categories_by_user(user):
+        return Category.objects.filter(Q(community__owner=user) | (Q(community__communityusers__user=user) & Q(community__communityusers__user_visa=True))).distinct()
     
     # Return the total number of bookmark attached to a category and all of its subcategories
     def get_nb_total_bookmark(self):

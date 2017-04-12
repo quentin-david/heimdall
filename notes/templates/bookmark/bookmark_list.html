@@ -15,9 +15,9 @@
          {% endfor %}
       </ul>
        
-   {% for community in community_list %}
-      {# for cat in root_category_list #}
-      {% for cat in community.get_root_categories_by_community %}
+   {# for community in community_list #}
+      {% for cat in category_list %}
+      {# for cat in community.get_root_categories_by_community #}
          {% if cat.get_nb_total_bookmark > 0 %}
             <hr>
              <li>
@@ -59,7 +59,7 @@
             </ul>
          {% endif %}
       {% endfor %}
-   {% endfor %}
+   {# endfor #}
    </ul>
     
     <!-- Modal -->

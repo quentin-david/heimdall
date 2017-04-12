@@ -31,7 +31,8 @@ class CategoryForm(forms.ModelForm):
         # Only display first and second level of imbrication
         # TODO : A user can't add a sub-category to a shared category
         if self.user:
-            self.fields["parent"].queryset = Category.objects.filter((Q(parent__isnull=True) | Q(parent__parent__isnull=True)) & Q(community__owner=self.user)).distinct()
+            #self.fields["parent"].queryset = Category.objects.filter((Q(parent__isnull=True) | Q(parent__parent__isnull=True)) & Q(community__owner=self.user)).distinct()
+            self.fields["parent"].queryset = Category.get_categories_by_user(self.user)
             #self.fields["community"].queryset = Community.objects.filter((Q(community_users=self.user) & Q(communityusers__user_visa=True)) | Q(owner=self.user)).distinct()
             self.fields["community"].queryset = Community.get_communities_by_user(self.user)
         
@@ -56,6 +57,11 @@ class BookmarkForm(forms.ModelForm):
             return 'http://'+url
         else:
             return url
+
+class PartialBookmarkForm(BookmarkForm):
+    class Meta:
+        model = Bookmark
+        fields = ['url']
 
 """
 Community

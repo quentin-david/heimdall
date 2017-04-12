@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.views.generic import ListView,CreateView,DetailView,UpdateView,DeleteView, FormView
 from django.core.urlresolvers import reverse_lazy
 from .models import Notes, Category, Bookmark, NotesFile, Community, CommunityUsers
-from .forms import NotesForm, CategoryForm, BookmarkForm, CommunityForm, CommunityUsersForm
+from .forms import NotesForm, CategoryForm, BookmarkForm, PartialBookmarkForm, CommunityForm, CommunityUsersForm
 from django.views.decorators.csrf import csrf_exempt
 from reportlab.pdfgen import canvas
 from django.http import HttpResponse
@@ -18,8 +18,8 @@ def notesList(request):
     #communities = Community.objects.filter((Q(community_users=request.user) & Q(communityusers__user_visa=True)) | Q(owner=request.user)).distinct()
     community_list = Community.get_communities_by_user(request.user)
     # TODO : check if user_visa == True
-    #notes_list = Notes.objects.filter(Q(category__community__communityusers__user=request.user) | Q(category__community__owner=request.user), category__community__communityusers__user_visa = True).distinct()
     notes_list = Notes.objects.filter((Q(category__community__communityusers__user=request.user) & Q(category__community__communityusers__user_visa = True))| Q(category__community__owner=request.user)).distinct()
+    #notes_list = Notes.objects.filter(category__in=Category.get_subcategories_by_user(request.user))
     return render(request, 'notes/notes_list.html', locals())
 
 
@@ -109,6 +109,12 @@ def categoryCreateOrUpdate(request, category_id=None):
             # if no community is given, the default is the personal community (perso-*)
             if category.community == None:
                 category.community = Community.objects.get(name='perso-'+request.user.username)
+            # change it's subcategories community as well
+        subcategory_list = category.category_set.all()
+        if subcategory_list:
+            for subcat in subcategory_list:
+                subcat.community = category.community
+                subcat.save()
         category.save()
         return redirect('category_list')
     return render(request, 'category/category_list.html', locals())
@@ -127,11 +133,13 @@ class CategoryDelete(DeleteView):
 """
 Bookmark
 """
-def bookmarkCreate(request):
+def bookmarkCreate(request, category_id=None):
     form = BookmarkForm(request.POST or None)
     if form.is_valid():
         bookmark = form.save(commit=False)
         bookmark.owner = request.user
+        if category_id:
+            bookmark.category = Category.objects.get(id=category_id)
         bookmark.save()
         return redirect('topic_view', category_id=bookmark.category.id)
     return render(request, 'bookmark/bookmark_list.html', locals())
@@ -141,6 +149,7 @@ def bookmarkList(request):
     unsorted_bookmark_list = Bookmark.objects.filter(category__isnull=True)
     #communities = Community.objects.filter((Q(community_users=request.user) & Q(communityusers__user_visa=True)) | Q(owner=request.user)).distinct()
     community_list = Community.get_communities_by_user(request.user)
+    category_list = Category.get_root_categories_by_user(request.user)
     bookmark_form = BookmarkForm(None)
 
     return render(request, 'bookmark/bookmark_list.html', locals())
@@ -165,8 +174,7 @@ def topicView(request, category_id):
     
     community_list = Community.get_communities_by_user(request.user)
     bookmark_list = Bookmark.objects.filter(category=category.id)
-    bookmark_form = BookmarkForm(None, user=request.user, initial={'category':category.id})
-    #form = NotesForm(None, user=request.user, initial={'category':category.id})
+    bookmark_form = PartialBookmarkForm(None)
     form = NotesForm(None)
     notes_list = Notes.objects.filter(category=category)
     

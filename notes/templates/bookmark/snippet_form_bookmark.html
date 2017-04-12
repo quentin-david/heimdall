@@ -1,4 +1,8 @@
-<form class="form-inline" action="{% url 'bookmark_create' %}" method="post">
+{% if category %}
+    <form class="form-inline" action="{% url 'bookmark_create' category.id %}" method="post">
+{% else %}
+    <form class="form-inline" action="{% url 'bookmark_create' %}" method="post">
+{% endif %}
     {% csrf_token %}
     <div class="form-group">
         {{ bookmark_form.url.errors }}
