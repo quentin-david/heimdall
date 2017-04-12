@@ -72,7 +72,7 @@ class CommunityForm(forms.ModelForm):
     def clean_name(self):
         name = self.cleaned_data['name']
         if re.match('^perso', name):
-            if name == 'perso'+self.user.username:
+            if name == 'perso-'+self.user.username:
                 return name
             else:
                 raise forms.ValidationError("Community named perso-* are reserved")
