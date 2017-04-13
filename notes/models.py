@@ -47,7 +47,8 @@ class NotesFile(models.Model):
         return str(self.uploaded_file).split('/')[-1]
     
     def delete_physical_file(self):
-        file_path = 'media/'+self.uploaded_file.name
+        #file_path = 'media/'+self.uploaded_file.name
+        file_path = '.'+self.uploaded_file.url
         if os.path.isfile(file_path):
             os.unlink(file_path)
         else:
@@ -55,7 +56,7 @@ class NotesFile(models.Model):
     
     def is_present(self):
         #if os.path.exists('media/'+self.uploaded_file.name):
-        if os.path.exists(self.uploaded_file.url):
+        if os.path.exists('.'+self.uploaded_file.url):
             return True
         else:
             return False
