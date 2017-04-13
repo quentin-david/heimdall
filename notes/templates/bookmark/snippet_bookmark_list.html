@@ -10,7 +10,7 @@
         </button>
     </a>
     
-    {% if user.username == book.owner.username %}
+    {% if user == book.category.community.owner or user == community_user.0.user %}
         <a href="{% url 'bookmark_delete' book.id %}">
             <button type="button" class="btn btn-default btn-xs">
                 <span class="glyphicon glyphicon-remove"></span>

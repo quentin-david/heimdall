@@ -64,7 +64,7 @@ Bookmark : collection de site
 """
 class Bookmark(models.Model):
     url = models.CharField(max_length=300)
-    owner = models.ForeignKey(User)
+    #owner = models.ForeignKey(User)
     date = models.DateTimeField(auto_now=True)
     category = models.ForeignKey('notes.Category', blank=True,null=True)
     class Meta:
