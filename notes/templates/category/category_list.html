@@ -9,15 +9,13 @@
     </div>
     <br>
     {% include 'category/snippet_form_category.html' %}
-    
-    <h3>My communities</h3>
-    
+     
     
     {% if personal_communities %}
         
         {% for community in personal_communities %}
             
-            <button class="btn btn-default btn-lg btn-block" type="button">
+            <button style="margin-top: 20px;margin-bottom: 5px" class="btn btn-default btn-lg btn-block" type="button">
                 <span class="glyphicon glyphicon-user"></span>  {{community.title}}
                 {% if community.community_users.all|length < 1%}
                     <span class="glyphicon glyphicon-lock"></span>
@@ -28,43 +26,11 @@
          
             {% if community.get_root_categories_by_community|length > 0%}
                 <div class="row">
+                <ul class="list list-group">
                 {% for cat in community.get_root_categories_by_community %}
-                <div class="col-lg-4">
-                    <div class="tab-content">
-                    <h5 style="text-align: center">
-                    {% if cat.category_set.all|length == 0%}
-                        <span style="color: red;" data-toggle="tooltip" data-placement="right" title="you have to create subcategories to add notes or bookmarsk">{{cat.name}}</span>
-                    {% else %}
-                        {{cat.name}}
-                    {% endif %}
-                        <a href="{% url 'category_update' cat.id %}">
-                            <button type="button" class="btn btn-default btn-xs">
-                                <span class="glyphicon glyphicon-pencil"></span>
-                            </button>
-                        </a>
-                    </h5>
-                    <ul>
-                        {% for kid in cat.category_set.all %}
-                            <li>
-                                {{kid.name}}
-                                <a href="{% url 'category_update' kid.id %}">
-                                    <button type="button" class="btn btn-default btn-xs">
-                                        <span class="glyphicon glyphicon-pencil"></span>
-                                    </button>
-                                </a>
-                            </li>
-                            <ul>
-                                {% for grandkid in kid.category_set.all %}
-                                    <li>
-                                        {{grandkid.name}}
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        {% endfor %}
-                    </ul>
-                    </div>
-                </div>
+                    {% include 'category/snippet_category_list_item.html' %}
                 {% endfor %}
+                </ul>
                 </div>
             {%else%}
                 <div class="alert alert-info">No category in this community yet</div>
@@ -76,10 +42,10 @@
     {% endif %}
     
     
-    <h3>Shared communities</h3>
+
     {% if shared_communities %}
         {% for community in shared_communities %}
-            <button class="btn btn-default btn-lg btn-block" type="button">
+            <button  style="margin-top: 20px;margin-bottom: 5px" class="btn btn-default btn-lg btn-block" type="button">
                 <span class="glyphicon glyphicon-globe"></span>  {{community.community.title}} ({{community.community.owner}})
                 {% if community.user_visa == 1 %}
                     <span class="glyphicon glyphicon-ok" style="color:#56db3a"></span>
@@ -88,7 +54,9 @@
                 {% endif %}
             </button>
             <div class="row">
+            <ul class="list list-group">
             {% for cat in community.community.get_root_categories_by_community %}
+                {% comment %}
                 <div class="col-lg-4">
                     <div class="tab-content">
                     <h5 style="text-align: center">
@@ -124,7 +92,10 @@
                     </ul>
                     </div>
                 </div>
+                {% endcomment%}
+                {% include 'category/snippet_category_list_item.html' %}
             {% endfor %}
+            </ul>
         {% endfor %}
         </div>
     {% else %}

@@ -1,12 +1,12 @@
 {% extends "notes/base_notes.html" %}
 
 {% block content %}
-    <h3>You are about to delete the category "{{category.name}}"</h3>
+    <h3>You are about to delete the category "{{category_to_delete.name}}"</h3>
     <p>
-        {% if category.category_set.all|length > 0 %}
+        {% if category_to_delete.category_set.all|length > 0 %}
             All these sub-categories will be impacted :
             <ul>
-                {% for kid in category.category_set.all %}
+                {% for kid in category_to_delete.category_set.all %}
                     <li>{{kid.name}}</li>
                     <ul>
                         {% for grandkid in kid.category_set.all %}
@@ -17,15 +17,16 @@
             </ul>
         {% endif %}
     </p>
-    {% if category.get_nb_total_notes > 0 %}
-        <div class="alert alert-danger">This Catgeory contains {{category.get_nb_total_notes}} Notes, you have to delete them first</div>
+    {% if category_to_delete.get_nb_total_notes > 0 %}
+        <div class="alert alert-danger">This Catgeory contains {{category_to_delete.get_nb_total_notes}} Notes, you have to delete them first</div>
+    {% endif %}
+    {% if category_to_delete.get_nb_total_bookmark > 0 %}
+        <div class="alert alert-danger">This Catgeory contains {{category_to_delete.get_nb_total_bookmark}} Bookmarks, you have to delete them first</div>
     {% endif %}
     
     <form method="post" action="">
         {% csrf_token %}
-        {% if category.get_nb_total_notes == 0 %}
-            <input type="submit" class="btn-submit" value="Proceed" />
-        {% endif %}
+        <input type="submit" class="btn-submit" value="Proceed" />
         <a href="{% url "category_list" %}">
             <button type="button" class="btn-cancel">Cancel</button>
         </a>

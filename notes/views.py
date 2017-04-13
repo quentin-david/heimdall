@@ -41,7 +41,7 @@ def notesCreateOrUpdate(request, category_id, notes_id=None):
     files = request.FILES.getlist('uploaded_files')
     if form.is_valid():
         note = form.save(commit=False)
-        if note.owner == None:
+        if not hasattr(note, 'owner'):
             note.owner = request.user
         if note.category == None:
             note.category = category
@@ -122,16 +122,14 @@ def categoryCreateOrUpdate(request, category_id=None):
     return render(request, 'category/category_list.html', locals())
 
 
-class CategoryDelete(DeleteView):
-    model = Category
-    context_object_name = 'category'
-    template_name = 'category/category_delete.html'
-    success_url = reverse_lazy('category_list')
-    def get_context_data(self, **kwargs):
-        context = super(CategoryDelete, self).get_context_data(**kwargs)
-        context['community_list'] = Community.get_communities_by_user(self.request.user)
-        return context
-
+def categoryDelete(request, category_id):
+    community_list = Community.get_communities_by_user(request.user)
+    category_to_delete = Category.objects.get(id=category_id)
+    if request.method == 'POST':
+        category_to_delete.delete()
+        return redirect('category_list')
+    return render(request, 'category/category_delete.html', locals())
+    
 """
 Bookmark
 """

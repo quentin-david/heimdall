@@ -17,7 +17,7 @@ urlpatterns = [
     url(r'^category/edit/(?P<category_id>\d+)$', login_required(views.categoryCreateOrUpdate), name='category_update2'),
     url(r'^category/(?P<category_id>\d+)/edit$', login_required(views.categoryList), name='category_update'),
     #url(r'^category/(?P<category_id>\d+)/edit$', login_required(views.categoryCreateOrUpdate), name='category_update'),
-    url(r'^category/(?P<pk>\d+)/delete$', login_required(views.CategoryDelete.as_view()), name='category_delete'),
+    url(r'^category/(?P<category_id>\d+)/delete$', login_required(views.categoryDelete), name='category_delete'),
     # Bookmarks
     url(r'^bookmark$', login_required(views.bookmarkList), name='bookmark_list'),
     url(r'^bookmark/new/$', login_required(views.bookmarkCreate), name='bookmark_create'),

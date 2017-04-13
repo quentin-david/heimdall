@@ -16,7 +16,7 @@ class Notes(models.Model):
     date_update = models.DateTimeField(auto_now=True)
     public = models.BooleanField(default=True)
     shared = models.BooleanField(default=False)
-    category = models.ForeignKey('notes.Category', null=True, on_delete=models.SET_NULL)
+    category = models.ForeignKey('notes.Category', null=True, on_delete=models.CASCADE)
     content = models.TextField(null=True,blank=True)
     
     class Meta:
@@ -66,7 +66,7 @@ class Bookmark(models.Model):
     url = models.CharField(max_length=300)
     #owner = models.ForeignKey(User)
     date = models.DateTimeField(auto_now=True)
-    category = models.ForeignKey('notes.Category', blank=True,null=True)
+    category = models.ForeignKey('notes.Category', blank=True,null=True, on_delete=models.CASCADE)
     class Meta:
         ordering = ['-date']
 
@@ -77,7 +77,7 @@ Categories : applied to notes, bookmarks, etc
 """
 class Category(models.Model):
     name = models.CharField(max_length=50)
-    parent = models.ForeignKey('notes.Category',null=True,blank=True)
+    parent = models.ForeignKey('notes.Category',null=True,blank=True, on_delete=models.CASCADE)
     community = models.ForeignKey('notes.Community', blank=True, null=True)
     
     class Meta:
