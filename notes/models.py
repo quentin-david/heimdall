@@ -54,7 +54,8 @@ class NotesFile(models.Model):
             return False
     
     def is_present(self):
-        if os.path.exists('media/'+self.uploaded_file.name):
+        #if os.path.exists('media/'+self.uploaded_file.name):
+        if os.path.exists(self.uploaded_file.url):
             return True
         else:
             return False
