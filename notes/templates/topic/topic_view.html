@@ -82,16 +82,16 @@
     <ul>
     {% for note in notes_list %}
         {% for file in note.notesfile_set.all %}
-            {% if file.is_present %}
+            {# if file.is_present #}
                 <li>
                     <a href="{{file.uploaded_file.url}}">
                         {{file.short_name}}
                     </a>
                         ({{file.uploaded_file.size|filesizeformat}})
                 </li>
-            {%else %}
-                <div class="alert alert-danger" role="alert">{{file.uploaded_file.name}} has been deleted...</div>
-            {% endif %}
+            {#else #}
+                {#<div class="alert alert-danger" role="alert">{{file.uploaded_file.name}} has been deleted...</div>#}
+            {# endif #}
         {% endfor %}
     {% endfor %}
     </ul>

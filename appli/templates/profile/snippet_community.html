@@ -1,7 +1,7 @@
 <div class="object_description">Communities are a way to share ressources with other users</div>
 <div class="row">
     <div class="col-lg-6">
-        <h4>
+        <h4 style="text-align: center">
             My communities
             <a href="{% url 'community_create' %}">
                 <button id="btn-add-bookmark" type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="right" title="add new community">
@@ -9,7 +9,7 @@
                 </button>
             </a>
         </h4>
-        <ul class="list-group">
+        <ul style="padding-left: 10px; margin-bottom: 10px;" class="list-group">
             {% for community in personal_communities %}
                 <li class="list-group-item" style="text-align: center">
                     <b>{{community.title}}</b>
@@ -53,8 +53,8 @@
     </div>
     
     <div class="col-lg-6">
-        <h4>Communities I'm in</h4>
-        <ul class="list-group">
+        <h4 style="text-align: center">Communities I'm in</h4>
+        <ul style="padding-right: 10px" class="list-group">
             {% for community in my_communities %}
                 <li class="list-group-item" style="text-align: center">
                     <button style="float: left" id="btn-enable-community" type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="right" title="enable/disable this community">
