@@ -41,8 +41,10 @@ def notesCreateOrUpdate(request, category_id, notes_id=None):
     files = request.FILES.getlist('uploaded_files')
     if form.is_valid():
         note = form.save(commit=False)
-        note.owner = request.user
-        note.category = category
+        if note.owner == None:
+            note.owner = request.user
+        if note.category == None:
+            note.category = category
         note.save()
         for upfile in files:
             f = NotesFile(notes=note, uploaded_file=upfile)
@@ -146,11 +148,9 @@ def bookmarkCreate(request, category_id=None):
 
 
 def bookmarkList(request):
-    unsorted_bookmark_list = Bookmark.objects.filter(category__isnull=True)
-    #communities = Community.objects.filter((Q(community_users=request.user) & Q(communityusers__user_visa=True)) | Q(owner=request.user)).distinct()
     community_list = Community.get_communities_by_user(request.user)
     category_list = Category.get_root_categories_by_user(request.user)
-    bookmark_form = BookmarkForm(None)
+    bookmark_form = BookmarkForm(None, user=request.user)
 
     return render(request, 'bookmark/bookmark_list.html', locals())
 
@@ -173,6 +173,7 @@ def topicView(request, category_id):
         return redirect('notes_list')
     
     community_list = Community.get_communities_by_user(request.user)
+    community_user = CommunityUsers.objects.filter(user=request.user, community=category.community)
     bookmark_list = Bookmark.objects.filter(category=category.id)
     bookmark_form = PartialBookmarkForm(None)
     form = NotesForm(None)
@@ -203,6 +204,7 @@ def communityCreateOrUpdate(request, community_id=None):
             for user in community_users_form:
                 u = user.save(commit=False)
                 u.community = community
+                u.user_visa = True
                 u.save()
 
         return redirect('profile')

@@ -124,7 +124,15 @@ class Category(models.Model):
         for kid in self.category_set.all():
             nb_total += len(kid.bookmark_set.all())
         return nb_total
-       
+    
+    # Return the total number of notes attached to a category and all of its subcategories
+    def get_nb_total_notes(self):
+        nb_total = 0
+        nb_total += len(self.notes_set.all())
+        for kid in self.category_set.all():
+            nb_total += len(kid.notes_set.all())
+        return nb_total
+    
 """
 Community
 """

@@ -11,7 +11,7 @@ def home(request):
     #communities = Community.objects.filter((Q(community_users=request.user) & Q(communityusers__user_visa=True)) | Q(owner=request.user)).distinct()
     community_list = Community.get_communities_by_user(request.user)
     recent_notes_list = Notes.objects.filter(date_update__gte=(datetime.today() - timedelta(days=3))) #Last 3 day topics
-    bookmark_form = BookmarkForm(None)
+    bookmark_form = BookmarkForm(None, user=request.user)
 
     return render(request, 'appli/home.html', locals())
 

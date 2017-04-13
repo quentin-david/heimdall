@@ -97,11 +97,21 @@
                     {% else %}
                         {{cat.name}}
                     {% endif %}
+                        <a href="{% url 'category_update' cat.id %}">
+                            <button type="button" class="btn btn-default btn-xs">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                        </a>
                     </h5>
                     <ul>
                         {% for kid in cat.category_set.all %}
                             <li>
                                 {{kid.name}}
+                                <a href="{% url 'category_update' kid.id %}">
+                                    <button type="button" class="btn btn-default btn-xs">
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                    </button>
+                                </a>
                             </li>
                             <ul>
                                 {% for grandkid in kid.category_set.all %}

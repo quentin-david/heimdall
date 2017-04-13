@@ -7,14 +7,7 @@
      
    
    <h3>My bookmarks</h3>
-   <ul>
-      <li><b>UNSORTED</b></li>
-       <ul class="bookmark-list">
-         {% for book in unsorted_bookmark_list %}
-            {% include "bookmark/snippet_bookmark_list.html" %}
-         {% endfor %}
-      </ul>
-       
+   <ul>       
    {# for community in community_list #}
       {% for cat in category_list %}
       {# for cat in community.get_root_categories_by_community #}

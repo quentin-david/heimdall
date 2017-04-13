@@ -21,7 +21,7 @@
                         {% endif %}
                         
                         ({{note.owner.username}})
-                        {% if user.username == note.owner.username or note.shared %}
+                        {% if user.username == note.owner.username or note.shared or category.community.owner == user or community_user.0.can_edit == 1 %}
                         <a href="{% url 'notes_update' note.category.id note.id %}">
                             <button type="button" class="btn btn-default btn-xs">
                                 <span class="glyphicon glyphicon-pencil"></span>

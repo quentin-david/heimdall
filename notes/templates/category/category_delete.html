@@ -17,10 +17,15 @@
             </ul>
         {% endif %}
     </p>
+    {% if category.get_nb_total_notes > 0 %}
+        <div class="alert alert-danger">This Catgeory contains {{category.get_nb_total_notes}} Notes, you have to delete them first</div>
+    {% endif %}
     
     <form method="post" action="">
         {% csrf_token %}
-        <input type="submit" class="btn-submit" value="Proceed" />
+        {% if category.get_nb_total_notes == 0 %}
+            <input type="submit" class="btn-submit" value="Proceed" />
+        {% endif %}
         <a href="{% url "category_list" %}">
             <button type="button" class="btn-cancel">Cancel</button>
         </a>
