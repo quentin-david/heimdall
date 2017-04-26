@@ -88,6 +88,7 @@
                         {{file.short_name}}
                     </a>
                         ({{file.uploaded_file.size|filesizeformat}})
+                        ({{file.uploaded_file.url}})
                 </li>
             {#else #}
                 {#<div class="alert alert-danger" role="alert">{{file.uploaded_file.name}} has been deleted...</div>#}

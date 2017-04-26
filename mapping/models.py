@@ -281,8 +281,8 @@ class ServiceWebServer(Service):
     family = models.CharField(max_length=20, choices=families, default='apache')
     protocols = (('http','http'),('https','https'),)
     protocol = models.CharField(max_length=20, choices=protocols, default='http')
-    url_root = models.CharField(max_length=50, null=True, blank=True, default='')
-    reverse_proxy = models.ForeignKey(ServiceReverseProxy, null=True, blank=True)
+    url_root = models.CharField(max_length=50, null=True, blank=True, default=' ')
+    reverse_proxy = models.ForeignKey(ServiceReverseProxy)
     
     def getFQDN(self):
         return str(self.reverse_proxy.protocol)+'://'+str(self.servername)+'.'+str(self.reverse_proxy.proxy_url)+'/'+str(self.url_root)

@@ -29,6 +29,18 @@
     <h3>Bookmark</h3>
     {% include 'bookmark/snippet_form_bookmark.html' %}
     
+    <h3>Applications</h3>
+    <ul class="list-group">
+        {% for appli in application_list %}
+            <div class="col-lg-4 col-xs-12">
+                <a class="list-group-item" href="{% url 'application_view' appli.id %}" style="text-align: center">
+                    <strong>{{appli.name}}</strong>
+                    <span class="badge">{{appli.node_set.all|length}}</span>
+                </a>
+            </div>
+        {% endfor %}
+    </ul>
+    
     <div class="row">
         <div class="col-lg-4">
         <h3>Mapping</h3>

@@ -18,14 +18,13 @@ def notesList(request):
     #communities = Community.objects.filter((Q(community_users=request.user) & Q(communityusers__user_visa=True)) | Q(owner=request.user)).distinct()
     community_list = Community.get_communities_by_user(request.user)
     # TODO : check if user_visa == True
-    notes_list = Notes.objects.filter((Q(category__community__communityusers__user=request.user) & Q(category__community__communityusers__user_visa = True))| Q(category__community__owner=request.user)).distinct()
-    #notes_list = Notes.objects.filter(category__in=Category.get_subcategories_by_user(request.user))
+    #notes_list = Notes.objects.filter((Q(category__community__communityusers__user=request.user) & Q(category__community__communityusers__user_visa = True))| Q(category__community__owner=request.user)).distinct()
+    notes_list = Notes.objects.filter(category__in=Category.get_subcategories_by_user(request.user))
     return render(request, 'notes/notes_list.html', locals())
 
 
 
 def notesCreateOrUpdate(request, category_id, notes_id=None):
-    #root_category_list = Category.objects.filter(parent__isnull=True)
     community_list = Community.get_communities_by_user(request.user)
     category = Category.objects.get(id=category_id)
     if notes_id:
@@ -47,7 +46,9 @@ def notesCreateOrUpdate(request, category_id, notes_id=None):
             note.category = category
         note.save()
         for upfile in files:
-            f = NotesFile(notes=note, uploaded_file=upfile)
+            # QT : f.name should give the original name
+            #f = NotesFile(notes=note, uploaded_file=upfile)
+            f = NotesFile(notes=note, uploaded_file=upfile, original_name=upfile.name)
             f.save()
         return redirect('topic_view', category_id=note.category.id)
     return render(request,'notes/notes_create_form.html',locals())

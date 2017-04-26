@@ -2,10 +2,14 @@ from django.db import models
 from django.contrib.auth.models import User
 import os.path
 from django.db.models import Q
+from datetime import datetime
 
 
 def file_naming(instance,name):
-    return "notes/{}-{}".format(instance.notes.id, name)
+    #return "notes/{}-{}".format(instance.notes.id, name)
+    notes_directory = 'notes'
+    obfuscated_name = name
+    return '{}/{}-{}'.format(notes_directory,instance.notes.id,obfuscated_name)
 
 class Notes(models.Model):
     title = models.CharField(max_length=50,null=False,blank=False,unique=True)
@@ -41,14 +45,15 @@ class Notes(models.Model):
 # files attached to the notes  
 class NotesFile(models.Model):
     notes = models.ForeignKey('notes.Notes', on_delete=models.CASCADE)
-    uploaded_file = models.FileField(upload_to=file_naming,null=True,blank=True)
+    #original_name = models.CharField(max_length=150)
+    uploaded_file = models.FileField(upload_to=file_naming,null=True,blank=True) #hashed name
     
     def short_name(self):
         return str(self.uploaded_file).split('/')[-1]
     
     def delete_physical_file(self):
         #file_path = 'media/'+self.uploaded_file.name
-        file_path = '.'+self.uploaded_file.url
+        file_path = '.'+str(self.uploaded_file.url)
         if os.path.isfile(file_path):
             os.unlink(file_path)
         else:
@@ -56,7 +61,7 @@ class NotesFile(models.Model):
     
     def is_present(self):
         #if os.path.exists('media/'+self.uploaded_file.name):
-        if os.path.exists('.'+self.uploaded_file.url):
+        if os.path.exists('.'+str(self.uploaded_file.url)):
             return True
         else:
             return False
