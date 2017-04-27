@@ -25,7 +25,7 @@ class Application(models.Model):
         return self.name
     
     def get_absolute_url(self):
-        return reverse('application_view', kwargs={'pk': self.pk})
+        return reverse('application_view', kwargs={'appli_id': self.pk})
     
     def getPublicURL(self):
         url_list = []

@@ -9,12 +9,26 @@
 .object_list_element {
     
 }
+
+/* Terminal style */
 .object_description {
     border-radius: 4px !important;
     box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12) !important;
     background-color: #000 !important;
     color: #56db3a;
 }
+
+/* Fancy style */
+.object_description_fancy {
+    border-radius: 4px !important;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12) !important;
+    padding-left: 10px;
+    height: 300px;
+    overflow: scroll;
+    /*background-color: #000 !important;
+    color: #56db3a;*/
+}
+
 
 form .btn-submit {
     width: 100% !important;

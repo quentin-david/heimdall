@@ -15,9 +15,25 @@
                 </button>
             </a>
         {% endif %}
+        <button type="button" class="btn btn-default btn-xs btn_service_description_{{service.id}}" style="float: right">
+            <span class="glyphicon glyphicon-info-sign"></span>
+        </button>
+        <script>
+            $("document").ready(function(){
+                $(".btn_service_description_{{service.id}}").hover(function(){
+                    $(".service_line_{{service.id}}").toggle();
+                    $(".service_description_{{service.id}}").toggle();
+                });
+            });
+        </script>
     </th>
 </tr>
-<tr>
+
+<tr class="object_description service_description_{{service.id}}" style="display: none">
+    <td>{{service.description|safe}}</td>
+</tr>
+
+<tr class="service_line_{{service.id}}">
      <th>public URL</th>
      <td>
                 <a href="{{service.servicewebserver.getFQDN}}" target="_blank">
@@ -25,15 +41,15 @@
                 </a>
     </td>
 </tr>
-<tr>
+<tr class="service_line_{{service.id}}">
     <th>Node</th>
     <td>{{service.node.name}}</td>
 </tr>
-<tr>
+<tr class="service_line_{{service.id}}">
     <th>local URL</th>
     <td>{{service.servicewebserver.protocol}}://{{service.servicewebserver.ip}}:{{service.servicewebserver.port}}</td>
 </tr>
-<tr>
+<tr class="service_line_{{service.id}}">
     <th>Reverse proxy</th>
     <td>{{service.servicewebserver.reverse_proxy}} ({{service.servicewebserver.reverse_proxy.ip}})</td>
 </tr>
