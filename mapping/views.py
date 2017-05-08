@@ -51,9 +51,9 @@ def applicationView(request, appli_id):
     servicewebserver_list = ServiceWebServer.objects.filter(application=appli)
     servicereverseproxy_list = ServiceReverseProxy.objects.filter(application=appli)
     servicedatabase_list = ServiceDatabase.objects.filter(application=appli)
-    #form_webserver = ServiceWebServerForm(request.POST or None,request.FILES or None, application=appli)
+    #form_webserver = ServiceWebServerForm(request.POST or None, application=appli)
     #form_reverseproxy = ServiceReverseProxyForm(request.POST or None,request.FILES or None, application=appli)
-    #form_database = ServiceDatabaseForm(request.POST or None,request.FILES or None, application=appli)
+    form_database = ServiceDatabaseForm(request.POST or None, application=appli)
     creation_from_heimdall = settings.CREATE_NODE_FROM_HEIMDALL
     
     return render(request, 'application/application.html', locals())
@@ -252,6 +252,18 @@ class NetworkCreate(CreateView):
 """
 #############################   Services   ##################################
 """
+
+# Ajax loading of service forms
+def loadWebServiceForm(request, application_id, form_type):
+    appli = Application.objects.get(id=application_id)
+    if form_type == 'webserver':
+        form_webserver = ServiceWebServerForm(None, application=appli)
+        template_name = 'service/forms/form_servicewebserver.html'
+    elif form_type == 'reverseproxy':
+        form_reverseproxy = ServiceReverseProxyForm(None, application=appli)
+        template_name = 'service/forms/form_servicereverseproxy.html'
+    return render(request, template_name, locals())
+
 class ServiceList(ListView):
     model = Service
     context_object_name = 'service_list'

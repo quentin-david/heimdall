@@ -6,7 +6,11 @@
         {% for service in service_list %}
             <a href="{{service.servicewebserver.getFQDN}}" target="_blank">
                 
-                    <button type="button" class="btn btn-default btn-block bg-success">
+                    {% if service.active == 1 %}
+                        <button type="button" class="btn btn-default btn-block">
+                    {% else %}
+                        <button type="button" class="btn btn-default btn-block" style="background-color: grey">
+                    {% endif %}
                         {{service.name}}
                         {% if service.servicewebserver.isOnline == 1 %}
                             <span class="glyphicon glyphicon-ok"  style="color:#56db3a"></span>

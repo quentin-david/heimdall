@@ -121,13 +121,50 @@
                 <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-              <li><a href="{% url 'service_webserver_create' appli.id %}">Web server</a></li>
-              <li><a href="{% url 'service_reverseproxy_create' appli.id %}">Reverse proxy</a></li>
+              {#<li><a href="{% url 'service_webserver_create' appli.id %}">Web server</a></li>#}
+              <li><a id="btn-webserver" href="#" data-toggle="modal" data-target="#serviceModal" data-type="webserver">Web server</a></li>
+              
+              {#<li><a href="{% url 'service_reverseproxy_create' appli.id %}">Reverse proxy</a></li>#}
+              <li><a id="btn-reverseproxy" href="#" data-toggle="modal" data-target="#serviceModal" data-type="reverseproxy">Reverse proxy</a></li>
+              
               <li role="separator" class="divider"></li>
               <li><a href="{% url 'service_database_create' appli.id %}">Database</a></li>
             </ul>
         </h3>
     </div>
+    
+    
+    <!-- Modal Web server-->
+    <div class="modal fade" id="serviceModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">new web server</h4>
+          </div>
+          <div class="modal-body">
+            {# include "service/forms/form_servicewebserver.html" #}
+            <script>
+                $('#serviceModal').on('show.bs.modal', function (event) {
+                    var button = $(event.relatedTarget); // Button that triggered the modal
+                    var formType = button.data('type');
+                    var modal = $(this);
+                    if(formType == 'webserver'){
+                        modal.find('.modal-body').val($(".modal-body").load("{% url 'service_ajax_form' appli.id "webserver" %}"));
+                    }
+                    if(formType == 'reverseproxy'){
+                        modal.find('.modal-body').val($(".modal-body").load("{% url 'service_ajax_form' appli.id "reverseproxy" %}"));
+                    }
+                    if(formType == 'database'){
+                        modal.find('.modal-body').val($(".modal-body").load("{% url 'service_ajax_form' appli.id "database" %}"));
+                    }
+                })
+            </script>
+          </div>
+        </div>
+      </div>
+    </div>
+
 
     {% if appli.service_set.all %}
         <div>
@@ -192,17 +229,6 @@
                     {% endif %}
                 </div>
                 
-                {% comment %}
-                <div role="tabpanel" class="tab-pane" id="dropdown1">
-                    {% include "service/forms/form_servicewebserver.html" %}
-                </div>
-                <div role="tabpanel" class="tab-pane" id="dropdown2">
-                    {# include "service/forms/form_servicereverseproxy.html" #}
-                </div>
-                <div role="tabpanel" class="tab-pane" id="dropdown3">
-                    {# include "service/forms/form_servicedatabase.html" #}
-                </div>
-                {%endcomment %}
             </div>
         </div>
     {% else %}

@@ -1,11 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views.generic import ListView,CreateView,DetailView,UpdateView,DeleteView, FormView
 from django.core.urlresolvers import reverse_lazy
-#from .models import Nextcloud
-#import easywebdav
+from notes.models import NotesFile, Category
 from os import listdir
 from os.path import isfile, join
+from django.conf import settings
 
 
 """
@@ -17,11 +17,11 @@ def nextcloudHome(request):
 
 """
 
-def nextcloudHome(request):
-    path = '/var/www/html/heimdall/media/nextcloud/david/Library'
-    #file_list = [f for f in listdir(path) if isfile(join(path, f))]
-    file_list = [f for f in listdir(path)]
+def documentHome(request):
+    #if not request.user.username == 'david':
+        #return redirect('home')
+    #topic_list = [ topic for topic in Category.objects.all() ]
+    topic_list = Category.get_subcategories_by_user(request.user)
+    media_url = settings.MEDIA_URL
     
-    #test_list = 
-    #test_list = [['d1fic1','d1fic2'],['d2fic1'], ['d3fic1','d3fic2']]
     return render(request, 'nextcloud/nextcloud_home.html', locals())

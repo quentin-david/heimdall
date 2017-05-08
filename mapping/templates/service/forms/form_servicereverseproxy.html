@@ -1,8 +1,4 @@
-{% extends "base.html" %}
 
-{% block title %}Reverse proxy {% endblock %}
-
-{% block content %}
     <form action="{% url 'service_reverseproxy_create' appli.id %}" method="post">
         {% csrf_token %}
 		
@@ -93,4 +89,3 @@
     <script type="text/javascript">
 		CKEDITOR.replace( 'id_description' );
 	</script>
-{% endblock %}

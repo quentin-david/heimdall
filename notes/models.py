@@ -3,13 +3,10 @@ from django.contrib.auth.models import User
 import os.path
 from django.db.models import Q
 from datetime import datetime
+from django.conf import settings
+import hashlib
+from datetime import datetime
 
-
-def file_naming(instance,name):
-    #return "notes/{}-{}".format(instance.notes.id, name)
-    notes_directory = 'notes'
-    obfuscated_name = name
-    return '{}/{}-{}'.format(notes_directory,instance.notes.id,obfuscated_name)
 
 class Notes(models.Model):
     title = models.CharField(max_length=50,null=False,blank=False,unique=True)
@@ -40,28 +37,35 @@ class Notes(models.Model):
                 return True
             else:
                 return False
-   
+
+
+def file_naming(instance,name):
+    #return "notes/{}-{}".format(instance.notes.id, name)
+    notes_directory = 'notes'
+    hasher = hashlib.sha256()
+    hasher.update(name.encode('utf-8')+str(datetime.now()).encode('utf-8'))
+    obfuscated_name = hasher.digest()
+    return '{}/{}-{}'.format(notes_directory,instance.notes.id,obfuscated_name)   
    
 # files attached to the notes  
 class NotesFile(models.Model):
     notes = models.ForeignKey('notes.Notes', on_delete=models.CASCADE)
-    #original_name = models.CharField(max_length=150)
+    original_name = models.CharField(max_length=150)
     uploaded_file = models.FileField(upload_to=file_naming,null=True,blank=True) #hashed name
     
     def short_name(self):
         return str(self.uploaded_file).split('/')[-1]
     
     def delete_physical_file(self):
-        #file_path = 'media/'+self.uploaded_file.name
-        file_path = '.'+str(self.uploaded_file.url)
-        if os.path.isfile(file_path):
+        file_path = 'media/'+self.uploaded_file.name
+        if os.path.exists(file_path):
             os.unlink(file_path)
+            return True
         else:
             return False
     
     def is_present(self):
-        #if os.path.exists('media/'+self.uploaded_file.name):
-        if os.path.exists('.'+str(self.uploaded_file.url)):
+        if os.path.exists('media/'+self.uploaded_file.name):
             return True
         else:
             return False
@@ -139,6 +143,9 @@ class Category(models.Model):
         for kid in self.category_set.all():
             nb_total += len(kid.notes_set.all())
         return nb_total
+    
+    def get_file_list(self):
+        return NotesFile.objects.filter(notes__in=self.notes_set.all())
     
 """
 Community

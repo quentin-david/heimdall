@@ -9,6 +9,7 @@ from reportlab.pdfgen import canvas
 from django.http import HttpResponse
 from django.db.models import Q
 from django.forms import modelformset_factory
+from django.conf import settings
 
 """
 Notes
@@ -54,6 +55,17 @@ def notesCreateOrUpdate(request, category_id, notes_id=None):
     return render(request,'notes/notes_create_form.html',locals())
 
 
+# Ajax call of the note form
+def loadNotesForm(request, category_id, notes_id=None):
+    category = Category.objects.get(id=category_id)
+    if notes_id:
+        note_to_edit = Notes.objects.get(id=notes_id)
+        upfiles = note_to_edit.notesfile_set.all()
+    else:
+        note_to_edit = None
+    form = NotesForm(request.POST or None,request.FILES or None, instance=note_to_edit)
+    return render(request, 'notes/snippet_form_note.html', locals())
+
 
 def notesDelete(request, notes_id):
     notes_to_delete = Notes.objects.get(id=notes_id)
@@ -76,10 +88,30 @@ NotesFile
 def notesFileDelete(request, notes_file_id):
     file_to_delete = NotesFile.objects.get(id=notes_file_id)
     if file_to_delete:
-        file_to_delete.delete_physical_file()
-        file_to_delete.delete()
-    messages.success(request, 'File "{}" deleted !'.format(file_to_delete.uploaded_file))
+        if not file_to_delete.delete_physical_file():
+            messages.warning(request, 'problem during physical deletion...')
+        else:
+            messages.success(request, 'File "{}" deleted !'.format(file_to_delete.uploaded_file))
+            file_to_delete.delete()
+    
     return redirect('topic_view', category_id=file_to_delete.notes.category.id)
+
+"""
+media File
+
+def mediaFileView(request, file_path):
+    #note = NotesFile.objects.get(id=notes_file_id)
+    #media = note.uploaded_file.url
+    response = HttpResponse()
+    #response = HttpResponse('http://media.heimdall/notes/'+file_path, content_type='application/pdf')
+    response['Content-Type'] = 'application/pdf'
+    #response['X-Sendfile'] = 'http://media.heimdall/media/notes/'+file_path
+    #response['X-Sendfile'] = 'https://media.dev.quentin-david.ovh/notes/'+file_path
+    response['X-Sendfile'] = 'media/notes/34-bFxa9xefx83xafxc9x01x9ex08pxb3x08xa1TZx08xbbVx9dxd4xbcxb6xa0x8fxbaxf1xe9Qxf9yxd0'
+    #response['Content-Disposition'] = 'inline; filename="{}"'.format(file_path)
+    return response
+"""
+
 
 
 """

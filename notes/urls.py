@@ -9,8 +9,15 @@ urlpatterns = [
     url(r'^(?P<category_id>\d+)/new/$', login_required(views.notesCreateOrUpdate), name='notes_create'),
     url(r'^(?P<category_id>\d+)/(?P<notes_id>\d+)/edit$', login_required(views.notesCreateOrUpdate), name='notes_update'),
     url(r'^(?P<notes_id>\d+)/delete$', login_required(views.notesDelete), name='notes_delete'),
+    # Ajax call
+    url(r'^(?P<category_id>\d+)/ajax/form$', login_required(views.loadNotesForm), name='notes_ajax_form'),
+    url(r'^(?P<category_id>\d+)/ajax/form/(?P<notes_id>\d+)$', login_required(views.loadNotesForm), name='notes_ajax_form'),
+    
     # NotesFile
-    url(r'^file/(?P<notes_file_id>\d+)/delete', login_required(views.notesFileDelete), name='notes_file_delete'),
+    url(r'^file/(?P<notes_file_id>\d+)/delete$', login_required(views.notesFileDelete), name='notes_file_delete'),
+    # Media file
+    #url(r'^media/(?P<file_path>.*)$', login_required(views.mediaFileView), name='media_file_view'),
+    
     # Categories
     url(r'^category$', login_required(views.categoryList), name='category_list'),
     url(r'^category/new/$', login_required(views.categoryCreateOrUpdate), name='category_create'),

@@ -1,17 +1,20 @@
 {% if note_to_edit %}
-	<form action="" enctype="multipart/form-data" method="post">
+	<form action="{% url 'notes_update' category.id note_to_edit.id %}" enctype="multipart/form-data" method="post">
 {% else %}
 	<form action="{% url 'notes_create' category.id%}" enctype="multipart/form-data" method="post">
 {% endif %}
         {% csrf_token %}
         
-		<div class="col-lg-5">
+		<div class="col-lg-4">
 			<div class="input-group">
                 {{ form.non_field_errors }}
                     {{ form.title.errors }}
                     <div class="input-group-addon"><b>Title</b></div>
                     {{ form.title }}
 			</div>
+			{{ form.uploaded_files.errors }}
+			<label for="{{ form.uploaded_files.id_for_label }}">add file</label>
+			<input id="id_uploaded_files_0" name="uploaded_files" multiple="" type="file">
 		</div>
         
 		<div class="col-lg-3">
@@ -32,13 +35,13 @@
 		</div>
 				
 				
-        <div class="col-lg-4">
+        <div class="col-lg-5" style="overflow: scroll">
 		{% if upfiles %}
 			<label for="{{ form.uploaded_files.id_for_label }}">existing files</label>
 			<ul>
 			{% for file in upfiles %}
 				<li id="file_{{file.id}}">
-					{{file.short_name}}
+					{{file.original_name}}
 					<button id="del_file_{{file.id}}" style="color: red" type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top" title="delete this file">
 						<span class="glyphicon glyphicon-remove"></span>
 					</button>
@@ -57,10 +60,6 @@
 			{% endfor %}
 			</ul>
 		{% endif %}
-				
-	    {{ form.uploaded_files.errors }}
-	    <label for="{{ form.uploaded_files.id_for_label }}">add file</label>
-	    <input id="id_uploaded_files_0" name="uploaded_files" multiple="" type="file">
 	</div>
 	
 	

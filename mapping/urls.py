@@ -33,20 +33,23 @@ urlpatterns = [
     url(r'^app/(?P<appli_id>\d+)/node/new$', login_required(views.nodeCreateOrUpdate), name='node_create'),
     
     # Networks
-    url(r'network$', views.networkList, name='network_list'),
-    url(r'network/new$', views.NetworkCreate.as_view(), name='network_create'),
+    url(r'^network$', views.networkList, name='network_list'),
+    url(r'^network/new$', views.NetworkCreate.as_view(), name='network_create'),
     
     # Services
     url(r'^service$', login_required(views.ServiceList.as_view()), name='service_list'),
+    url(r'^node/(?P<application_id>\d+)/service/delete/(?P<pk>\d+)$', login_required(views.ServiceDelete.as_view()), name='service_delete'),
     
-    url(r'node/(?P<application_id>\d+)/service/new/webserver$', views.serviceWebServerCreate, name='service_webserver_create'),
-    url(r'node/(?P<application_id>\d+)/service/webserver/edit/(?P<webserver_id>\d+)$', login_required(views.serviceWebServerUpdate), name='service_webserver_update'),
-    url(r'node/(?P<application_id>\d+)/service/delete/(?P<pk>\d+)$', login_required(views.ServiceDelete.as_view()), name='service_delete'),
+    url(r'^node/(?P<application_id>\d+)/service/new/webserver$', views.serviceWebServerCreate, name='service_webserver_create'),
+    url(r'^node/(?P<application_id>\d+)/service/webserver/edit/(?P<webserver_id>\d+)$', login_required(views.serviceWebServerUpdate), name='service_webserver_update'),
     
-    url(r'node/(?P<application_id>\d+)/service/new/reverseproxy$', views.serviceReverseProxyCreate, name='service_reverseproxy_create'),
-    url(r'node/(?P<application_id>\d+)/service/reverseproxy/edit/(?P<reverseproxy_id>\d+)$', login_required(views.serviceReverseProxyUpdate), name='service_reverseproxy_update'),
+    url(r'^node/(?P<application_id>\d+)/service/new/reverseproxy$', views.serviceReverseProxyCreate, name='service_reverseproxy_create'),
+    url(r'^node/(?P<application_id>\d+)/service/reverseproxy/edit/(?P<reverseproxy_id>\d+)$', login_required(views.serviceReverseProxyUpdate), name='service_reverseproxy_update'),
     
-    url(r'node/(?P<application_id>\d+)/service/new/database$', views.serviceDatabaseCreate, name='service_database_create'),
+    url(r'^node/(?P<application_id>\d+)/service/new/database$', views.serviceDatabaseCreate, name='service_database_create'),
     url(r'^node/(?P<application_id>\d+)/service/database/edit/(?P<database_id>\d+)$', login_required(views.serviceDatabaseUpdate), name='service_database_update'),
+    
+    # Ajax loading
+    url(r'^service/(?P<application_id>\d+)/ajax/(?P<form_type>.+)/form$', views.loadWebServiceForm, name='service_ajax_form'),
 
 ]

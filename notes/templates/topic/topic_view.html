@@ -69,7 +69,20 @@
           </div>
           
           <div class="modal-body">
-                {% include "notes/snippet_form_note.html" %}
+                {# include "notes/snippet_form_note.html" #}
+                <script>
+                $('#noteModal').on('show.bs.modal', function (event) {
+                    var button = $(event.relatedTarget); // Button that triggered the modal
+                    var notes_id = button.data('notes');
+                    var modal = $(this);
+                    if(notes_id == undefined){
+                        modal.find('.modal-body').val($(".modal-body").load("{% url 'notes_ajax_form' category.id %}"));
+                    }else{
+                        modal.find('.modal-body').val($(".modal-body").load("{% url 'notes_ajax_form' category.id %}/"+notes_id));
+                        modal.find('.modal-title').text('edit');
+                    }
+                })
+            </script>
           </div>
           
         </div>
@@ -82,17 +95,16 @@
     <ul>
     {% for note in notes_list %}
         {% for file in note.notesfile_set.all %}
-            {# if file.is_present #}
+            {% if file.is_present %}
                 <li>
-                    <a href="{{file.uploaded_file.url}}">
-                        {{file.short_name}}
+                    <a href="{{file.uploaded_file.url}}" target="_blank">
+                        {{file.original_name}}
                     </a>
                         ({{file.uploaded_file.size|filesizeformat}})
-                        ({{file.uploaded_file.url}})
                 </li>
-            {#else #}
-                {#<div class="alert alert-danger" role="alert">{{file.uploaded_file.name}} has been deleted...</div>#}
-            {# endif #}
+            {% else %}
+                <div class="alert alert-danger" role="alert">{{file.uploaded_file.name}} has been deleted...</div>
+            {% endif %}
         {% endfor %}
     {% endfor %}
     </ul>

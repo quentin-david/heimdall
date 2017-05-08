@@ -3,23 +3,27 @@
 {% block title %}Nextcloud{%endblock %}
 
 {% block content %}
-    <p>Connected to {{path}}</p>
     <h3>File list</h3>
     <ul>
-        {% for file in file_list %}
-            <li>{{file}}</li>
+        {% for topic in topic_list %}
+            {% if topic.get_file_list %}
+                <li>{{topic.name}}</li>
+                <ul>
+                    {% for file in topic.get_file_list %}
+                        <li>
+                            <a href="{{file.uploaded_file.url}}" target="_blank">
+                                {{file.original_name}}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
         {% endfor %}
     </ul>
     
-    <h3>test list</h3>
-    <ul>
-    {% for dir in test_list %}
-        <li>{{dir}}</li>
-        <ul>
-        {% for fic in dir %}
-            <li>{{fic}}</li>
-        {% endfor %}
-        </ul>
-    {% endfor %}
-    </ul>
+    <h2>Videos</h2>
+    <video controls>
+        <source src="{{media_url}}videos/american_dad.mp4" type="video/mp4">
+        <p>Your browser doesn't support HTML5 video. Here is a <a href="american_dad.mp4">link to the video</a> instead.</p>
+    </video>
 {% endblock %}

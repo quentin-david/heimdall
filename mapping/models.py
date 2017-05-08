@@ -132,7 +132,10 @@ class Node(Vm):
     def createNode(self,foreman_object,foreman_object_specs,host):
         default_application = Application.objects.get(id=3) #
         self.name = foreman_object['name']
-        self.application = default_application # bricolage
+        if self.application == None:
+            self.application = default_application # bricolage
+        else:
+            self.application = self.application
         if self.description == None:
             self.description = 'created from Foreman'
         else:
