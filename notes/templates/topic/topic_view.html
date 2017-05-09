@@ -103,7 +103,7 @@
                         ({{file.uploaded_file.size|filesizeformat}})
                 </li>
             {% else %}
-                <div class="alert alert-danger" role="alert">{{file.uploaded_file.name}} has been deleted...</div>
+                <div class="alert alert-danger" role="alert">{{file.original_name}} has been deleted...</div>
             {% endif %}
         {% endfor %}
     {% endfor %}

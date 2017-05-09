@@ -45,7 +45,7 @@ def file_naming(instance,name):
     hasher = hashlib.sha256()
     hasher.update(name.encode('utf-8')+str(datetime.now()).encode('utf-8'))
     obfuscated_name = hasher.digest()
-    return '{}/{}-{}'.format(notes_directory,instance.notes.id,obfuscated_name)   
+    return '{}/{}-{}'.format(notes_directory,instance.notes.id,str(obfuscated_name))   
    
 # files attached to the notes  
 class NotesFile(models.Model):
