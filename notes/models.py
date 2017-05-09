@@ -42,10 +42,10 @@ class Notes(models.Model):
 def file_naming(instance,name):
     #return "notes/{}-{}".format(instance.notes.id, name)
     notes_directory = 'notes'
-    hasher = hashlib.sha256()
+    hasher = hashlib.md5()
     hasher.update(name.encode('utf-8')+str(datetime.now()).encode('utf-8'))
     obfuscated_name = hasher.digest()
-    return '{}/{}-{}'.format(notes_directory,instance.notes.id,str(obfuscated_name))   
+    return '{}/{}-{}'.format(notes_directory,instance.notes.id,obfuscated_name)   
    
 # files attached to the notes  
 class NotesFile(models.Model):
@@ -57,15 +57,14 @@ class NotesFile(models.Model):
         return str(self.uploaded_file).split('/')[-1]
     
     def delete_physical_file(self):
-        file_path = 'media/'+self.uploaded_file.name
+        file_path = settings.MEDIA_ROOT+self.uploaded_file.name
         if os.path.exists(file_path):
-            os.unlink(file_path)
-            return True
+            return os.unlink(file_path)
         else:
-            return False
+            return True
     
     def is_present(self):
-        if os.path.exists('media/'+self.uploaded_file.name):
+        if os.path.exists(settings.MEDIA_ROOT+self.uploaded_file.name):
             return True
         else:
             return False

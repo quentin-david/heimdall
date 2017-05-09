@@ -61,7 +61,7 @@
                                         <br>
                                 {%else%}
                                         <div class="alert alert-danger" role="alert">
-                                                {{file.uploaded_file.name}} has been deleted...
+                                                {{file.original_name}} has been deleted...
                                                 {% if user.username == note.owner.username %}
                                                 <a href="{% url 'notes_file_delete' file.id %}">
                                                       <button type="button" style="color: red" class="btn btn-default btn-md" data-toggle="tooltip" data-placement="top" title="delete this file">

@@ -91,7 +91,7 @@ def notesFileDelete(request, notes_file_id):
         if not file_to_delete.delete_physical_file():
             messages.warning(request, 'problem during physical deletion...')
         else:
-            messages.success(request, 'File "{}" deleted !'.format(file_to_delete.uploaded_file))
+            messages.success(request, 'File "{}" deleted !'.format(file_to_delete.original_name))
             file_to_delete.delete()
     
     return redirect('topic_view', category_id=file_to_delete.notes.category.id)
