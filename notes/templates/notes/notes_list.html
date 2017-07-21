@@ -2,9 +2,12 @@
 
 {% block content %}
 
-    {% for note in notes_list %}
-        {% include "notes/snippet_note_div.html" %}
-    {% endfor %}
-   
+    {% if notes_list %}
+        {% for note in notes_list %}
+            {% include "notes/snippet_note_div.html" %}
+        {% endfor %}
+    {% else %}
+        <div class="alert alert-info">No notes in your communities</div>   
+    {% endif %}
 {% endblock %}
         

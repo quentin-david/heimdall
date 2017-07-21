@@ -1,11 +1,21 @@
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.contrib.auth.decorators import login_required
 from . import views
 from .models import Application, Host, ServiceWebServer
 
+from rest_framework import routers
+router = routers.DefaultRouter()
+router.register(r'applications', views.ApplicationViewSet)
+
+
 urlpatterns = [
     # Applications
     url(r'app$', login_required(views.ApplicationList.as_view()), name='application_list'),
+    # essai en JSON / DRF
+    #url(r'api/applications$', views.applicationListJson, name='application_list_json'),
+    #url(r'api/applications$', views.ApplicationViewSet, name='application_list_json'),
+    url(r'^api/', include(router.urls)),
+    
     url(r'app/new$', login_required(views.ApplicationCreate.as_view()), name='application_create'),
     #url(r'app/(?P<pk>\d+)$', login_required(views.ApplicationView.as_view()), name='application_view'),
     url(r'app/(?P<appli_id>\d+)$', login_required(views.applicationView), name='application_view'),

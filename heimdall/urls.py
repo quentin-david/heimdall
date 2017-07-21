@@ -25,18 +25,23 @@ from bugzilla import views
 from nextcloud import views
 from notes import views
 from collect import views
+from visio import views
+from rest_framework.authtoken.views import obtain_auth_token # essai DRF
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    #url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')), #tests DRF
     url(r'^', include('appli.urls')),
     url(r'^map/', include('mapping.urls')),
     url(r'^monitoring/', include('monitoring.urls')),
     url(r'^deployment/', include('deployment.urls')),
-    url(r'poc_sport/', include('poc_sport.urls')),
-    url(r'bugzilla/', include('bugzilla.urls')),
-    url(r'nextcloud/', include('nextcloud.urls')),
-    url(r'notes/', include('notes.urls')),
-    url(r'collect/', include('collect.urls')),
+    url(r'^poc_sport/', include('poc_sport.urls')),
+    url(r'^bugzilla/', include('bugzilla.urls')),
+    url(r'^nextcloud/', include('nextcloud.urls')),
+    url(r'^notes/', include('notes.urls')),
+    url(r'^collect/', include('collect.urls')),
+    url(r'^visio/', include('visio.urls')),
+    url(r'^api-auth-token/', obtain_auth_token), # essai DRF - Ember
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

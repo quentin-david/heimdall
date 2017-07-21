@@ -15,13 +15,34 @@
                     <b>{{community.title}}</b>
                     
                     {% if community.community_users.all|length < 1%}
-                    <span style="float: left">
-                        <button type="button" class="btn btn-default btn-xl" data-toggle="tooltip" data-placement="right" title="private community">
-                            <span class="glyphicon glyphicon-lock"></span>
-                        </button>
-                    </span>
+						<span style="float: left">
+							<button type="button" class="btn btn-default btn-xl" data-toggle="tooltip" data-placement="right" title="private community">
+								<span class="glyphicon glyphicon-lock"></span>
+							</button>
+						</span>
+					{% endif %}
+					
+					{% if community.communityusers.user_visa == 1 %}
+                        <span class="glyphicon glyphicon-ok" style="color:#56db3a; float: right;"></span>
+                    {% else %}
+                        <span class="glyphicon glyphicon-remove" style="color: red; float: right;"></span>
                     {% endif %}
-                    
+					<span style="float: right">
+						<button style="float: left" id="btn-enable-community-{{community.id}}" type="button" class="btn btn-default btn-xs" data-community="{{community.id}}" data-toggle="tooltip" data-placement="right" title="enable/disable this community">
+							<span class="glyphicon glyphicon-off"></span>
+						</button>
+						<script>
+							$("#btn-enable-community-{{community.id}}").click(function(){
+								$.ajax({
+									type: "POST",
+									url: "{% url 'community_toggle_community' community.id %}",
+									success: function(result){
+										location.reload();
+									}
+								});
+							});
+						</script>
+					</span>
 					<span style="float: right">
                         <a href="{% url 'community_delete' community.id %}">
 							<button type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="bottom" title="delete community">

@@ -11,23 +11,28 @@
     {% include 'category/snippet_form_category.html' %}
      
     
-    {% if personal_communities %}
+    {% if all_communities_list %}
         
-        {% for community in personal_communities %}
+        {% for community in all_communities_list %}
             
             <button style="margin-top: 20px;margin-bottom: 5px" class="btn btn-default btn-lg btn-block" type="button">
-                <span class="glyphicon glyphicon-user"></span>  {{community.title}}
-                {% if community.community_users.all|length < 1%}
-                    <span class="glyphicon glyphicon-lock"></span>
-                {% else %}
-                    ({{community.community_users.all|length}} user)
-                {% endif %}
+                <span class="glyphicon glyphicon-user"></span>
+                    {{community.community.title}}
+                    {% if not community.community.is_shared %}
+                        <span class="glyphicon glyphicon-lock"></span>
+                    {% else %}
+                        ({{community.community.get_contributors|length}} user)
+                    {% endif %}
+                    {% if community.community.owner != user %}
+						<span class="glyphicon glyphicon-globe"></span>
+                        [{{community.community.owner}}]
+					{% endif %}
             </button>
          
-            {% if community.get_root_categories_by_community|length > 0%}
+            {% if community.community.get_root_categories_by_community|length > 0%}
                 <div class="row">
                 <ul class="list list-group">
-                {% for cat in community.get_root_categories_by_community %}
+                {% for cat in community.community.get_root_categories_by_community %}
                     {% include 'category/snippet_category_list_item.html' %}
                 {% endfor %}
                 </ul>
@@ -42,7 +47,7 @@
     {% endif %}
     
     
-
+    {% comment%}
     {% if shared_communities %}
         {% for community in shared_communities %}
             <button  style="margin-top: 20px;margin-bottom: 5px" class="btn btn-default btn-lg btn-block" type="button">
@@ -56,43 +61,6 @@
             <div class="row">
             <ul class="list list-group">
             {% for cat in community.community.get_root_categories_by_community %}
-                {% comment %}
-                <div class="col-lg-4">
-                    <div class="tab-content">
-                    <h5 style="text-align: center">
-                    {% if cat.category_set.all|length == 0%}
-                        <span style="color: red;" data-toggle="tooltip" data-placement="right" title="you have to create subcategories to add notes or bookmarsk">{{cat.name}}</span>
-                    {% else %}
-                        {{cat.name}}
-                    {% endif %}
-                        <a href="{% url 'category_update' cat.id %}">
-                            <button type="button" class="btn btn-default btn-xs">
-                                <span class="glyphicon glyphicon-pencil"></span>
-                            </button>
-                        </a>
-                    </h5>
-                    <ul>
-                        {% for kid in cat.category_set.all %}
-                            <li>
-                                {{kid.name}}
-                                <a href="{% url 'category_update' kid.id %}">
-                                    <button type="button" class="btn btn-default btn-xs">
-                                        <span class="glyphicon glyphicon-pencil"></span>
-                                    </button>
-                                </a>
-                            </li>
-                            <ul>
-                                {% for grandkid in kid.category_set.all %}
-                                    <li>
-                                        {{grandkid.name}}
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        {% endfor %}
-                    </ul>
-                    </div>
-                </div>
-                {% endcomment%}
                 {% include 'category/snippet_category_list_item.html' %}
             {% endfor %}
             </ul>
@@ -101,5 +69,5 @@
     {% else %}
         <div class="alert alert-info">You don't have shared community</div>
     {% endif %}
-    
+    {% endcomment %}
 {% endblock %}

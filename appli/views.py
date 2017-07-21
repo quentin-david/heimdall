@@ -9,8 +9,8 @@ from django.db.models import Q
 def home(request):
     service_list = ServiceWebServer.objects.order_by('name')
     application_list = Application.objects.all()
-    #communities = Community.objects.filter((Q(community_users=request.user) & Q(communityusers__user_visa=True)) | Q(owner=request.user)).distinct()
     community_list = Community.get_communities_by_user(request.user)
+    all_communities_list = CommunityUsers.get_all_communities_by_user(request.user)
     recent_notes_list = Notes.objects.filter(date_update__gte=(datetime.today() - timedelta(days=3))) #Last 3 day topics
     bookmark_form = BookmarkForm(None, user=request.user)
 
@@ -20,8 +20,8 @@ def home(request):
 def profile(request):
     user = User.objects.get(username=request.user.username)
     community_list = Community.get_communities_by_user(request.user)
-    personal_communities = user.community_set.all()
-    my_communities = CommunityUsers.objects.filter(user=request.user)
+    all_communities_list = CommunityUsers.get_all_communities_by_user(request.user)
+    my_communities = CommunityUsers.get_all_communities_by_user(request.user)
     form = CommunityForm(None)
     return render(request, 'profile/profile.html', locals())
 

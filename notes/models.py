@@ -119,13 +119,21 @@ class Category(models.Model):
     #   - the user own the community
     #   - OR is part of the community AND has enabled it
     def get_subcategories_by_user(user):
-        return Category.objects.filter(Q(community__owner=user) | (Q(community__communityusers__user=user) & Q(community__communityusers__user_visa=True)) | (Q(parent__community__communityusers__user=user) & Q(parent__community__communityusers__user_visa=True)), parent__isnull=False).distinct()
-    
+        #return Category.objects.filter(Q(community__owner=user) | (Q(community__communityusers__user=user) & Q(community__communityusers__user_visa=True)) | (Q(parent__community__communityusers__user=user) & Q(parent__community__communityusers__user_visa=True)), parent__isnull=False).distinct()
+        return Category.objects.filter(Q(community__in = Community.get_communities_by_user(user)))
+        
     def get_root_categories_by_user(user):
-        return Category.objects.filter(Q(community__owner=user) | (Q(community__communityusers__user=user) & Q(community__communityusers__user_visa=True)), parent__isnull=True).distinct()
+        #return Category.objects.filter(Q(community__owner=user) | (Q(community__communityusers__user=user) & Q(community__communityusers__user_visa=True)), parent__isnull=True).distinct()
+        return Category.objects.filter(Q(community__in = Community.get_communities_by_user(user), parent__isnull=True))
     
+    # Active categories
     def get_categories_by_user(user):
-        return Category.objects.filter(Q(community__owner=user) | (Q(community__communityusers__user=user) & Q(community__communityusers__user_visa=True))).distinct()
+        #return Category.objects.filter(Q(community__owner=user) | (Q(community__communityusers__user=user) & Q(community__communityusers__user_visa=True))).distinct()
+        return Category.objects.filter(Q(community__in = Community.get_communities_by_user(user)))
+    
+    # All categories
+    def get_all_categories_by_user(user):
+        return Category.objects.filter(Q(community__in = Community.get_all_communities_by_user(user)))
     
     # Return the total number of bookmark attached to a category and all of its subcategories
     def get_nb_total_bookmark(self):
@@ -162,14 +170,32 @@ class Community(models.Model):
     def get_root_categories_by_community(self):
         return self.category_set.filter(parent__isnull=True)
     
-    # List all communities accessible by the user
+    # List all communities activated by the user
     # Check if
     #   - the user own the community
     #   - OR is part of the community AND has enabled it
     def get_communities_by_user(user):
-        return Community.objects.filter((Q(community_users=user) & Q(communityusers__user_visa=True)) | Q(owner=user)).distinct()
+        #return Community.objects.filter((Q(community_users=user) & Q(communityusers__user_visa=True)) | (Q(owner=user) & Q(communityusers__user_visa=True) )).distinct()
+        return Community.objects.filter((Q(community_users=user) & Q(communityusers__user_visa=True))).distinct()
 
-       
+    # List all communities the user can activate
+    def get_all_communities_by_user(user):
+        return Community.objects.filter(Q(communityusers__in=CommunityUsers.get_all_communities_by_user(user))).distinct()
+    
+    def is_shared(self):
+        if self.community_users.count() > 1:
+            return True
+        else:
+            return False
+        
+    def get_contributors(self):
+        user_list = []
+        for user in self.community_users.distinct():
+            if user != self.owner:
+                user_list.append(user)
+        return user_list
+    
+    
 class CommunityUsers(models.Model):
     community = models.ForeignKey(Community, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -177,5 +203,7 @@ class CommunityUsers(models.Model):
     can_edit = models.BooleanField(default=False)
     user_visa = models.BooleanField(default=True) # Set if the user accept this community or not
     
+    def get_all_communities_by_user(user):
+        return CommunityUsers.objects.filter(Q(user=user)).distinct()
     
         

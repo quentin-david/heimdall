@@ -18,6 +18,7 @@ Notes
 def notesList(request):
     #communities = Community.objects.filter((Q(community_users=request.user) & Q(communityusers__user_visa=True)) | Q(owner=request.user)).distinct()
     community_list = Community.get_communities_by_user(request.user)
+    all_communities_list = CommunityUsers.get_all_communities_by_user(request.user)
     # TODO : check if user_visa == True
     #notes_list = Notes.objects.filter((Q(category__community__communityusers__user=request.user) & Q(category__community__communityusers__user_visa = True))| Q(category__community__owner=request.user)).distinct()
     notes_list = Notes.objects.filter(category__in=Category.get_subcategories_by_user(request.user))
@@ -119,8 +120,9 @@ Categories
 """
 def categoryList(request, category_id=None):
     community_list = Community.get_communities_by_user(request.user)
-    personal_communities = Community.objects.filter(owner=request.user)
-    shared_communities = CommunityUsers.objects.filter(user=request.user)
+    all_communities_list = CommunityUsers.get_all_communities_by_user(request.user)
+    #personal_communities = Community.objects.filter(owner=request.user)
+    #shared_communities = CommunityUsers.objects.filter(user=request.user)
     if category_id:
         category_to_edit = Category.objects.get(id=category_id)
     else:
@@ -180,6 +182,7 @@ def bookmarkCreate(request, category_id=None):
 
 def bookmarkList(request):
     community_list = Community.get_communities_by_user(request.user)
+    all_communities_list = CommunityUsers.get_all_communities_by_user(request.user)
     category_list = Category.get_root_categories_by_user(request.user)
     bookmark_form = BookmarkForm(None, user=request.user)
 
@@ -204,6 +207,7 @@ def topicView(request, category_id):
         return redirect('notes_list')
     
     community_list = Community.get_communities_by_user(request.user)
+    all_communities_list = CommunityUsers.get_all_communities_by_user(request.user)
     community_user = CommunityUsers.objects.filter(user=request.user, community=category.community)
     bookmark_list = Bookmark.objects.filter(category=category.id)
     bookmark_form = PartialBookmarkForm(None)
@@ -260,6 +264,7 @@ def sharedCommunityToggle(request, shared_community_id):
 # Categori and notes aren't delete, they are moved to the user's personal community
 def communityDelete(request, community_id):
     community_list = Community.get_communities_by_user(request.user)
+    all_communities_list = CommunityUsers.get_all_communities_by_user(request.user)
     community_to_delete = Community.objects.get(id=community_id)
     personal_community = Community.objects.get(name='perso-'+request.user.username)
     if request.method == 'POST':

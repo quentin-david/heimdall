@@ -10,6 +10,12 @@ from collect.models import CollectItem, Collect
 from django.conf import settings
 from django.forms import modelformset_factory
 from django.forms import formset_factory
+from django.http import JsonResponse
+from django.core import serializers
+
+# essai DRF
+from rest_framework import viewsets
+from .serializers import ApplicationSerializer
 
 """
 APPLICATIONS
@@ -18,6 +24,16 @@ class ApplicationList(ListView):
     model = Application
     context_object_name = 'application_list'
     template_name = 'application/application_list.html'
+
+#def applicationListJson(request):
+#    application_list = serializers.serialize("json", Application.objects.all())
+#    return JsonResponse(application_list, safe=False)
+class ApplicationViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows application to be viewed or edited.
+    """
+    queryset = Application.objects.order_by('id')
+    serializer_class = ApplicationSerializer
 
 class ApplicationCreate(CreateView):
     model = Application

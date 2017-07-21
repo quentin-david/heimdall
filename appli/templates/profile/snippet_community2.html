@@ -1,0 +1,92 @@
+<div class="object_description">Communities are a way to share ressources with other users</div>
+<div class="row">
+    <div class="col-lg-11">
+        <h4 style="text-align: center">
+            My communities
+            <a href="{% url 'community_create' %}">
+                <button id="btn-add-bookmark" type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="right" title="add new community">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </button>
+            </a>
+        </h4>
+        <ul style="padding-left: 10px; margin-bottom: 10px;" class="list-group">
+            {% for community in my_communities %}
+                <li class="list-group-item" style="text-align: center">
+                    <b>{{community.community.title}}</b>
+					{% if community.user_visa == 1 %}
+                        <span class="glyphicon glyphicon-ok" style="color:#56db3a;"></span>
+                    {% else %}
+                        <span class="glyphicon glyphicon-remove" style="color: red;"></span>
+                    {% endif %}
+                    
+                    {% if not community.community.is_shared %}
+						<span style="float: left">
+							<button type="button" class="btn btn-default btn-xl" data-toggle="tooltip" data-placement="right" title="private community">
+								<span class="glyphicon glyphicon-lock"></span>
+							</button>
+						</span>
+					{% endif %}
+					{% if community.community.owner != user %}
+						<span style="float: left">
+							<button type="button" class="btn btn-default btn-xl" data-toggle="tooltip" data-placement="right" title="private community">
+								<span class="glyphicon glyphicon-globe"></span>
+							</button>
+						</span>
+					{% endif %}
+					
+					<span style="float: right">
+						<button style="float: left" id="btn-enable-community-{{community.id}}" type="button" class="btn btn-default btn-xs" data-community="{{community.id}}" data-toggle="tooltip" data-placement="right" title="enable/disable this community">
+							<span class="glyphicon glyphicon-off"></span>
+						</button>
+						<script>
+							$("#btn-enable-community-{{community.id}}").click(function(){
+								$.ajax({
+									type: "POST",
+									url: "{% url 'community_toggle_community' community.community.id %}",
+									success: function(result){
+										location.reload();
+									}
+								});
+							});
+						</script>
+					</span>
+					
+					{% if community.community.owner == user %}
+						<span style="float: right">
+							<a href="{% url 'community_delete' community.community.id %}">
+								<button type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="bottom" title="delete community">
+									<span class="glyphicon glyphicon-remove"></span>
+								</button>
+							</a>
+						</span>
+						<span style="float: right">
+							<a href="{% url 'community_update' community.community.id %}">
+								<button type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="left" title="edit community">
+									<span class="glyphicon glyphicon-pencil"></span>
+								</button>
+							</a>
+						</span>
+					{% endif %}	
+						
+					{% if community.community.is_shared %}
+						{% if community.community.owner == user %}
+							<p>Shared WITH :
+							{% for contrib in community.community.get_contributors %}
+								{{contrib}}, 
+							{%endfor %}
+							</p>
+						{% else %}
+							<p>Shared BY :
+								{{community.community.owner}}
+							</p>
+						{% endif %}
+					{% else %}
+						<p>private</p>
+					{% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    
+
+</div>

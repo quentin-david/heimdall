@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block left_nav %}
+    {% comment %}
     <div class="list-group launcher">
         <h4>Shortcuts</h4>
         {% for service in service_list %}
@@ -12,6 +13,7 @@
                         <button type="button" class="btn btn-default btn-block" style="background-color: grey">
                     {% endif %}
                         {{service.name}}
+                        
                         {% if service.servicewebserver.isOnline == 1 %}
                             <span class="glyphicon glyphicon-ok"  style="color:#56db3a"></span>
                         {% else %}
@@ -21,6 +23,7 @@
             </a>
         {% endfor %}
     </div>
+{% endcomment %}
     
     {% include 'category/snippet_category_list.html' with communities=community_list%}
     
